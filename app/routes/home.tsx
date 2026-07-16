@@ -14,12 +14,13 @@ interface MovieDetails {
   Genre: string;
 }
 
+let api_key = "eaca397b12af42ca89067ac3c10ff934";
+
 function Home() {
   const [query, setQuery] = useState("");
   const [loading, setLoading] = useState(false);
-  const [movies, setMovies] = useState<MovieDetails[]>([]);
+  const [movies, setMovies] = useState([]);
 
-  // api call
   useEffect(() => {
     async function searchMovie() {
       if (!query) {
@@ -27,18 +28,20 @@ function Home() {
       }
       try {
         const response = await fetch(
-          "http://www.omdbapi.com/?i=tt3896198&apikey=2af45af0",
+          `https://api.themoviedb.org/3/movie/popular?api_key=${api_key}`,
         );
 
         const data = await response.json();
         setMovies(data);
+        console.log("movies detail", data);
+
         console.log(data);
       } catch (error) {
         console.log(error);
       }
     }
-    searchMovie()
-  }, [])
+    searchMovie();
+  }, []);
 
   return (
     <div className=" ">
@@ -60,38 +63,40 @@ function Home() {
       </div>
 
       <div className="w-full mx-auto p-2">
-        {loading && (
-          <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-8 rounded-lg p-2 mt-10 lg:mt-20">
-            {[...Array(8)].map((_, i) => (
-              <div key={i} className="animate-pulse">
-                <div className="aspect-2/3 bg-gray-900 rounded-t-lg"></div>
-                <div className="bg-gray-950 p-4 rounded-b-lg space-y-3">
-                  <div className="h-4 bg-gray-900 rounded w-3/4"></div>
-                  <div className="h-3 bg-gray-900 rounded w-1/2"></div>
-                </div>
-              </div>
-            ))}
-          </div>
-        )}
+        { }
 
         <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-8 rounded-lg p-2 mt-2 lg:mt-20 mb-10">
-          {loading &&
-            movies.map((movie) => (
-              <ol key={movie.Title}>
+          {!loading ? (
+            <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-8 rounded-lg p-2 mt-10 lg:mt-20">
+              {[...Array(8)].map((_, i) => (
+                <div key={i} className="animate-pulse">
+                  <div className="aspect-2/3 bg-gray-900 rounded-t-lg"></div>
+                  <div className="bg-gray-950 p-4 rounded-b-lg space-y-3">
+                    <div className="h-4 bg-gray-900 rounded w-3/4"></div>
+                    <div className="h-3 bg-gray-900 rounded w-1/2"></div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          ) : (
+            movies?.results?.map((movie: any) => (
+              <ol key={movie.id}>
                 <li className="bg-gray-900 rounded-lg p-2 shadow-lg/60 transition-transform duration-300 hover:scale-102 hover:shadow-lg/100 cursor-pointer">
                   <img
-                    className="w-full h-100 mb-3 object-cover"
-                    src={movie.Poster}
-                    alt={movie.Title}
+                    className="w-full h-full mb-3 object-cover"
+                    src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`}
+                    alt={movie.title}
                   />
                   <h1 className="text-white text-left text-xl font-medium mb-3">
-                    {movie.Title}
+                    {movie.title}
                   </h1>
+                  <p className="text-left text-gray-500 text-sm font-normal mb-2 truncate">
+                    {movie.overview}
+                  </p>
                   <div className="flex items-center align-middle mb-3">
                     <Calendar className="text-xs text-gray-600 font-normal" />
                     <p className="text-left text-gray-600 text-sm font-normal mx-2">
-                      {" "}
-                      {movie.Year}
+                      {movie.release_date}
                     </p>
                     <img
                       className="w-4 h-4 rounded-full mx-2"
@@ -99,25 +104,23 @@ function Home() {
                       alt="rating star"
                     />
                     <span className="text-left text-gray-600 text-sm font-normal">
-                      {movie.imdbRating}{" "}
+                      {movie.vote_average}
                     </span>
                   </div>
-                  <p className="text-left text-sm text-gray-500 font-medium mb-3">
-                    {movie.Genre}{" "}
-                  </p>
-                  <p className="text-left text-gray-300 text-xs mb-3">
-                    {movie.Plot}
-                  </p>
                 </li>
               </ol>
-            ))}
+            ))
+          )}
         </div>
+        <span className="text-left text-gray-500 text-sm font-medium">
+          Showing page: {movies?.page} of pages: {movies?.total_pages}
+        </span>
       </div>
       <div className=" bottom-0 w-full bg-gray-900">
         <Footer />
       </div>
     </div>
-  )
+  );
 }
 
 export default Home;
