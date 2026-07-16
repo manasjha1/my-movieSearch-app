@@ -1,25 +1,37 @@
 import { useEffect, useState } from "react";
-// import { MovieSearch } from "./components/MovieSearch";
-import { Dashboard } from "../components/Dashboard";
 import { Footer } from "~/components/Footer";
 import { Headers } from "~/components/Headers";
 import { Calendar, Search } from "lucide-react";
-
-interface MovieDetails {
-  Title: string;
-  Year: number;
-  Plot: string;
-  Poster: string;
-  imdbRating: number;
-  Genre: string;
-}
+import {
+  Pagination,
+  PaginationContent,
+  PaginationEllipsis,
+  PaginationItem,
+  PaginationLink,
+  PaginationNext,
+  PaginationPrevious,
+} from "~/components/ui/pagination"
+import { useSearchParams } from "react-router";
 
 let api_key = "eaca397b12af42ca89067ac3c10ff934";
 
 function Home() {
+  const [searhParams, setSearchParams] = useSearchParams()
   const [query, setQuery] = useState("");
   const [loading, setLoading] = useState(false);
   const [movies, setMovies] = useState([]);
+  const pages = Number(searhParams.get("page")) || movies?.page
+  const limit = Number(searhParams.get("limit")) || movies?.results?.length
+
+  // we got data from api and in data we got pages so we don't need to create pages. 
+  // what we need to do --> we need to make pagination function and show data according to page.
+  const pagination = () => {
+    const nextPage = pages + 1
+    setMovies(movies)
+    setSearchParams({ page: nextPage })
+    console.log("pages ----->>>>", nextPage, limit);
+
+  }
 
   useEffect(() => {
     async function searchMovie() {
@@ -42,6 +54,7 @@ function Home() {
     }
     searchMovie();
   }, []);
+
 
   return (
     <div className=" ">
@@ -104,17 +117,44 @@ function Home() {
                       alt="rating star"
                     />
                     <span className="text-left text-gray-600 text-sm font-normal">
-                      {movie.vote_average}
+                      {Math.round(movie.vote_average)}.1
                     </span>
                   </div>
                 </li>
               </ol>
             ))
           )}
+          <span className="text-left text-gray-500 text-sm font-medium">
+            Showing page: {pages} of pages: {movies?.total_pages}
+          </span>
         </div>
-        <span className="text-left text-gray-500 text-sm font-medium">
-          Showing page: {movies?.page} of pages: {movies?.total_pages}
-        </span>
+        <div className="my-5">
+          <Pagination>
+            <PaginationContent>
+              <PaginationItem>
+                <PaginationPrevious href="#" />
+              </PaginationItem>
+              <PaginationItem>
+                <PaginationLink href="#">{movies.page}</PaginationLink>
+              </PaginationItem>
+              <PaginationItem>
+                <PaginationLink href="#" isActive>
+                  {pages}
+                </PaginationLink>
+              </PaginationItem>
+              <PaginationItem>
+                <PaginationLink href="#">{movies?.page}</PaginationLink>
+              </PaginationItem>
+              <PaginationItem>
+                <PaginationEllipsis />
+              </PaginationItem>
+              <PaginationItem>
+                <PaginationNext onClick={() => pagination()} />
+              </PaginationItem>
+            </PaginationContent>
+          </Pagination>
+        </div>
+
       </div>
       <div className=" bottom-0 w-full bg-gray-900">
         <Footer />
