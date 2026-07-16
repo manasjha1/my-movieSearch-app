@@ -1,58 +1,43 @@
-import { Menu, Search } from "lucide-react"
-
-export interface MovieDetails {
-    id: number;
-    title: string;
-    description: string;
-    poster: string;
-}
-
-
+import { Menu, PlayCircle, Search } from "lucide-react";
 
 export const Headers = () => {
-    return <div>
-        {/* Header */}
-        <header className="flex  items-center align-middle w-full h-16 mx-auto p-1 bg-gray-900 shadow-lg/100 fixed z-20 mb-28">
-            <nav className="flex justify-between items-center align-middle h-14 w-[90%] mx-auto">
-                <h1 className="text-left text-lg md:text-xl text-white font-sans capitalize">
-                    my movie app
-                </h1>
-                {/* menu icon */}
-                <Menu className="text-right text-md text-indigo-600 flex md:hidden" />
-                <ol className="hidden md:flex">
+    return (
+        <header className="sticky top-0 z-40 border-b border-white/10 bg-black/20 backdrop-blur-2xl">
+            <nav className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
+                <a href="#" className="flex items-center gap-3 text-sm font-semibold uppercase tracking-[0.3em] text-white/90">
+                    <div className="flex h-10 w-10 items-center justify-center rounded-full border border-white/15 bg-white/10 shadow-[0_0_25px_rgba(255,59,59,0.15)]">
+                        <PlayCircle className="h-5 w-5 text-[#ff3b3b]" />
+                    </div>
+                    AuraMx
+                </a>
 
-                    <li className="mx-3 text-white text-sm hover:text-indigo-600 font-normal cursor-pointer">
-                        Drama
-                    </li>
+                <div className="hidden items-center gap-6 text-sm text-white/70 md:flex">
+                    {['Movies', 'TV Shows', 'Genres', 'New Releases'].map((item) => (
+                        <a key={item} href="#" className="transition hover:text-[#ff3b3b]">
+                            {item}
+                        </a>
+                    ))}
+                </div>
 
-                    <li className="mx-3 text-white text-sm hover:text-indigo-600 font-normal cursor-pointer">
-                        Thriller
-                    </li>
-                    <li className="mx-3 text-white text-sm hover:text-indigo-600 font-normal cursor-pointer">
-                        Action
-                    </li>
-                    <li className="mx-3 text-white text-sm hover:text-indigo-600 font-normal cursor-pointer">
-                        Comedy
-                    </li>
-                </ol>
-                <div className="lg:flex items-center align-middle mx-3 hidden">
-                    <div className="flex align-middle p-2 border border-indigo-400 rounded-lg">
-                        {/* search icon */}
-                        <Search className="mx-2 text-xs text-indigo-600" />
+                <div className="flex items-center gap-2 sm:gap-3">
+                    <div className="hidden items-center gap-2 rounded-full border border-white/10 bg-white/10 px-3 py-2 text-sm text-white/70 sm:flex">
+                        <Search className="h-4 w-4 text-white/60" />
                         <input
                             type="search"
-                            placeholder="search movies.."
-                            className="text-gray-400 text-sm outline-none"
+                            placeholder="Search"
+                            className="w-24 bg-transparent text-sm outline-none placeholder:text-white/40"
                         />
                     </div>
-                    {/* button */}
-                    <button
-                        className="text-white text-sm bg-indigo-600 hover:bg-indigo-700 py-2 px-3 mx-2 rounded-lg cursor-pointer  transition-transform duration-300 hover:scale-102"
-                    >
-                        Search
+
+                    <button className="rounded-full border border-white/10 bg-white/10 p-2 text-white/80 transition hover:bg-white/15 md:hidden" aria-label="Menu">
+                        <Menu className="h-4 w-4" />
+                    </button>
+
+                    <button className="rounded-full bg-[#ff3b3b] px-4 py-2 text-sm font-semibold text-white shadow-[0_12px_35px_rgba(255,59,59,0.25)] transition hover:bg-[#ff4f4f]">
+                        Sign In
                     </button>
                 </div>
             </nav>
         </header>
-    </div>
-}
+    );
+};
