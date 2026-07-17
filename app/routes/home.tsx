@@ -1,14 +1,16 @@
 import { useEffect, useMemo, useState } from "react";
 import { Footer } from "~/components/Footer";
 import { Headers } from "~/components/Headers";
+// hero uses simple crossfade; embla carousel removed for this section
 import {
   Calendar,
   ChevronRight,
   Clock3,
+  MoveRight,
   Play,
-  Search,
-  Sparkles,
-  Star,
+  Plus,
+  Share2,
+  View,
 } from "lucide-react";
 import {
   Pagination,
@@ -27,36 +29,56 @@ function Home() {
   const [searchParams, setSearchParams] = useSearchParams();
   const [query, setQuery] = useState("");
   const [loading, setLoading] = useState(true);
-  const [movies, setMovies] = useState<any>(null);
+  const [movies, setMovies] = useState<any>([]);
 
-  const pages = Number(searchParams.get("page")) || movies?.page || 1;
-  const limit = Number(searchParams.get("limit")) || movies?.results?.length || 20;
+  const page = Number(searchParams.get("page")) || movies?.page || 1;
+  const limit =
+    Number(searchParams.get("limit")) || movies?.results?.length || 20;
 
-  const featuredMovie = useMemo(() => movies?.results?.[0], [movies]);
+  const featuredMovie = useMemo(() => movies?.results?.[16], [movies]);
 
-  const pagination = () => {
-    const nextPage = pages + 1;
-    setSearchParams({ page: String(nextPage), limit: String(limit) });
+  // Hero crossfade controls
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const [autoplay, setAutoplay] = useState(true);
+  const [isHovering, setIsHovering] = useState(false);
+  const [slideCount, setSlideCount] = useState(8);
+
+  const getMovies = async () => {
+    try {
+      setLoading(true);
+      const response = await fetch(
+        `https://api.themoviedb.org/3/movie/popular?page=${page}&api_key=${apiKey}`,
+      );
+      const data = await response.json();
+      setMovies(data);
+      console.log("movies data", data.results);
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setLoading(false);
+    }
   };
 
   useEffect(() => {
-    async function searchMovie() {
-      try {
-        setLoading(true);
-        const response = await fetch(
-          `https://api.themoviedb.org/3/movie/popular?api_key=${apiKey}`
-        );
-        const data = await response.json();
-        setMovies(data);
-      } catch (error) {
-        console.log(error);
-      } finally {
-        setLoading(false);
-      }
-    }
-
-    searchMovie();
+    getMovies();
   }, []);
+
+  // Autoplay crossfade for hero
+  useEffect(() => {
+    const count = Math.min(slideCount, movies?.results?.length || 0);
+    if (!autoplay || isHovering || count <= 1) return;
+    const id = setInterval(() => {
+      setCurrentIndex((prev) => (prev + 1) % count);
+    }, 3000);
+    return () => clearInterval(id);
+  }, [autoplay, isHovering, slideCount, movies]);
+
+  // Reset index when movies or slideCount change
+  useEffect(() => {
+    setCurrentIndex(0);
+  }, [movies, slideCount]);
+
+  console.log();
 
   const formatDate = (date: string) => {
     if (!date) return "Coming soon";
@@ -67,218 +89,308 @@ function Home() {
     });
   };
 
-  const truncate = (text: string, maxLength = 120) => {
+  const truncate = (text: string, n = 100) => {
     if (!text) return "";
-    return text.length > maxLength ? `${text.slice(0, maxLength)}...` : text;
+    return text.length > n ? text.slice(0, n).trimEnd() + "..." : text;
   };
 
+  const currentMovie = movies?.results?.[currentIndex] || featuredMovie;
+
   return (
-    <div className="min-h-screen bg-[radial-gradient(circle_at_top_left,rgba(255,59,59,0.16),transparent_24%),radial-gradient(circle_at_top_right,rgba(61,139,255,0.16),transparent_28%),linear-gradient(135deg,#05070c_0%,#0a0d16_100%)] text-white">
+    <div className="min-h-screen bg-[#131313] text-white">
       <Headers />
 
-      <main className="mx-auto max-w-7xl px-4 pb-12 pt-6 sm:px-6 lg:px-8 lg:pt-10">
-        <section className="overflow-hidden rounded-[2rem] border border-white/10 bg-white/8 p-4 shadow-[0_24px_90px_rgba(0,0,0,0.35)] backdrop-blur-2xl sm:p-6 lg:p-8">
-          <div className="flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
-            <div className="max-w-2xl">
-              <div className="mb-4 inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/10 px-3 py-1 text-sm text-white/70">
-                <Sparkles className="h-4 w-4 text-[#3d8bff]" />
-                Premium streaming experience
-              </div>
-              <h1 className="text-4xl font-semibold leading-tight sm:text-5xl lg:text-6xl">
-                Discover timeless stories in a cinematic glow.
-              </h1>
-              <p className="mt-4 text-base leading-8 text-white/70 sm:text-lg">
-                Explore the latest releases through a polished, immersive interface built around the same trusted movie catalog you already love.
-              </p>
-            </div>
+      <main className="pt-20">
+        <section className="relative h-[85vh] w-full overflow-hidden flex flex-col justify-end">
+          <div
+            className="absolute inset-0"
+            onMouseEnter={() => setIsHovering(true)}
+            onMouseLeave={() => setIsHovering(false)}
+          >
+            <div className="h-full relative">
+              {movies?.results
+                ?.slice(0, slideCount)
+                .map((movie: any, idx: number) => (
+                  <div
+                    key={movie.id}
+                    className={`absolute inset-0 transition-opacity duration-700 ${currentIndex === idx
+                      ? "opacity-100 z-20"
+                      : "opacity-0 z-10"
+                      }`}
+                  >
+                    <img
+                      src={
+                        movie.backdrop_path
+                          ? `https://image.tmdb.org/t/p/original${movie.backdrop_path}`
+                          : movie.poster_path
+                            ? `https://image.tmdb.org/t/p/original${movie.poster_path}`
+                            : "https://images.unsplash.com/photo-1517602302552-471fe67acf66?auto=format&fit=crop&w=1600&q=80"
+                      }
+                      alt={
+                        movie.title ||
+                        featuredMovie?.title ||
+                        "CinéNoir hero image"
+                      }
+                      className={`h-full w-full object-cover grayscale-[0.2] contrast-[1.1]`}
+                    />
+                    <div className="absolute inset-0 bg-linear-to-t from-[#131313] via-[#131313]/80 to-transparent" />
+                  </div>
+                ))}
 
-            {/* <div className="flex w-full max-w-md items-center gap-2 rounded-full border border-white/10 bg-black/25 px-3 py-2 shadow-[0_10px_30px_rgba(0,0,0,0.25)] backdrop-blur-xl">
-              <Search className="h-4 w-4 text-white/60" />
-              <input
-                type="search"
-                value={query}
-                onChange={(e) => setQuery(e.target.value)}
-                placeholder="Search your next favorite"
-                className="w-full bg-transparent text-sm text-white outline-none placeholder:text-white/40"
-              />
-              <button className="rounded-full bg-[#ff3b3b] px-3 py-2 text-sm font-semibold text-white transition hover:bg-[#ff4f4f]">
-                Explore
-              </button>
-            </div> */}
+              {/* indicators */}
+              <div className="absolute left-1/2 -translate-x-1/2 bottom-6 z-40 flex gap-2">
+                {movies?.results
+                  ?.slice(0, slideCount)
+                  .map((_: any, i: number) => (
+                    <button
+                      key={`dot-${i}`}
+                      onClick={() => setCurrentIndex(i)}
+                      className={`h-2 w-8 rounded-full transition-all duration-300 ${currentIndex === i ? "bg-white" : "bg-white/20"}`}
+                      aria-label={`Go to slide ${i + 1}`}
+                    />
+                  ))}
+              </div>
+            </div>
           </div>
 
-          <div className="mt-8 grid gap-6 lg:grid-cols-[1.05fr_0.95fr]">
-            <div className="rounded-[1.75rem] border border-white/10 bg-black/25 p-5 shadow-[inset_0_1px_0_rgba(255,255,255,0.08)] sm:p-6">
-              <div className="flex items-center justify-between text-sm text-white/65">
-                <span>Featured Premiere</span>
-                <span className="rounded-full border border-white/10 bg-white/10 px-3 py-1 text-[11px] uppercase tracking-[0.3em] text-white/70">
-                  Now streaming
+          <div className="relative z-20 px-[5vw] pb-24 grid md:grid-cols-2 items-end gap-12">
+            <div>
+              <div className="flex flex-wrap items-center gap-3 mb-6">
+                <span className="rounded-full border border-white/20 bg-white/10 px-3 py-1 text-[0.65rem] uppercase tracking-[0.4em] text-white/90">
+                  FEATURE FILM
+                </span>
+                <span className="text-[0.75rem] uppercase tracking-[0.35em] text-[#e5e2e1]/70">
+                  TRENDING • TOP RATED • UPCOMING
                 </span>
               </div>
 
-              <div className="mt-5 flex items-center gap-3">
-                <div className="flex h-12 w-12 items-center justify-center rounded-2xl border border-[#ff3b3b]/30 bg-[#ff3b3b]/10">
-                  <Play className="h-5 w-5 text-[#ff3b3b]" />
-                </div>
-                <div>
-                  <h2 className="text-2xl font-semibold text-white">
-                    {featuredMovie?.title || "Popular release"}
-                  </h2>
-                  <p className="mt-1 text-sm text-white/60">
-                    {featuredMovie?.release_date ? formatDate(featuredMovie.release_date) : "Fresh arrival"}
-                  </p>
-                </div>
-              </div>
-
-              <p className="mt-5 text-sm leading-8 text-white/70">
-                {featuredMovie?.overview
-                  ? truncate(featuredMovie.overview, 180)
-                  : "A curated collection of standout stories, all presented with elegant motion and a premium feel."}
+              <h1 className="font-[Libre Caslon Text] text-6xl leading-[0.9] md:text-[5rem] md:leading-[0.9]">
+                Every Story Starts Here
+              </h1>
+              <p className="mt-4 max-w-xl text-[1.125rem] leading-8 text-[#e5e2e1]/75 md:text-[1.125rem]">
+                Step into a world of unforgettable stories. Explore thousands of
+                films, discover what's trending, and build your personal
+                watchlist.{" "}
               </p>
-
-              <div className="mt-6 flex flex-wrap gap-3 text-sm text-white/75">
-                <span className="rounded-full border border-white/10 bg-white/10 px-3 py-1.5">
-                  TMDb {featuredMovie?.vote_average?.toFixed(1) || "8.8"}
-                </span>
-                <span className="rounded-full border border-white/10 bg-white/10 px-3 py-1.5">
-                  {featuredMovie?.vote_count ? `${featuredMovie.vote_count} reviews` : "Trending"}
-                </span>
-              </div>
             </div>
 
-            <div className="relative overflow-hidden rounded-[1.75rem] border border-white/10 bg-white/10 p-3 shadow-[0_20px_70px_rgba(0,0,0,0.24)]">
-              <img
-                src={
-                  featuredMovie?.poster_path
-                    ? `https://image.tmdb.org/t/p/w500${featuredMovie.poster_path}`
-                    : "https://images.unsplash.com/photo-1517602302552-471fe67acf66?auto=format&fit=crop&w=900&q=80"
-                }
-                alt={featuredMovie?.title || "Featured movie"}
-                className="h-105 w-full rounded-[1.4rem] object-cover"
-              />
-              <div className="absolute inset-x-6 bottom-6 rounded-[1.3rem] border border-white/10 bg-black/35 p-4 backdrop-blur-xl">
-                <div className="flex items-center justify-between">
-                  <span className="text-sm text-white/70">Featured highlight</span>
-                  <span className="rounded-full bg-[#3d8bff]/15 px-2.5 py-1 text-[10px] uppercase tracking-[0.3em] text-[#8dc2ff]">
-                    4K UHD
-                  </span>
-                </div>
-                <h3 className="mt-2 text-xl font-semibold text-white">{featuredMovie?.title || "Featured movie"}</h3>
+            <div className="flex flex-col md:items-end gap-6">
+              <div className="flex flex-wrap gap-4">
+                <button className="inline-flex items-center gap-3 rounded-full bg-white px-10 py-4 text-[0.75rem] uppercase tracking-[0.35em] text-[#131313] transition hover:bg-[#e5e2e1]/90 cursor-pointer">
+                  EXPLORE MOVIES
+                  <MoveRight className="h-4 w-4" />
+
+                </button>
+                <button className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-transparent px-10 py-4 text-[0.75rem] uppercase tracking-[0.35em] text-white transition hover:bg-white/10 cursor-pointer">
+                  <View className="h-4 w-4" />
+                  VIEW COLLECTION
+                </button>
+                <button className="inline-flex items-center justify-center rounded-full border border-white/20 bg-transparent p-4 text-white transition hover:bg-white/10">
+                  <Share2 className="h-4 w-4" />
+                </button>
               </div>
             </div>
           </div>
         </section>
 
-        <section className="mt-10">
-          <div className="mb-6 flex items-end justify-between gap-4">
-            <div>
-              <p className="text-sm uppercase tracking-[0.35em] text-white/45">Trending now</p>
-              <h2 className="mt-2 text-3xl font-semibold text-white sm:text-4xl">
-                Handpicked from the catalog
+        <div className="flex flex-col gap-16 py-16">
+          <section className="px-[5vw]">
+            <div className="flex justify-between items-baseline mb-8">
+              <h2 className="font-[Libre Caslon Text] text-[2rem] md:text-[3rem] italic">
+                Award Winning
               </h2>
+              <a
+                className="font-[Manrope] text-[0.75rem] uppercase tracking-[0.35em] text-[#e5e2e1]/70 transition hover:text-white"
+                href="#"
+              >
+                VIEW ALL
+              </a>
             </div>
-            <a href="#" className="hidden items-center gap-2 rounded-full border border-white/10 bg-white/8 px-4 py-2 text-sm text-white/70 transition hover:bg-white/10 sm:flex">
-              Browse all
-              <ChevronRight className="h-4 w-4" />
-            </a>
-          </div>
-
-          {loading ? (
-            <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-4">
-              {Array.from({ length: 8 }).map((_, index) => (
-                <div key={index} className="animate-pulse rounded-[1.75rem] border border-white/10 bg-white/8 p-3">
-                  <div className="h-64 rounded-[1.3rem] bg-white/10" />
-                  <div className="mt-4 h-4 w-3/4 rounded-full bg-white/10" />
-                  <div className="mt-3 h-3 w-1/2 rounded-full bg-white/10" />
-                </div>
-              ))}
-            </div>
-          ) : (
-            <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-4">
+            <div className="flex gap-6 overflow-x-auto hide-scrollbar snap-x pb-6">
               {movies?.results?.map((movie: any) => (
-                <article
+                <div
                   key={movie.id}
-                  className="group relative overflow-hidden rounded-[1.75rem] border border-white/10 bg-white/8 p-3 shadow-[0_20px_60px_rgba(0,0,0,0.22)] backdrop-blur-2xl transition duration-300 hover:-translate-y-2 hover:shadow-[0_28px_80px_rgba(0,0,0,0.3)]"
+                  className="movie-card flex-none w-[60vw] md:w-[22vw] aspect-2/3 relative snap-start overflow-hidden group cursor-pointer"
                 >
                   <img
-                    src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`}
+                    className="w-full h-full object-cover"
+                    src={
+                      movie.poster_path
+                        ? `https://image.tmdb.org/t/p/w500${movie.poster_path}`
+                        : "https://images.unsplash.com/photo-1517602302552-471fe67acf66?auto=format&fit=crop&w=900&q=80"
+                    }
                     alt={movie.title}
-                    className="h-full w-full rounded-[1.3rem] object-cover"
                   />
-                  <div className="absolute inset-x-6 top-6 flex items-center justify-between">
-                    <span className="rounded-full border border-white/15 bg-black/35 px-2.5 py-1 text-[10px] uppercase tracking-[0.3em] text-white/70">
-                      Popular
-                    </span>
-                    <span className="rounded-full border border-white/15 bg-white/10 px-2.5 py-1 text-[10px] uppercase tracking-[0.3em] text-white/70">
-                      New
-                    </span>
+                  <div className="movie-overlay absolute inset-0 bg-[#131313]/90 opacity-0 transition-opacity duration-500 flex flex-col justify-end p-6">
+                    <h3 className="font-[Libre Caslon Text] text-[1rem]">
+                      {movie.title}
+                    </h3>
                   </div>
-                  <div className="relative mt-4 flex items-start justify-between gap-3">
-                    <div>
-                      <h3 className="text-lg font-semibold text-white">{movie.title}</h3>
-
-                    </div>
-                    <span className="rounded-full border border-white/10 bg-white/10 px-2.5 py-1 text-xs text-white/80">
-                      ★ {Math.round(movie.vote_average * 10) / 10}
-                    </span>
-                  </div>
-                  <p className="mt-2 text-sm leading-7 text-white/60">
-                    {truncate(movie.overview, 90)}
-                  </p>
-                  <div className="relative mt-4 flex items-center justify-between text-sm text-white/60">
-                    <div className="flex items-center gap-2">
-                      <Calendar className="h-4 w-4 text-[#3d8bff]" />
-                      <span>{movie.release_date ? formatDate(movie.release_date) : "Soon"}</span>
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <Clock3 className="h-4 w-4 text-[#ff3b3b]" />
-                      <span>{Math.max(90, Math.round(movie.vote_count / 100))} min</span>
-                    </div>
-                  </div>
-
-                  <div className="relative mt-5 flex items-center justify-between">
-                    <button className="rounded-full bg-[#ff3b3b] px-4 py-2 text-sm font-semibold text-white transition hover:bg-[#ff4f4f]">
-                      Watch now
-                    </button>
-                    <button className="rounded-full border border-white/10 bg-white/10 px-4 py-2 text-sm text-white/70 transition hover:bg-white/15">
-                      Details
-                    </button>
-                  </div>
-                </article>
+                </div>
               ))}
             </div>
-          )}
-        </section>
+          </section>
 
-        <div className="mt-8 rounded-[1.75rem] border border-white/10 bg-white/8 p-4 shadow-[0_15px_45px_rgba(0,0,0,0.2)] backdrop-blur-xl">
-          <Pagination>
-            <PaginationContent>
-              <PaginationItem>
-                <PaginationPrevious href="#" />
-              </PaginationItem>
-              <PaginationItem>
-                <PaginationLink href="#">{pages}</PaginationLink>
-              </PaginationItem>
-              <PaginationItem>
-                <PaginationLink href="#" isActive>
-                  {pages}
-                </PaginationLink>
-              </PaginationItem>
-              <PaginationItem>
-                <PaginationLink href="#">{pages + 1}</PaginationLink>
-              </PaginationItem>
-              <PaginationItem>
-                <PaginationEllipsis />
-              </PaginationItem>
-              <PaginationItem>
-                <PaginationNext onClick={() => pagination()} />
-              </PaginationItem>
-            </PaginationContent>
-          </Pagination>
+          <section className="px-[5vw]">
+            <div className="flex justify-between items-baseline mb-8">
+              <h2 className="font-[Libre Caslon Text] text-[2rem] md:text-[3rem]">
+                Recently Added
+              </h2>
+              <a
+                className="font-[Manrope] text-[0.75rem] uppercase tracking-[0.35em] text-[#e5e2e1]/70 transition hover:text-white"
+                href="#"
+              >
+                VIEW ALL
+              </a>
+            </div>
+            <div className="flex gap-6 overflow-x-auto hide-scrollbar snap-x pb-6">
+              {movies?.results?.map((movie: any) => (
+                <div
+                  key={movie.id}
+                  className="movie-card flex-none w-[60vw] md:w-[22vw] aspect-2/3 relative snap-start overflow-hidden group cursor-pointer"
+                >
+                  <img
+                    className="w-full h-full object-cover"
+                    src={
+                      movie.poster_path
+                        ? `https://image.tmdb.org/t/p/w500${movie.poster_path}`
+                        : "https://images.unsplash.com/photo-1517602302552-471fe67acf66?auto=format&fit=crop&w=900&q=80"
+                    }
+                    alt={movie.title}
+                  />
+                  <div className="movie-overlay absolute inset-0 bg-[#131313]/90 opacity-0 transition-opacity duration-500 flex flex-col justify-end p-6">
+                    <h3 className="font-[Libre Caslon Text] text-[1rem]">
+                      {movie.title}
+                    </h3>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </section>
+
+          <section className="px-[5vw]">
+            <h2 className="font-[Libre Caslon Text] text-[2rem] md:text-[3rem] mb-8 italic">
+              Director's Cut
+            </h2>
+            <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
+              <div className="md:col-span-2 relative group overflow-hidden rounded-[1.5rem] h-60">
+                <img
+                  className="w-full h-60 object-cover transition-transform duration-700 group-hover:scale-110"
+                  src={
+                    featuredMovie?.backdrop_path
+                      ? `https://image.tmdb.org/t/p/original${featuredMovie.backdrop_path}`
+                      : "https://images.unsplash.com/photo-1517602302552-471fe67acf66?auto=format&fit=crop&w=1200&q=80"
+                  }
+                  alt={featuredMovie?.title || "Director Cut"}
+                />
+                <div className="absolute inset-0 bg-linear-to-t from-[#131313]/90 via-transparent to-transparent" />
+                <div className="absolute top-8 p-10">
+                  <span className="bg-white text-[#131313] px-3 py-1 font-[Manrope] text-[10px] tracking-[0.2em] uppercase inline-block mb-4">
+                    EXCLUSIVE
+                  </span>
+                  <h3 className="font-[Libre Caslon Text] text-[2rem] leading-tight">
+                    Visions of the Void
+                  </h3>
+                  <p className="font-[Manrope] text-[0.875rem] text-[#e5e2e1]/70 mt-2 max-w-sm">
+                    A retrospective on minimalism in modern cinema by acclaimed
+                    director Marcus Thorne.
+                  </p>
+                </div>
+              </div>
+
+              <div className="md:col-span-2 flex gap-6">
+                {movies?.results?.slice(0, 2).map((movie: any) => (
+                  <div key={movie.id} className="relative group overflow-hidden rounded-[1.5rem] w-70 h-auto">
+                    <img
+                      className="w-70 h-auto object-cover transition-transform duration-700 group-hover:scale-110"
+                      src={
+                        movie.poster_path
+                          ? `https://image.tmdb.org/t/p/w500${movie.poster_path}`
+                          : "https://images.unsplash.com/photo-1517602302552-471fe67acf66?auto=format&fit=crop&w=900&q=80"
+                      }
+                      alt={movie.title}
+                    />
+                    <div className="absolute inset-0 bg-[#131313]/40 transition-colors group-hover:bg-[#131313]/10"></div>
+                    <div className="absolute bottom-6 left-6">
+                      <h4 className="font-[Libre Caslon Text] text-[1.25rem]">
+                        {movie.title}
+                      </h4>
+                    </div>
+                  </div>
+                ))}
+              </div>
+              {/* 2nd section */}
+              <div className="md:col-span-2 flex gap-6">
+                {movies?.results?.slice(3, 5).map((movie: any) => (
+                  <div key={movie.id} className="relative group overflow-hidden rounded-[1.5rem] w-200 h-auto">
+                    <img
+                      className="w-110 h-auto object-cover transition-transform duration-700 group-hover:scale-110"
+                      src={
+                        movie.poster_path
+                          ? `https://image.tmdb.org/t/p/w500${movie.poster_path}`
+                          : "https://images.unsplash.com/photo-1517602302552-471fe67acf66?auto=format&fit=crop&w=900&q=80"
+                      }
+                      alt={movie.title}
+                    />
+                    <div className="absolute inset-0 bg-[#131313]/40 transition-colors group-hover:bg-[#131313]/10"></div>
+                    <div className="absolute bottom-6 left-6">
+                      <h4 className="font-[Libre Caslon Text] text-[1.25rem]">
+                        {movie.title}
+                      </h4>
+                    </div>
+                  </div>
+                ))}
+              </div>
+              <div className="md:col-span-2 relative group overflow-hidden rounded-[1.5rem] h-105">
+                <img
+                  className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                  src={
+                    featuredMovie?.backdrop_path
+                      ? `https://image.tmdb.org/t/p/original${featuredMovie.backdrop_path}`
+                      : "https://images.unsplash.com/photo-1517602302552-471fe67acf66?auto=format&fit=crop&w=1200&q=80"
+                  }
+                  alt={featuredMovie?.title || "Director Cut"}
+                />
+                <div className="absolute inset-0 bg-linear-to-t from-[#131313]/90 via-transparent to-transparent" />
+                <div className="absolute top-45 p-10">
+                  <span className="bg-white text-[#131313] px-3 py-1 font-[Manrope] text-[10px] tracking-[0.2em] uppercase inline-block mb-4">
+                    EXCLUSIVE
+                  </span>
+                  <h3 className="font-[Libre Caslon Text] text-[2rem] leading-tight">
+                    Visions of the Void
+                  </h3>
+                  <p className="font-[Manrope] text-[0.875rem] text-[#e5e2e1]/70 mt-2 max-w-sm">
+                    A retrospective on minimalism in modern cinema by acclaimed
+                    director Marcus Thorne.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </section>
         </div>
       </main>
 
       <Footer />
+
+      <nav className="fixed bottom-0 left-0 w-full z-50 flex justify-around items-center h-16 px-4 bg-[#131313]/90 backdrop-blur-lg border-t border-white/5 md:hidden">
+        {[
+          { icon: "home", label: "Home" },
+          { icon: "search", label: "Search" },
+          { icon: "video_library", label: "Library" },
+          { icon: "person", label: "Profile" },
+        ].map((item) => (
+          <a
+            key={item.label}
+            className="flex flex-col items-center justify-center text-white transition-transform active:scale-95"
+            href="#"
+          >
+            <span className="material-symbols-outlined">{item.icon}</span>
+            <span className="font-[Manrope] text-[0.625rem] mt-1 uppercase tracking-[0.25em]">
+              {item.label}
+            </span>
+          </a>
+        ))}
+      </nav>
     </div>
   );
 }

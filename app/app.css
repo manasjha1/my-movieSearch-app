@@ -156,3 +156,29 @@ body {
     @apply font-sans;
   }
 }
+
+body {
+  background-color: #131313;
+  color: #e5e2e1;
+}
+
+.hide-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+.hide-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.movie-card:hover .movie-overlay {
+  opacity: 1;
+}
+
+.movie-card img {
+  transition: transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.movie-card:hover img {
+  transform: scale(1.05);
+}
