@@ -47,7 +47,7 @@ function Home() {
     try {
       setLoading(true);
       const response = await fetch(
-        `https://api.themoviedb.org/3/movie/popular?page=${page}&api_key=${apiKey}`,
+        `https://api.themoviedb.org/3/movie/popular?api_key=${apiKey}`,
       );
       const data = await response.json();
       setMovies(data);
@@ -273,7 +273,81 @@ function Home() {
               Director's Cut
             </h2>
             <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-              <div className="md:col-span-2 relative group overflow-hidden rounded-[1.5rem] h-60">
+              <div className="md:col-span-2 relative group overflow-hidden rounded-[1.5rem] h-105">
+                <img
+                  className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                  src={
+                    featuredMovie?.backdrop_path
+                      ? `https://image.tmdb.org/t/p/original${featuredMovie.backdrop_path}`
+                      : "https://images.unsplash.com/photo-1517602302552-471fe67acf66?auto=format&fit=crop&w=1200&q=80"
+                  }
+                  alt={featuredMovie?.title || "Director Cut"}
+                />
+                <div className="absolute inset-0 bg-linear-to-t from-[#131313]/90 via-transparent to-transparent" />
+                <div className="absolute top-45 p-10">
+                  <span className="bg-white text-[#131313] px-3 py-1 font-[Manrope] text-[10px] tracking-[0.2em] uppercase inline-block mb-4">
+                    EXCLUSIVE
+                  </span>
+                  <h3 className="font-[Libre Caslon Text] font-bold text-[2rem] leading-tight">
+                    Visions of the Void
+                  </h3>
+                  <p className="font-[Manrope] font-medium text-[0.875rem] text-[#e5e2e1]/70 mt-2 max-w-sm">
+                    A retrospective on minimalism in modern cinema by acclaimed
+                    director Marcus Thorne.
+                  </p>
+                </div>
+              </div>
+
+              <div className="md:col-span-2 flex gap-6">
+                {movies?.results?.slice(0, 2).map((movie: any) => (
+                  <div key={movie.id} className="relative group overflow-hidden rounded-[1.5rem] h-auto">
+                    <img
+                      className="w-90 h-auto object-cover transition-transform duration-700 group-hover:scale-110"
+                      src={
+                        movie.poster_path
+                          ? `https://image.tmdb.org/t/p/w500${movie.poster_path}`
+                          : "https://images.unsplash.com/photo-1517602302552-471fe67acf66?auto=format&fit=crop&w=900&q=80"
+                      }
+                      alt={movie.title}
+                    />
+                    <div className="absolute inset-0 bg-[#131313]/40 transition-colors group-hover:bg-[#131313]/10"></div>
+                    <div className="absolute bottom-6 left-6">
+                      <h4 className="font-[Libre Caslon Text] text-[1.25rem]">
+                        {movie.title}
+                      </h4>
+                    </div>
+                  </div>
+                ))}
+              </div>
+              {/* 2nd section */}
+              <div className="md:col-span-4 flex gap-6">
+                {movies?.results?.slice(3, 5).map((movie: any) => (
+                  <div key={movie.id} className="relative group overflow-hidden rounded-[1.5rem] h-60">
+                    <img
+                      className="w-170 h-70 object-cover transition-transform duration-700 group-hover:scale-110"
+                      src={
+                        movie.poster_path
+                          ? `https://image.tmdb.org/t/p/w500${movie.poster_path}`
+                          : "https://images.unsplash.com/photo-1517602302552-471fe67acf66?auto=format&fit=crop&w=900&q=80"
+                      }
+                      alt={movie.title}
+                    />
+                    <div className="absolute inset-0 bg-linear-to-t from-[#131313]/90 via-transparent to-transparent" />
+                    <div className="absolute top-30 p-10">
+                      {/* <span className="bg-white text-[#131313] px-3 py-1 font-[Manrope] text-[10px] tracking-[0.2em] uppercase inline-block mb-4">
+                        EXCLUSIVE
+                      </span> */}
+                      <h3 className="font-[Libre Caslon Text] font-bold text-[2rem] leading-tight">
+                        {movie?.title}
+                      </h3>
+                      <p className="font-[Manrope] text-[0.875rem] text-[#e5e2e1]/70 mt-2 max-w-sm truncate">
+                        {movie?.overview}
+                      </p>
+                    </div>
+                  </div>
+                ))}
+              </div>
+              {/* <div className="md:col-span-2 relative group overflow-hidden rounded-[1.5rem] h-60">
                 <img
                   className="w-full h-60 object-cover transition-transform duration-700 group-hover:scale-110"
                   src={
@@ -296,75 +370,7 @@ function Home() {
                     director Marcus Thorne.
                   </p>
                 </div>
-              </div>
-
-              <div className="md:col-span-2 flex gap-6">
-                {movies?.results?.slice(0, 2).map((movie: any) => (
-                  <div key={movie.id} className="relative group overflow-hidden rounded-[1.5rem] w-70 h-auto">
-                    <img
-                      className="w-70 h-auto object-cover transition-transform duration-700 group-hover:scale-110"
-                      src={
-                        movie.poster_path
-                          ? `https://image.tmdb.org/t/p/w500${movie.poster_path}`
-                          : "https://images.unsplash.com/photo-1517602302552-471fe67acf66?auto=format&fit=crop&w=900&q=80"
-                      }
-                      alt={movie.title}
-                    />
-                    <div className="absolute inset-0 bg-[#131313]/40 transition-colors group-hover:bg-[#131313]/10"></div>
-                    <div className="absolute bottom-6 left-6">
-                      <h4 className="font-[Libre Caslon Text] text-[1.25rem]">
-                        {movie.title}
-                      </h4>
-                    </div>
-                  </div>
-                ))}
-              </div>
-              {/* 2nd section */}
-              <div className="md:col-span-2 flex gap-6">
-                {movies?.results?.slice(3, 5).map((movie: any) => (
-                  <div key={movie.id} className="relative group overflow-hidden rounded-[1.5rem] w-200 h-auto">
-                    <img
-                      className="w-110 h-auto object-cover transition-transform duration-700 group-hover:scale-110"
-                      src={
-                        movie.poster_path
-                          ? `https://image.tmdb.org/t/p/w500${movie.poster_path}`
-                          : "https://images.unsplash.com/photo-1517602302552-471fe67acf66?auto=format&fit=crop&w=900&q=80"
-                      }
-                      alt={movie.title}
-                    />
-                    <div className="absolute inset-0 bg-[#131313]/40 transition-colors group-hover:bg-[#131313]/10"></div>
-                    <div className="absolute bottom-6 left-6">
-                      <h4 className="font-[Libre Caslon Text] text-[1.25rem]">
-                        {movie.title}
-                      </h4>
-                    </div>
-                  </div>
-                ))}
-              </div>
-              <div className="md:col-span-2 relative group overflow-hidden rounded-[1.5rem] h-105">
-                <img
-                  className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
-                  src={
-                    featuredMovie?.backdrop_path
-                      ? `https://image.tmdb.org/t/p/original${featuredMovie.backdrop_path}`
-                      : "https://images.unsplash.com/photo-1517602302552-471fe67acf66?auto=format&fit=crop&w=1200&q=80"
-                  }
-                  alt={featuredMovie?.title || "Director Cut"}
-                />
-                <div className="absolute inset-0 bg-linear-to-t from-[#131313]/90 via-transparent to-transparent" />
-                <div className="absolute top-45 p-10">
-                  <span className="bg-white text-[#131313] px-3 py-1 font-[Manrope] text-[10px] tracking-[0.2em] uppercase inline-block mb-4">
-                    EXCLUSIVE
-                  </span>
-                  <h3 className="font-[Libre Caslon Text] text-[2rem] leading-tight">
-                    Visions of the Void
-                  </h3>
-                  <p className="font-[Manrope] text-[0.875rem] text-[#e5e2e1]/70 mt-2 max-w-sm">
-                    A retrospective on minimalism in modern cinema by acclaimed
-                    director Marcus Thorne.
-                  </p>
-                </div>
-              </div>
+              </div> */}
             </div>
           </section>
         </div>
