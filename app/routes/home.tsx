@@ -217,7 +217,7 @@ function Home() {
                 VIEW ALL
               </a>
             </div>
-            <RecentMovie hook={undefined} />
+            <RecentMovie popularMovies={popularMovies} />
           </section>
 
           <section className="px-[5vw]">
