@@ -1,11 +1,17 @@
+import { Link } from "react-router";
+
 export const Headers = () => {
     return (
-        <header className="fixed inset-x-0 top-0 z-50 border-b border-white/10 bg-[#131313]/80 backdrop-blur-xl">
+        <header className="fixed inset-x-0 top-0 z-50 border-b border-white/10 bg-[#131313]/80 backdrop-blur-sm">
             <nav className="mx-auto flex h-20 max-w-7xl items-center justify-between px-[5vw]">
-                <div className="font-[Libre Caslon Text] text-[1.1rem] tracking-tighter text-white">CinéNoir</div>
+                <Link to="/">
+                    <div className="font-[Libre Caslon Text] font-bold text-[1.6rem] tracking-tighter text-white">
+                        CinéNoir
+                    </div>
+                </Link>
 
                 <div className="hidden items-center gap-8 text-[0.75rem] uppercase tracking-[0.35em] text-[#e5e2e1]/70 md:flex">
-                    {['Discovery', 'Browse', 'My List', 'Originals'].map((item) => (
+                    {["Discovery", "Browse", "My List", "Originals"].map((item) => (
                         <a key={item} href="#" className="transition hover:text-white">
                             {item}
                         </a>
@@ -26,7 +32,10 @@ export const Headers = () => {
                     <button className="hidden rounded-full border border-white/15 bg-white/10 px-5 py-2 text-[0.75rem] uppercase tracking-[0.35em] text-white transition hover:bg-white/20 md:inline-flex">
                         Subscribe
                     </button>
-                    <button className="rounded-full border border-white/10 bg-white/10 p-2 text-white/80 transition hover:bg-white/15 md:hidden" aria-label="Menu">
+                    <button
+                        className="rounded-full border border-white/10 bg-white/10 p-2 text-white/80 transition hover:bg-white/15 md:hidden"
+                        aria-label="Menu"
+                    >
                         <span className="material-symbols-outlined">menu</span>
                     </button>
                 </div>

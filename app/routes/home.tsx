@@ -21,11 +21,16 @@ import {
   PaginationNext,
   PaginationPrevious,
 } from "~/components/ui/pagination";
-import { useSearchParams } from "react-router";
+import { Link, useSearchParams } from "react-router";
+import { Button } from "~/components/ui/button";
+import { env } from "~/src/api.ts/config/env";
+import RecentMovie from "./recentMovie";
+import { usePpopularMovies } from "~/hooks/queries";
 
 const apiKey = "eaca397b12af42ca89067ac3c10ff934";
 
 function Home() {
+  const { data: popularMovies } = usePpopularMovies()
   const [searchParams, setSearchParams] = useSearchParams();
   const [query, setQuery] = useState("");
   const [loading, setLoading] = useState(true);
@@ -48,10 +53,12 @@ function Home() {
       setLoading(true);
       const response = await fetch(
         `https://api.themoviedb.org/3/movie/popular?api_key=${apiKey}`,
+        // `https://api.themoviedb.org/3/movie/popular?api_key=${apiKey}`
       );
+      console.log("movies data", response);
+
       const data = await response.json();
       setMovies(data);
-      console.log("movies data", data.results);
     } catch (error) {
       console.log(error);
     } finally {
@@ -108,7 +115,7 @@ function Home() {
             onMouseLeave={() => setIsHovering(false)}
           >
             <div className="h-full relative">
-              {movies?.results
+              {popularMovies?.results
                 ?.slice(0, slideCount)
                 .map((movie: any, idx: number) => (
                   <div
@@ -164,7 +171,7 @@ function Home() {
                 </span>
               </div>
 
-              <h1 className="font-[Libre Caslon Text] text-6xl leading-[0.9] md:text-[5rem] md:leading-[0.9]">
+              <h1 className="font-[Libre Caslon Text] font-semibold text-6xl leading-[0.9] md:text-[5rem] md:leading-[0.9]">
                 Every Story Starts Here
               </h1>
               <p className="mt-4 max-w-xl text-[1.125rem] leading-8 text-[#e5e2e1]/75 md:text-[1.125rem]">
@@ -176,10 +183,14 @@ function Home() {
 
             <div className="flex flex-col md:items-end gap-6">
               <div className="flex flex-wrap gap-4">
-                <button className="inline-flex items-center gap-3 rounded-full bg-white px-10 py-4 text-[0.75rem] uppercase tracking-[0.35em] text-[#131313] transition hover:bg-[#e5e2e1]/90 cursor-pointer">
+                <button
+                  onClick={() =>
+                    window.scrollTo({ top: 700, behavior: "smooth" })
+                  }
+                  className="inline-flex items-center gap-3 rounded-full bg-white px-10 py-4 text-[0.75rem] uppercase tracking-[0.35em] text-[#131313] transition hover:bg-[#e5e2e1]/90 cursor-pointer"
+                >
                   EXPLORE MOVIES
                   <MoveRight className="h-4 w-4" />
-
                 </button>
                 <button className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-transparent px-10 py-4 text-[0.75rem] uppercase tracking-[0.35em] text-white transition hover:bg-white/10 cursor-pointer">
                   <View className="h-4 w-4" />
@@ -192,12 +203,12 @@ function Home() {
             </div>
           </div>
         </section>
-
+        {/* Popular Movies */}
         <div className="flex flex-col gap-16 py-16">
           <section className="px-[5vw]">
             <div className="flex justify-between items-baseline mb-8">
-              <h2 className="font-[Libre Caslon Text] text-[2rem] md:text-[3rem] italic">
-                Award Winning
+              <h2 className="font-[Libre Caslon Text] font-bold text-[2rem] md:text-[3rem] tracking-[4px]">
+                Popular Movies
               </h2>
               <a
                 className="font-[Manrope] text-[0.75rem] uppercase tracking-[0.35em] text-[#e5e2e1]/70 transition hover:text-white"
@@ -206,42 +217,19 @@ function Home() {
                 VIEW ALL
               </a>
             </div>
-            <div className="flex gap-6 overflow-x-auto hide-scrollbar snap-x pb-6">
-              {movies?.results?.map((movie: any) => (
-                <div
-                  key={movie.id}
-                  className="movie-card flex-none w-[60vw] md:w-[22vw] aspect-2/3 relative snap-start overflow-hidden group cursor-pointer"
-                >
-                  <img
-                    className="w-full h-full object-cover"
-                    src={
-                      movie.poster_path
-                        ? `https://image.tmdb.org/t/p/w500${movie.poster_path}`
-                        : "https://images.unsplash.com/photo-1517602302552-471fe67acf66?auto=format&fit=crop&w=900&q=80"
-                    }
-                    alt={movie.title}
-                  />
-                  <div className="movie-overlay absolute inset-0 bg-[#131313]/90 opacity-0 transition-opacity duration-500 flex flex-col justify-end p-6">
-                    <h3 className="font-[Libre Caslon Text] text-[1rem]">
-                      {movie.title}
-                    </h3>
-                  </div>
-                </div>
-              ))}
-            </div>
+            <RecentMovie hook={undefined} />
           </section>
 
           <section className="px-[5vw]">
             <div className="flex justify-between items-baseline mb-8">
-              <h2 className="font-[Libre Caslon Text] text-[2rem] md:text-[3rem]">
+              <h2 className="font-[Libre Caslon Text] font-bold text-[2rem] md:text-[3rem] tracking-[4px]">
                 Recently Added
               </h2>
-              <a
-                className="font-[Manrope] text-[0.75rem] uppercase tracking-[0.35em] text-[#e5e2e1]/70 transition hover:text-white"
-                href="#"
-              >
-                VIEW ALL
-              </a>
+              <Link to="/recentMovie">
+                <Button className="font-[Manrope] text-[0.75rem] uppercase tracking-[0.35em] text-[#e5e2e1]/70 bg-transparent hover:bg-transparent transition hover:text-white">
+                  VIEW ALL
+                </Button>
+              </Link>
             </div>
             <div className="flex gap-6 overflow-x-auto hide-scrollbar snap-x pb-6">
               {movies?.results?.map((movie: any) => (
@@ -269,7 +257,7 @@ function Home() {
           </section>
 
           <section className="px-[5vw]">
-            <h2 className="font-[Libre Caslon Text] text-[2rem] md:text-[3rem] mb-8 italic">
+            <h2 className="font-[Libre Caslon Text] font-bold text-[2rem] md:text-[3rem] tracking-[8px]">
               Director's Cut
             </h2>
             <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
@@ -300,7 +288,10 @@ function Home() {
 
               <div className="md:col-span-2 flex gap-6">
                 {movies?.results?.slice(0, 2).map((movie: any) => (
-                  <div key={movie.id} className="relative group overflow-hidden rounded-[1.5rem] h-auto">
+                  <div
+                    key={movie.id}
+                    className="relative group overflow-hidden rounded-[1.5rem] h-auto"
+                  >
                     <img
                       className="w-90 h-auto object-cover transition-transform duration-700 group-hover:scale-110"
                       src={
@@ -322,7 +313,10 @@ function Home() {
               {/* 2nd section */}
               <div className="md:col-span-4 flex gap-6">
                 {movies?.results?.slice(3, 5).map((movie: any) => (
-                  <div key={movie.id} className="relative group overflow-hidden rounded-[1.5rem] h-60">
+                  <div
+                    key={movie.id}
+                    className="relative group overflow-hidden rounded-[1.5rem] h-60"
+                  >
                     <img
                       className="w-170 h-70 object-cover transition-transform duration-700 group-hover:scale-110"
                       src={
