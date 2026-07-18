@@ -47,6 +47,8 @@ function Home() {
   const [autoplay, setAutoplay] = useState(true);
   const [isHovering, setIsHovering] = useState(false);
   const [slideCount, setSlideCount] = useState(8);
+  console.log("popular movies", popularMovies);
+
 
   const getMovies = async () => {
     try {
@@ -217,7 +219,7 @@ function Home() {
                 VIEW ALL
               </a>
             </div>
-            <RecentMovie popularMovies={popularMovies} />
+            <RecentMovie movies={movies} getMovies={getMovies} />
           </section>
 
           <section className="px-[5vw]">

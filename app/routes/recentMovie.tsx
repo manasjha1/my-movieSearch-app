@@ -1,35 +1,12 @@
-import type { UseQueryResult } from "@tanstack/react-query"
-import { usePpopularMovies } from "~/hooks/queries"
-
-export interface Movie {
-    id: number;
-    title: string;
-    overview: string;
-    poster_path: string;
-    backdrop_path: string;
-    release_date: string;
-    vote_average: number;
+interface movieData {
+    movies: []
 }
 
-export interface MovieResponse {
-    page: number;
-    results: Movie[];
-    total_pages: number;
-    total_results: number;
-}
-
-export type Movies = {
-    popularMovies: unknown
-}
-
-
-
-export default function RecentMovie({ popularMovies }: Movies) {
-    const { data } = usePpopularMovies()
+export default function RecentMovie({ movies }: movieData) {
     return (
         <div>
             <div className="flex gap-6 overflow-x-auto hide-scrollbar snap-x pb-6">
-                {popularMovies?.results?.map((movie: any) => (
+                {movies?.results?.map((movie: any) => (
                     <div
                         key={movie.id}
                         className="movie-card flex-none w-[60vw] md:w-[22vw] aspect-2/3 relative snap-start overflow-hidden group cursor-pointer"
