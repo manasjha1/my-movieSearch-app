@@ -11,7 +11,7 @@ export const Headers = () => {
                 </Link>
 
                 <div className="hidden items-center gap-8 text-[0.75rem] uppercase tracking-[0.35em] text-[#e5e2e1]/70 md:flex">
-                    {["Discovery", "Browse", "My List", "Originals"].map((item) => (
+                    {["Popular", "Upcoming", "Top rated"].map((item) => (
                         <a key={item} href="#" className="transition hover:text-white">
                             {item}
                         </a>

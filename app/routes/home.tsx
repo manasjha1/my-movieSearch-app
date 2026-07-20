@@ -23,14 +23,14 @@ import {
 } from "~/components/ui/pagination";
 import { Link, useSearchParams } from "react-router";
 import { Button } from "~/components/ui/button";
-import { env } from "~/src/api.ts/config/env";
 import RecentMovie from "./recentMovie";
-import { usePpopularMovies } from "~/hooks/queries";
 
 const apiKey = "eaca397b12af42ca89067ac3c10ff934";
 
+
+
 function Home() {
-  const { data: popularMovies } = usePpopularMovies()
+  // const { data: popularMovies } = usePpopularMovies()
   const [searchParams, setSearchParams] = useSearchParams();
   const [query, setQuery] = useState("");
   const [loading, setLoading] = useState(true);
@@ -47,7 +47,6 @@ function Home() {
   const [autoplay, setAutoplay] = useState(true);
   const [isHovering, setIsHovering] = useState(false);
   const [slideCount, setSlideCount] = useState(8);
-  console.log("popular movies", popularMovies);
 
 
   const getMovies = async () => {
@@ -117,7 +116,7 @@ function Home() {
             onMouseLeave={() => setIsHovering(false)}
           >
             <div className="h-full relative">
-              {popularMovies?.results
+              {movies?.results
                 ?.slice(0, slideCount)
                 .map((movie: any, idx: number) => (
                   <div
@@ -219,9 +218,9 @@ function Home() {
                 VIEW ALL
               </a>
             </div>
-            <RecentMovie movies={movies} getMovies={getMovies} />
+            <RecentMovie />
           </section>
-
+          {/* Upcoming movies */}
           <section className="px-[5vw]">
             <div className="flex justify-between items-baseline mb-8">
               <h2 className="font-[Libre Caslon Text] font-bold text-[2rem] md:text-[3rem] tracking-[4px]">
@@ -257,7 +256,7 @@ function Home() {
               ))}
             </div>
           </section>
-
+          {/* Top rated movies */}
           <section className="px-[5vw]">
             <h2 className="font-[Libre Caslon Text] font-bold text-[2rem] md:text-[3rem] tracking-[8px]">
               Director's Cut
