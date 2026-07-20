@@ -281,6 +281,45 @@ function Home() {
           </section>
           {/* Top rated movies */}
           <section className="px-[5vw]">
+            <div className="flex justify-between items-baseline mb-8">
+              <h2 className="font-[Libre Caslon Text] font-bold text-[2rem] md:text-[3rem] tracking-[4px]">
+                Top Rated Movies
+              </h2>
+              <Link to="/recentMovie">
+                <Button className="font-[Manrope] text-[0.75rem] uppercase tracking-[0.35em] text-[#e5e2e1]/70 bg-transparent hover:bg-transparent transition hover:text-white">
+                  VIEW ALL
+                </Button>
+              </Link>
+            </div>
+            <div className="flex gap-6 overflow-x-auto hide-scrollbar snap-x pb-6">
+              {movies?.results?.map((movie: any) => (
+                <div
+                  key={movie.id}
+                  className="movie-card flex-none w-[60vw] md:w-[22vw] aspect-2/3 relative snap-start overflow-hidden group cursor-pointer"
+                >
+                  <img
+                    className="w-full h-full object-cover"
+                    src={
+                      movie.poster_path
+                        ? `https://image.tmdb.org/t/p/w500${movie.poster_path}`
+                        : "https://images.unsplash.com/photo-1517602302552-471fe67acf66?auto=format&fit=crop&w=900&q=80"
+                    }
+                    alt={movie.title}
+                  />
+                  <div className="absolute inset-0 bg-[#131313]/90 opacity-0 transition-opacity duration-500 flex flex-col justify-end p-6 group-hover:opacity-100">
+                    <h3 className="font-[Libre Caslon Text] text-[1rem]">
+                      {movie.title}
+                    </h3>
+                    <p className="font-[Manrope] text-[0.75rem] text-[#e5e2e1]/70 mt-2 line-clamp-3">
+                      {movie.overview}
+                    </p>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </section>
+          {/* director's cut */}
+          <section className="px-[5vw]">
             <h2 className="font-[Libre Caslon Text] font-bold text-[2rem] md:text-[3rem] tracking-[8px]">
               Director's Cut
             </h2>
@@ -311,13 +350,13 @@ function Home() {
               </div>
 
               <div className="md:col-span-2 flex gap-6">
-                {movies?.results?.slice(0, 2).map((movie: any) => (
+                {movies?.results?.slice(0, 2)?.map((movie: any) => (
                   <div
                     key={movie.id}
-                    className="relative group overflow-hidden rounded-[1.5rem] h-auto"
+                    className="movie-card flex-none w-[60vw] md:w-[22vw] aspect-2/3 rounded-lg relative snap-start overflow-hidden group cursor-pointer"
                   >
                     <img
-                      className="w-90 h-auto object-cover transition-transform duration-700 group-hover:scale-110"
+                      className="w-full h-full object-cover"
                       src={
                         movie.poster_path
                           ? `https://image.tmdb.org/t/p/w500${movie.poster_path}`
@@ -325,11 +364,13 @@ function Home() {
                       }
                       alt={movie.title}
                     />
-                    <div className="absolute inset-0 bg-[#131313]/40 transition-colors group-hover:bg-[#131313]/10"></div>
-                    <div className="absolute bottom-6 left-6">
-                      <h4 className="font-[Libre Caslon Text] text-[1.25rem]">
+                    <div className="absolute inset-0 bg-[#131313]/90 opacity-0 transition-opacity duration-500 flex flex-col justify-end p-6 group-hover:opacity-100">
+                      <h3 className="font-[Libre Caslon Text] text-[1rem]">
                         {movie.title}
-                      </h4>
+                      </h3>
+                      <p className="font-[Manrope] text-[0.75rem] text-[#e5e2e1]/70 mt-2 line-clamp-3">
+                        {movie.overview}
+                      </p>
                     </div>
                   </div>
                 ))}

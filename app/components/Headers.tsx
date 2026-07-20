@@ -11,11 +11,17 @@ export const Headers = () => {
                 </Link>
 
                 <div className="hidden items-center gap-8 text-[0.75rem] uppercase tracking-[0.35em] text-[#e5e2e1]/70 md:flex">
-                    {["Popular", "Upcoming", "Top rated"].map((item) => (
-                        <a key={item} href="#" className="transition hover:text-white">
-                            {item}
-                        </a>
-                    ))}
+                    <ol className="flex items-center align-middle gap-6">
+                        <Link to="/popularMovie">
+                            <li className="transition hover:text-white cursor-pointer">Popular</li>
+                        </Link>
+                        <Link to="/upcomingMovie">
+                            <li className="transition hover:text-white cursor-pointer">Upcomig</li>
+                        </Link>
+                        <Link to="/top_ratedMovie">
+                            <li className="transition hover:text-white cursor-pointer">Top rated</li>
+                        </Link>
+                    </ol>
                 </div>
 
                 <div className="flex items-center gap-4">
