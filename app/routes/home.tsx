@@ -23,8 +23,8 @@ import {
 } from "~/components/ui/pagination";
 import { Link, useSearchParams } from "react-router";
 import { Button } from "~/components/ui/button";
+import API_KEY from "~/src/config/constantKey";
 
-const apiKey = "eaca397b12af42ca89067ac3c10ff934";
 
 
 
@@ -52,7 +52,7 @@ function Home() {
     try {
       setLoading(true);
       const response = await fetch(
-        `https://api.themoviedb.org/3/movie/popular?api_key=${apiKey}`,
+        `https://api.themoviedb.org/3/movie/popular?api_key=${API_KEY}`,
         // `https://api.themoviedb.org/3/movie/popular?api_key=${apiKey}`
       );
       const data = await response.json();
@@ -65,45 +65,11 @@ function Home() {
       setLoading(false);
     }
   };
-  const getUpcomingMovies = async () => {
-    try {
-      setLoading(true);
-      const response = await fetch(
-        `https://api.themoviedb.org/3/movie/upcoming?api_key=${apiKey}`,
-        // `https://api.themoviedb.org/3/movie/popular?api_key=${apiKey}`
-      );
-      const data = await response.json();
-      setMovies(data);
-      console.log("movies data--> ", data, movies);
 
-    } catch (error) {
-      console.log(error);
-    } finally {
-      setLoading(false);
-    }
-  };
-  const getTop_ratedMovies = async () => {
-    try {
-      setLoading(true);
-      const response = await fetch(
-        `https://api.themoviedb.org/3/movie/top_rated?api_key=${apiKey}`,
-        // `https://api.themoviedb.org/3/movie/popular?api_key=${apiKey}`
-      );
-      const data = await response.json();
-      setMovies(data);
-      console.log("movies data--> ", data, movies);
 
-    } catch (error) {
-      console.log(error);
-    } finally {
-      setLoading(false);
-    }
-  };
 
   useEffect(() => {
     getPopularMovies();
-    getUpcomingMovies();
-    getTop_ratedMovies();
   }, []);
 
   // Autoplay crossfade for hero
@@ -243,9 +209,14 @@ function Home() {
         <div className="flex flex-col gap-16 py-16">
           <section className="px-[5vw]">
             <div className="flex justify-between items-baseline mb-8">
-              <h2 className="font-[Libre Caslon Text] font-bold text-[2rem] md:text-[3rem] tracking-[4px]">
-                Popular Movies
-              </h2>
+              <div>
+                <p className="text-xs uppercase tracking-[0.35em] text-white/40">
+                  EDITOR'S PICK
+                </p>
+                <h2 className="font-[Libre Caslon Text] font-semibold text-2xl sm:text-3xl">
+                  Popular Right Now
+                </h2>
+              </div>
               <Link to="/popularMovie">
                 <Button className="font-[Manrope] text-[0.75rem] uppercase tracking-[0.35em] text-[#e5e2e1]/70 bg-transparent hover:bg-transparent transition hover:text-white cursor-pointer">
                   VIEW ALL
@@ -253,7 +224,7 @@ function Home() {
               </Link>
             </div>
             <div className="flex gap-6 overflow-x-auto hide-scrollbar snap-x pb-6">
-              {movies?.results?.map((movie: any) => (
+              {movies?.results?.slice(0, 8)?.map((movie: any) => (
                 <div
                   key={movie.id}
                   className="movie-card flex-none w-[60vw] md:w-[22vw] aspect-2/3 relative snap-start overflow-hidden group cursor-pointer"
@@ -282,17 +253,23 @@ function Home() {
           {/* Upcoming movies */}
           <section className="px-[5vw]">
             <div className="flex justify-between items-baseline mb-8">
-              <h2 className="font-[Libre Caslon Text] font-bold text-[2rem] md:text-[3rem] tracking-[4px]">
-                Upcoming Movies
-              </h2>
-              <Link to="/recentMovie">
+              <div>
+                <p className="text-xs uppercase tracking-[0.35em] text-white/40">
+                  COMING SOON
+
+                </p>
+                <h2 className="font-[Libre Caslon Text] font-semibold text-2xl sm:text-3xl">
+                  Worth the Wait
+                </h2>
+              </div>
+              <Link to="/upcomingMovie">
                 <Button className="font-[Manrope] text-[0.75rem] uppercase tracking-[0.35em] text-[#e5e2e1]/70 bg-transparent hover:bg-transparent transition hover:text-white">
                   VIEW ALL
                 </Button>
               </Link>
             </div>
             <div className="flex gap-6 overflow-x-auto hide-scrollbar snap-x pb-6">
-              {movies?.results?.map((movie: any) => (
+              {movies?.results?.slice(10, 20)?.map((movie: any) => (
                 <div
                   key={movie.id}
                   className="movie-card flex-none w-[60vw] md:w-[22vw] aspect-2/3 relative snap-start overflow-hidden group cursor-pointer"
@@ -306,10 +283,13 @@ function Home() {
                     }
                     alt={movie.title}
                   />
-                  <div className="movie-overlay absolute inset-0 bg-[#131313]/90 opacity-0 transition-opacity duration-500 flex flex-col justify-end p-6">
+                  <div className="absolute inset-0 bg-[#131313]/90 opacity-0 transition-opacity duration-500 flex flex-col justify-end p-6 group-hover:opacity-100">
                     <h3 className="font-[Libre Caslon Text] text-[1rem]">
                       {movie.title}
                     </h3>
+                    <p className="font-[Manrope] text-[0.75rem] text-[#e5e2e1]/70 mt-2 line-clamp-3">
+                      {movie.overview}
+                    </p>
                   </div>
                 </div>
               ))}
@@ -318,17 +298,23 @@ function Home() {
           {/* Top rated movies */}
           <section className="px-[5vw]">
             <div className="flex justify-between items-baseline mb-8">
-              <h2 className="font-[Libre Caslon Text] font-bold text-[2rem] md:text-[3rem] tracking-[4px]">
-                Top Rated Movies
-              </h2>
-              <Link to="/recentMovie">
+              <div>
+                <p className="text-xs uppercase tracking-[0.35em] text-white/40">
+                  HIGHEST RATED
+
+                </p>
+                <h2 className="font-[Libre Caslon Text] font-semibold text-2xl sm:text-3xl">
+                  Critics' Choice
+                </h2>
+              </div>
+              <Link to="/top_ratedMovie">
                 <Button className="font-[Manrope] text-[0.75rem] uppercase tracking-[0.35em] text-[#e5e2e1]/70 bg-transparent hover:bg-transparent transition hover:text-white">
                   VIEW ALL
                 </Button>
               </Link>
             </div>
             <div className="flex gap-6 overflow-x-auto hide-scrollbar snap-x pb-6">
-              {movies?.results?.map((movie: any) => (
+              {movies?.results?.slice(9, 19)?.map((movie: any) => (
                 <div
                   key={movie.id}
                   className="movie-card flex-none w-[60vw] md:w-[22vw] aspect-2/3 relative snap-start overflow-hidden group cursor-pointer"
@@ -356,9 +342,14 @@ function Home() {
           </section>
           {/* director's cut */}
           <section className="px-[5vw]">
-            <h2 className="font-[Libre Caslon Text] font-bold text-[2rem] md:text-[3rem] tracking-[8px]">
-              Director's Cut
-            </h2>
+            <div className="mb-8">
+              <p className="text-xs uppercase tracking-[0.35em] text-white/40">
+                SIGNATURE COLLECTION
+              </p>
+              <h2 className="font-[Libre Caslon Text] font-semibold text-2xl sm:text-3xl">
+                Director's cut
+              </h2>
+            </div>
             <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
               <div className="md:col-span-2 relative group overflow-hidden rounded-[1.5rem] h-105">
                 <img
@@ -371,7 +362,7 @@ function Home() {
                   alt={featuredMovie?.title || "Director Cut"}
                 />
                 <div className="absolute inset-0 bg-linear-to-t from-[#131313]/90 via-transparent to-transparent" />
-                <div className="absolute top-45 p-10">
+                <div className="absolute top-50 p-10">
                   <span className="bg-white text-[#131313] px-3 py-1 font-[Manrope] text-[10px] tracking-[0.2em] uppercase inline-block mb-4">
                     EXCLUSIVE
                   </span>

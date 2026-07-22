@@ -2,33 +2,35 @@ import { MoveRight } from "lucide-react";
 import { useEffect, useState } from "react";
 import { Footer } from "~/components/Footer";
 import { Headers } from "~/components/Headers";
+import API_KEY from "~/src/config/constantKey";
 
 const apiKey = "eaca397b12af42ca89067ac3c10ff934";
 
 export default function RecentMovie() {
-    const [popularMovie, setPopularMovie] = useState<any>({ results: [] });
+    const [movies, setMovies] = useState<any>({ results: [] });
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
 
-    const getPopularMovies = async () => {
+    const getTop_ratedMovies = async () => {
         try {
             setLoading(true);
-            setError(null);
             const response = await fetch(
-                `https://api.themoviedb.org/3/movie/top_rated?api_key=${apiKey}`
+                `https://api.themoviedb.org/3/movie/top_rated?api_key=${API_KEY}`,
+                // `https://api.themoviedb.org/3/movie/popular?api_key=${apiKey}`
             );
             const data = await response.json();
-            setPopularMovie(data);
+            setMovies(data);
+            console.log("movies data--> ", data);
+
         } catch (error) {
             console.log(error);
-            setError("We couldn't load the top rated movies right now.");
         } finally {
             setLoading(false);
         }
     };
 
     useEffect(() => {
-        getPopularMovies();
+        getTop_ratedMovies();
     }, []);
 
     return (
@@ -65,7 +67,7 @@ export default function RecentMovie() {
                             <p className="text-xs uppercase tracking-[0.35em] text-white/40">
                                 Heighend picks
                             </p>
-                            <h2 className="font-[Libre Caslon Text] text-2xl sm:text-3xl">
+                            <h2 className="font-[Libre Caslon Text] font-semibold text-2xl sm:text-3xl">
                                 Top rated movies
                             </h2>
                         </div>
@@ -95,7 +97,7 @@ export default function RecentMovie() {
                         </div>
                     ) : (
                         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-                            {popularMovie?.results?.map((movie: any) => {
+                            {movies?.results?.map((movie: any) => {
                                 const releaseYear = movie.release_date?.split("-")[0] || "Coming soon";
 
                                 return (
