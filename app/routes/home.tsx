@@ -210,8 +210,8 @@ function Home() {
               <h2 className="font-[Libre Caslon Text] font-bold text-[2rem] md:text-[3rem] tracking-[4px]">
                 Popular Movies
               </h2>
-              <Link to="/recentMovie">
-                <Button className="font-[Manrope] text-[0.75rem] uppercase tracking-[0.35em] text-[#e5e2e1]/70 bg-transparent hover:bg-transparent transition hover:text-white">
+              <Link to="/popularMovie">
+                <Button className="font-[Manrope] text-[0.75rem] uppercase tracking-[0.35em] text-[#e5e2e1]/70 bg-transparent hover:bg-transparent transition hover:text-white cursor-pointer">
                   VIEW ALL
                 </Button>
               </Link>

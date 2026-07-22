@@ -150,6 +150,8 @@ export async function apiHandler<T = unknown>(
     signal,
   } = cfg;
 
+  console.log("httpHandler", url);
+
   const axiosConfig: AxiosRequestConfig = {
     url,
     method,

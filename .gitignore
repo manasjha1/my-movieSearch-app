@@ -1,6 +1,6 @@
 .DS_Store
 .env
-.env.local
+constantKey.ts
 /node_modules/
 
 # React Router
