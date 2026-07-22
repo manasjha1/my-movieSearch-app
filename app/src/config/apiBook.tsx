@@ -1,4 +1,3 @@
-import { useEffect } from "react";
 import API_KEY from "./constantKey";
 
 const IMAGE_URL = import.meta.env.VITE_TMDB_IMAGE_URL

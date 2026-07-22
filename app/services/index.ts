@@ -23,7 +23,7 @@ const getUpcomingMovies = async () => {
     });
     console.log("response by getUpcoming", res);
 
-    return res;
+    return res.data;
   } catch (error) {
     return error;
   }

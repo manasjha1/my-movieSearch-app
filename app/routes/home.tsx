@@ -48,7 +48,7 @@ function Home() {
   const [slideCount, setSlideCount] = useState(8);
 
 
-  const getMovies = async () => {
+  const getPopularMovies = async () => {
     try {
       setLoading(true);
       const response = await fetch(
@@ -65,9 +65,45 @@ function Home() {
       setLoading(false);
     }
   };
+  const getUpcomingMovies = async () => {
+    try {
+      setLoading(true);
+      const response = await fetch(
+        `https://api.themoviedb.org/3/movie/upcoming?api_key=${apiKey}`,
+        // `https://api.themoviedb.org/3/movie/popular?api_key=${apiKey}`
+      );
+      const data = await response.json();
+      setMovies(data);
+      console.log("movies data--> ", data, movies);
+
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setLoading(false);
+    }
+  };
+  const getTop_ratedMovies = async () => {
+    try {
+      setLoading(true);
+      const response = await fetch(
+        `https://api.themoviedb.org/3/movie/top_rated?api_key=${apiKey}`,
+        // `https://api.themoviedb.org/3/movie/popular?api_key=${apiKey}`
+      );
+      const data = await response.json();
+      setMovies(data);
+      console.log("movies data--> ", data, movies);
+
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   useEffect(() => {
-    getMovies();
+    getPopularMovies();
+    getUpcomingMovies();
+    getTop_ratedMovies();
   }, []);
 
   // Autoplay crossfade for hero

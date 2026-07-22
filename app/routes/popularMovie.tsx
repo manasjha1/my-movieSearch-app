@@ -11,7 +11,7 @@ const apiKey = "eaca397b12af42ca89067ac3c10ff934";
 
 export default function PopularMovie() {
     const [loading, setLoading] = useState(false);
-    const [popularMovie, setPopularMovie] = useState(getPopularMovies())
+    const [popularMovie, setPopularMovie] = useState<any>(getPopularMovies())
     console.log("popular movies", popularMovie);
 
 
