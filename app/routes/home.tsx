@@ -31,6 +31,7 @@ import API_KEY from "~/src/config/constantKey";
 function Home() {
   // const { data: popularMovies } = usePpopularMovies()
   const [searchParams, setSearchParams] = useSearchParams();
+  const movieIdParam = searchParams.get("movieId") || "550";
   const [query, setQuery] = useState("");
   const [loading, setLoading] = useState(true);
   const [movies, setMovies] = useState<any>([]);
@@ -224,30 +225,36 @@ function Home() {
               </Link>
             </div>
             <div className="flex gap-6 overflow-x-auto hide-scrollbar snap-x pb-6">
+
               {movies?.results?.slice(0, 8)?.map((movie: any) => (
-                <div
-                  key={movie.id}
-                  className="movie-card flex-none w-[60vw] md:w-[22vw] aspect-2/3 relative snap-start overflow-hidden group cursor-pointer"
-                >
-                  <img
-                    className="w-full h-full object-cover"
-                    src={
-                      movie.poster_path
-                        ? `https://image.tmdb.org/t/p/w500${movie.poster_path}`
-                        : "https://images.unsplash.com/photo-1517602302552-471fe67acf66?auto=format&fit=crop&w=900&q=80"
-                    }
-                    alt={movie.title}
-                  />
-                  <div className="absolute inset-0 bg-[#131313]/90 opacity-0 transition-opacity duration-500 flex flex-col justify-end p-6 group-hover:opacity-100">
-                    <h3 className="font-[Libre Caslon Text] text-[1rem]">
-                      {movie.title}
-                    </h3>
-                    <p className="font-[Manrope] text-[0.75rem] text-[#e5e2e1]/70 mt-2 line-clamp-3">
-                      {movie.overview}
-                    </p>
+                <Link to={`https://api.themoviedb.org/3/movie/${movieIdParam}?api_key=${API_KEY}&language=en-US`}>
+
+                  <div
+                    key={movie.id}
+                    className="movie-card flex-none w-[60vw] md:w-[22vw] aspect-2/3 relative snap-start overflow-hidden group cursor-pointer"
+                  >
+                    <img
+                      className="w-full h-full object-cover"
+                      src={
+                        movie.poster_path
+                          ? `https://image.tmdb.org/t/p/w500${movie.poster_path}`
+                          : "https://images.unsplash.com/photo-1517602302552-471fe67acf66?auto=format&fit=crop&w=900&q=80"
+                      }
+                      alt={movie.title}
+                    />
+                    <div className="absolute inset-0 bg-[#131313]/90 opacity-0 transition-opacity duration-500 flex flex-col justify-end p-6 group-hover:opacity-100">
+                      <h3 className="font-[Libre Caslon Text] text-[1rem]">
+                        {movie.title}
+                      </h3>
+                      <p className="font-[Manrope] text-[0.75rem] text-[#e5e2e1]/70 mt-2 line-clamp-3">
+                        {movie.overview}
+                      </p>
+                    </div>
                   </div>
-                </div>
+                </Link>
+
               ))}
+
             </div>
           </section>
           {/* Upcoming movies */}

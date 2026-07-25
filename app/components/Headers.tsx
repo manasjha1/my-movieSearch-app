@@ -1,4 +1,5 @@
 import { Link } from "react-router";
+import { Button } from "./ui/button";
 
 export const Headers = () => {
     return (
@@ -35,9 +36,10 @@ export const Headers = () => {
                             src="https://images.unsplash.com/photo-1527980965255-d3b416303d12?auto=format&fit=crop&w=200&q=80"
                         />
                     </div>
-                    <button className="hidden rounded-full border border-white/15 bg-white/10 px-5 py-2 text-[0.75rem] uppercase tracking-[0.35em] text-white transition hover:bg-white/20 md:inline-flex">
+                    
+                    <Button className="hidden rounded-full border border-white/15 bg-white/10 px-5 py-2 text-[0.75rem] uppercase tracking-[0.35em] text-white transition hover:bg-white/20 md:inline-flex">
                         Subscribe
-                    </button>
+                    </Button>
                     <button
                         className="rounded-full border border-white/10 bg-white/10 p-2 text-white/80 transition hover:bg-white/15 md:hidden"
                         aria-label="Menu"
