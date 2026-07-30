@@ -21,8 +21,8 @@ export default function MovieDetail() {
     const [searchParams] = useSearchParams();
     const movieIdParam = searchParams.get("movieId") || "550";
     const [movie, setMovie] = useState<any>({});
-    const [movieVideo, setMovieVideo] = useState([])
-    const [credits, setCredits] = useState<any>(null);
+    const [movieVideo, setMovieVideo] = useState<any>(null)
+    const [credits, setCredits] = useState<any>([]);
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
@@ -49,7 +49,6 @@ export default function MovieDetail() {
                 ]);
 
                 setMovie(detailData);
-                setMovie(videoData);
                 setCredits(creditsData);
                 console.log(
                     "responses by it type---->>>>", detailData, creditsData, videoData
@@ -64,9 +63,20 @@ export default function MovieDetail() {
         fetchMovieDetail();
     }, [id]);
 
-    const findtrailer = movie?.results?.find((trailer: any) => trailer.site === "YouTube" &&
-        trailer.type === "Trailer" && trailer.official)
-    console.log("find trailer ---> ", findtrailer);
+    const findtrailer =
+        movieVideo?.results?.find(
+
+            movieVideo?.results?.find(
+                (video: any) =>
+                    video.site === "YouTube" &&
+                    video.type === "Trailer"
+            ))
+
+    const youtubeVideo = movieVideo?.results?.find(
+        (video: any) => video.site === "YouTube"
+    );
+
+    console.log(youtubeVideo);
 
 
     const formatDate = (date?: string) => {
@@ -95,7 +105,7 @@ export default function MovieDetail() {
         ? `${POSTER_BASE_URL}${movie.poster_path}`
         : "https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?auto=format&fit=crop&w=800&q=80";
 
-    const cast = credits?.cast?.slice(0, 6) || [];
+    const cast = credits?.cast?.slice(0, 10) || [];
 
     return (
         <div className="min-h-screen bg-[#0f0f10] text-white">
@@ -131,7 +141,7 @@ export default function MovieDetail() {
                     </div>
                 ) : (
                     <>
-                        <section className="relative isolate overflow-hidden">
+                        <section key={movie.id} className="relative isolate overflow-hidden">
                             <div className="absolute inset-0">
                                 <img
                                     src={backdropUrl}
@@ -253,9 +263,22 @@ export default function MovieDetail() {
                                         </span>
                                     ))}
                                 </div>
-                                <div className="my-5 rounded-xl">
-                                    {findtrailer && (
-                                        <video src={findtrailer} />
+                                <div className=" my-5 bg-accent p-3 rounded-xl">
+                                    {!findtrailer ? (
+                                        <div>
+                                            <iframe
+                                                className="w-full h-full"
+                                                src={`https://www.youtube.com/embed/${findtrailer?.key}`}
+                                                title={findtrailer?.name}
+                                                allowFullScreen
+                                            />
+                                        </div>
+                                    ) : (
+                                        <div>
+                                            <h1 className="text-5xl text-left text-white font-medium">
+                                                Trailer not found
+                                            </h1>
+                                        </div>
                                     )}
                                 </div>
                             </div>
