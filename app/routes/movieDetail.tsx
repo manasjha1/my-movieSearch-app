@@ -8,7 +8,7 @@ import {
     Ticket,
     UserRound,
 } from "lucide-react";
-import { Link, useSearchParams } from "react-router";
+import { Link, useParams, useSearchParams } from "react-router";
 import { Footer } from "~/components/Footer";
 import { Headers } from "~/components/Headers";
 import API_KEY from "~/src/config/constantKey";
@@ -17,9 +17,11 @@ const IMAGE_BASE_URL = "https://image.tmdb.org/t/p/original";
 const POSTER_BASE_URL = "https://image.tmdb.org/t/p/w500";
 
 export default function MovieDetail() {
+    const { id } = useParams();
     const [searchParams] = useSearchParams();
     const movieIdParam = searchParams.get("movieId") || "550";
-    const [movie, setMovie] = useState<any>(null);
+    const [movie, setMovie] = useState<any>({});
+    const [movieVideo, setMovieVideo] = useState([])
     const [credits, setCredits] = useState<any>(null);
     const [loading, setLoading] = useState(true);
 
@@ -27,33 +29,45 @@ export default function MovieDetail() {
         const fetchMovieDetail = async () => {
             try {
                 setLoading(true);
-                const [detailResponse, creditsResponse] = await Promise.all([
-                    fetch(
-                        `https://api.themoviedb.org/3/movie/${movieIdParam}?api_key=${API_KEY}&language=en-US`,
-                    ),
-                    fetch(
-                        `https://api.themoviedb.org/3/movie/${movieIdParam}/credits?api_key=${API_KEY}&language=en-US`,
-                    ),
-                ]);
+                const [detailResponse, creditsResponse, videoResponse] =
+                    await Promise.all([
+                        fetch(
+                            `https://api.themoviedb.org/3/movie/${id}?api_key=${API_KEY}&language=en-US`,
+                        ),
+                        fetch(
+                            `https://api.themoviedb.org/3/movie/${id}/videos?api_key=${API_KEY}&language=en-US`,
+                        ),
+                        fetch(
+                            `https://api.themoviedb.org/3/movie/${id}/credits?api_key=${API_KEY}&language=en-US`,
+                        ),
+                    ]);
 
-                const [detailData, creditsData] = await Promise.all([
+                const [detailData, creditsData, videoData] = await Promise.all([
                     detailResponse.json(),
                     creditsResponse.json(),
+                    videoResponse.json(),
                 ]);
 
                 setMovie(detailData);
+                setMovie(videoData);
                 setCredits(creditsData);
-                console.log("detail is  -->", detailData, creditsData);
-
+                console.log(
+                    "responses by it type---->>>>", detailData, creditsData, videoData
+                );
             } catch (error) {
-                error
+                error;
             } finally {
                 setLoading(false);
             }
         };
 
         fetchMovieDetail();
-    }, [movieIdParam]);
+    }, [id]);
+
+    const findtrailer = movie?.results?.find((trailer: any) => trailer.site === "YouTube" &&
+        trailer.type === "Trailer" && trailer.official)
+    console.log("find trailer ---> ", findtrailer);
+
 
     const formatDate = (date?: string) => {
         if (!date) return "Coming soon";
@@ -150,7 +164,7 @@ export default function MovieDetail() {
                                     </div>
 
                                     <h1 className="mt-6 font-[Libre Caslon Text] text-4xl font-semibold leading-tight sm:text-5xl lg:text-6xl">
-                                        {movie.title || movie.name}
+                                        {movie.title}
                                     </h1>
                                     <p className="mt-5 max-w-2xl text-lg leading-8 text-white/75">
                                         {movie.overview ||
@@ -238,6 +252,11 @@ export default function MovieDetail() {
                                             {genre.name}
                                         </span>
                                     ))}
+                                </div>
+                                <div className="my-5 rounded-xl">
+                                    {findtrailer && (
+                                        <video src={findtrailer} />
+                                    )}
                                 </div>
                             </div>
 

@@ -21,7 +21,7 @@ import {
   PaginationNext,
   PaginationPrevious,
 } from "~/components/ui/pagination";
-import { Link, useSearchParams } from "react-router";
+import { Link, useNavigate, useSearchParams } from "react-router";
 import { Button } from "~/components/ui/button";
 import API_KEY from "~/src/config/constantKey";
 
@@ -35,6 +35,7 @@ function Home() {
   const [query, setQuery] = useState("");
   const [loading, setLoading] = useState(true);
   const [movies, setMovies] = useState<any>([]);
+  const navigate = useNavigate()
 
   const page = Number(searchParams.get("page")) || movies?.page || 1;
   const limit =
@@ -47,7 +48,6 @@ function Home() {
   const [autoplay, setAutoplay] = useState(true);
   const [isHovering, setIsHovering] = useState(false);
   const [slideCount, setSlideCount] = useState(8);
-
 
   const getPopularMovies = async () => {
     try {
@@ -99,10 +99,19 @@ function Home() {
     });
   };
 
-  const truncate = (text: string, n = 100) => {
-    if (!text) return "";
-    return text.length > n ? text.slice(0, n).trimEnd() + "..." : text;
-  };
+  // const movieDetail = async () => {
+  //   try {
+  //     const response = await fetch(`https://api.themoviedb.org/3/movie/${movies.id}?api_key=${API_KEY}&language=en-US`)
+
+  //     const data = response.json()
+  //     console.log("movie details issss -->", data);
+
+  //   } catch (error) {
+  //     return error
+  //   } finally {
+  //     navigate(`/movie/${movies?.results?.map((item: any) => item.id)}`)
+  //   }
+  // }
 
   const currentMovie = movies?.results?.[currentIndex] || featuredMovie;
 
@@ -227,9 +236,24 @@ function Home() {
             <div className="flex gap-6 overflow-x-auto hide-scrollbar snap-x pb-6">
 
               {movies?.results?.slice(0, 8)?.map((movie: any) => (
-                <Link to={`https://api.themoviedb.org/3/movie/${movieIdParam}?api_key=${API_KEY}&language=en-US`}>
+                <Link to={`/movie/${movie.id}`}>
 
                   <div
+                    // onClick={() => {
+                    //   const movieDetail = async () => {
+                    //     try {
+                    //       const response = await fetch(`https://api.themoviedb.org/3/movie/${movie.id}?api_key=${API_KEY}&language=en-US`)
+
+                    //       const data = await response.json()
+                    //       setMovies(data)
+                    //       console.log("movie details issss -->-->", data);
+
+                    //     } catch (error) {
+                    //       return error
+                    //     }
+                    //   }
+                    //   movieDetail()
+                    // }}
                     key={movie.id}
                     className="movie-card flex-none w-[60vw] md:w-[22vw] aspect-2/3 relative snap-start overflow-hidden group cursor-pointer"
                   >
