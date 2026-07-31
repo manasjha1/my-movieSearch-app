@@ -18,11 +18,9 @@ const POSTER_BASE_URL = "https://image.tmdb.org/t/p/w500";
 
 export default function MovieDetail() {
     const { id } = useParams();
-    const [searchParams] = useSearchParams();
-    const movieIdParam = searchParams.get("movieId") || "550";
     const [movie, setMovie] = useState<any>({});
-    const [movieVideo, setMovieVideo] = useState<any>(null)
-    const [credits, setCredits] = useState<any>([]);
+    const [movieVideo, setMovieVideo] = useState<any>(null);
+    const [credits, setCredits] = useState<any>(null);
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
@@ -51,7 +49,11 @@ export default function MovieDetail() {
                 setMovie(detailData);
                 setCredits(creditsData);
                 console.log(
-                    "responses by it type---->>>>", detailData, creditsData, videoData
+                    "data by it type---->>>>",
+                    detailData,
+                    videoData,
+                    creditsData,
+
                 );
             } catch (error) {
                 error;
@@ -63,21 +65,17 @@ export default function MovieDetail() {
         fetchMovieDetail();
     }, [id]);
 
-    const findtrailer =
+    const findtrailer = movieVideo?.results?.find(
         movieVideo?.results?.find(
-
-            movieVideo?.results?.find(
-                (video: any) =>
-                    video.site === "YouTube" &&
-                    video.type === "Trailer"
-            ))
+            (video: any) => video.site === "YouTube" && video.type === "Trailer",
+        ),
+    );
 
     const youtubeVideo = movieVideo?.results?.find(
-        (video: any) => video.site === "YouTube"
+        (video: any) => video.site === "YouTube",
     );
 
     console.log(youtubeVideo);
-
 
     const formatDate = (date?: string) => {
         if (!date) return "Coming soon";
@@ -102,8 +100,16 @@ export default function MovieDetail() {
             : "https://images.unsplash.com/photo-1517602302552-471fe67acf66?auto=format&fit=crop&w=1600&q=80";
 
     const posterUrl = movie?.poster_path
+        ? `${POSTER_BASE_URL}${movie.poster_path}`
+        : "https://images.unsplash.com/photo-1517602302552-471fe67acf66?auto=format&fit=crop&w=1600&q=80";
 
     const cast = credits?.cast?.slice(0, 10) || [];
+    console.log("cast is --->", cast);
+
+    const castData = movie?.results?.map((cast: []) => cast)
+    console.log("cast not is >>>>>>>>>>>", castData);
+
+
 
     return (
         <div className="min-h-screen bg-[#0f0f10] text-white">
@@ -139,7 +145,10 @@ export default function MovieDetail() {
                     </div>
                 ) : (
                     <>
-                        <section key={movie.id} className="relative isolate overflow-hidden">
+                        <section
+                            key={movie.id}
+                            className="relative isolate overflow-hidden"
+                        >
                             <div className="absolute inset-0">
                                 <img
                                     src={backdropUrl}
@@ -297,8 +306,8 @@ export default function MovieDetail() {
                                 </div>
 
                                 <div className="mt-6 space-y-4">
-                                    {cast.length > 0 ? (
-                                        cast.map((person: any) => (
+                                    {movie?.cast &&
+                                        movie?.cast.map((person: any) => (
                                             <div
                                                 key={person.id}
                                                 className="flex items-center gap-4 rounded-2xl border border-white/10 bg-white/5 p-3"
@@ -307,20 +316,21 @@ export default function MovieDetail() {
                                                     {person.name?.charAt(0) || "A"}
                                                 </div>
                                                 <div>
-                                                    <p className="font-medium text-white">
+                                                    <h3 className="font-medium text-white">
                                                         {person.name}
-                                                    </p>
+                                                    </h3>
                                                     <p className="text-sm text-white/60">
                                                         {person.character || "Cast member"}
                                                     </p>
                                                 </div>
+                                                <p>there is no any cast</p>
                                             </div>
                                         ))
-                                    ) : (
-                                        <p className="text-white/70">
-                                            Cast information is not available for this title yet.
-                                        </p>
-                                    )}
+
+                                        // <p className="text-white/70">
+                                        //     Cast information is not available for this title yet.
+                                        // </p>
+                                    }
                                 </div>
                             </div>
                         </section>
