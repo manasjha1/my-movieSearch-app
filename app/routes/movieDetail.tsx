@@ -102,8 +102,6 @@ export default function MovieDetail() {
             : "https://images.unsplash.com/photo-1517602302552-471fe67acf66?auto=format&fit=crop&w=1600&q=80";
 
     const posterUrl = movie?.poster_path
-        ? `${POSTER_BASE_URL}${movie.poster_path}`
-        : "https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?auto=format&fit=crop&w=800&q=80";
 
     const cast = credits?.cast?.slice(0, 10) || [];
 
