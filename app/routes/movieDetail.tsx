@@ -27,23 +27,22 @@ export default function MovieDetail() {
         const fetchMovieDetail = async () => {
             try {
                 setLoading(true);
-                const [detailResponse, creditsResponse, videoResponse] =
+                const [detailResponse, creditsResponse] =
                     await Promise.all([
                         fetch(
                             `https://api.themoviedb.org/3/movie/${id}?api_key=${API_KEY}&language=en-US`,
                         ),
-                        fetch(
-                            `https://api.themoviedb.org/3/movie/${id}/videos?api_key=${API_KEY}&language=en-US`,
-                        ),
+                        // fetch(
+                        //     `https://api.themoviedb.org/3/movie/${id}/videos?api_key=${API_KEY}&language=en-US`,
+                        // ),
                         fetch(
                             `https://api.themoviedb.org/3/movie/${id}/credits?api_key=${API_KEY}&language=en-US`,
                         ),
                     ]);
 
-                const [detailData, creditsData, videoData] = await Promise.all([
+                const [detailData, creditsData] = await Promise.all([
                     detailResponse.json(),
                     creditsResponse.json(),
-                    videoResponse.json(),
                 ]);
 
                 setMovie(detailData);
@@ -51,9 +50,8 @@ export default function MovieDetail() {
                 console.log(
                     "data by it type---->>>>",
                     detailData,
-                    videoData,
+                    // videoData,
                     creditsData,
-
                 );
             } catch (error) {
                 error;
@@ -106,10 +104,8 @@ export default function MovieDetail() {
     const cast = credits?.cast?.slice(0, 10) || [];
     console.log("cast is --->", cast);
 
-    const castData = movie?.results?.map((cast: []) => cast)
+    const castData = movie?.results?.map((cast: []) => cast);
     console.log("cast not is >>>>>>>>>>>", castData);
-
-
 
     return (
         <div className="min-h-screen bg-[#0f0f10] text-white">
@@ -239,7 +235,56 @@ export default function MovieDetail() {
                             </div>
                         </section>
 
-                        <section className="mx-auto mt-12 grid max-w-7xl gap-8 px-[5vw] lg:grid-cols-[1.2fr_0.8fr]">
+                        <section className="mx-auto mt-12 grid gap-8 px-[5vw]">
+
+
+                            <div className="rounded-[2rem] border border-white/10 bg-[#111111] p-8">
+                                <div className="flex items-center gap-3">
+                                    <div className="rounded-full bg-white/10 p-3">
+                                        <UserRound className="h-5 w-5 text-[#ffb703]" />
+                                    </div>
+                                    <div>
+                                        <p className="text-xs uppercase tracking-[0.35em] text-white/50">
+                                            Featured cast
+                                        </p>
+                                        <h2 className="font-[Libre Caslon Text] text-2xl">
+                                            Meet the crew
+                                        </h2>
+                                    </div>
+                                </div>
+
+                                <div className="flex gap-12 overflow-x-auto hide-scrollbar snap-x pb-6">
+                                    {
+                                        cast.length > 0 ? (
+                                            cast.map((person: any) => (
+                                                <div
+                                                    key={person.id}
+                                                    className="movie-card flex-none aspect-2/3 relative snap-start overflow-hidden group cursor-pointer"
+                                                >
+                                                    <img
+                                                        src={`${IMAGE_BASE_URL}${person.profile_path}` ? `${IMAGE_BASE_URL}${person.profile_path}` : `${person.name?.charAt(0) || "A"}`}
+                                                        className="flex h-50 w-auto items-center justify-center rounded-sm bg-white/10 text-sm font-semibold uppercase text-white/70" />
+
+
+                                                    <div>
+                                                        <h3 className="font-medium text-white">
+                                                            {person.name}
+                                                        </h3>
+                                                        <p className="text-sm text-white/60">
+                                                            {person.character || "Cast member"}
+                                                        </p>
+                                                    </div>
+                                                </div>
+                                            ))) : (
+                                            <p className="text-white/70">
+                                                Cast information is not available for this title yet.
+                                            </p>
+                                        )
+
+
+                                    }
+                                </div>
+                            </div>
                             <div className="rounded-[2rem] border border-white/10 bg-white/5 p-8 shadow-2xl shadow-black/20">
                                 <div className="flex items-center gap-3">
                                     <div className="rounded-full bg-white/10 p-3">
@@ -287,50 +332,6 @@ export default function MovieDetail() {
                                             </h1>
                                         </div>
                                     )}
-                                </div>
-                            </div>
-
-                            <div className="rounded-[2rem] border border-white/10 bg-[#111111] p-8">
-                                <div className="flex items-center gap-3">
-                                    <div className="rounded-full bg-white/10 p-3">
-                                        <UserRound className="h-5 w-5 text-[#ffb703]" />
-                                    </div>
-                                    <div>
-                                        <p className="text-xs uppercase tracking-[0.35em] text-white/50">
-                                            Featured cast
-                                        </p>
-                                        <h2 className="font-[Libre Caslon Text] text-2xl">
-                                            Meet the crew
-                                        </h2>
-                                    </div>
-                                </div>
-
-                                <div className="mt-6 space-y-4">
-                                    {movie?.cast &&
-                                        movie?.cast.map((person: any) => (
-                                            <div
-                                                key={person.id}
-                                                className="flex items-center gap-4 rounded-2xl border border-white/10 bg-white/5 p-3"
-                                            >
-                                                <div className="flex h-12 w-12 items-center justify-center rounded-full bg-white/10 text-sm font-semibold uppercase text-white/70">
-                                                    {person.name?.charAt(0) || "A"}
-                                                </div>
-                                                <div>
-                                                    <h3 className="font-medium text-white">
-                                                        {person.name}
-                                                    </h3>
-                                                    <p className="text-sm text-white/60">
-                                                        {person.character || "Cast member"}
-                                                    </p>
-                                                </div>
-                                                <p>there is no any cast</p>
-                                            </div>
-                                        ))
-
-                                        // <p className="text-white/70">
-                                        //     Cast information is not available for this title yet.
-                                        // </p>
-                                    }
                                 </div>
                             </div>
                         </section>

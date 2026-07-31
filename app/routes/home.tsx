@@ -239,21 +239,6 @@ function Home() {
                 <Link to={`/movie/${movie.id}`}>
 
                   <div
-                    // onClick={() => {
-                    //   const movieDetail = async () => {
-                    //     try {
-                    //       const response = await fetch(`https://api.themoviedb.org/3/movie/${movie.id}?api_key=${API_KEY}&language=en-US`)
-
-                    //       const data = await response.json()
-                    //       setMovies(data)
-                    //       console.log("movie details issss -->-->", data);
-
-                    //     } catch (error) {
-                    //       return error
-                    //     }
-                    //   }
-                    //   movieDetail()
-                    // }}
                     key={movie.id}
                     className="movie-card flex-none w-[60vw] md:w-[22vw] aspect-2/3 relative snap-start overflow-hidden group cursor-pointer"
                   >
