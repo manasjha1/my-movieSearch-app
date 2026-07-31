@@ -143,7 +143,7 @@ export default function MovieDetail() {
                     <>
                         <section
                             key={movie.id}
-                            className="relative isolate overflow-hidden"
+                            className="relative h-[85vh] w-full overflow-hidden"
                         >
                             <div className="absolute inset-0">
                                 <img
@@ -154,8 +154,8 @@ export default function MovieDetail() {
                                 <div className="absolute inset-0 bg-linear-to-r from-[#0f0f10] via-[#0f0f10]/85 to-[#0f0f10]/20" />
                             </div>
 
-                            <div className="relative mx-auto flex max-w-7xl flex-col gap-10 px-[5vw] py-20 lg:flex-row lg:items-end lg:justify-between">
-                                <div className="max-w-3xl">
+                            <div className="relative mx-auto flex max-w-9xl flex-col gap-10 px-[5vw] py-20 lg:flex-row lg:items-end lg:justify-between">
+                                <div className="max-w-3xl lg:h-20">
                                     <Link
                                         to="/"
                                         className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/10 px-4 py-2 text-sm text-white/80 transition hover:bg-white/15"
@@ -179,7 +179,7 @@ export default function MovieDetail() {
                                     <h1 className="mt-6 font-[Libre Caslon Text] text-4xl font-semibold leading-tight sm:text-5xl lg:text-6xl">
                                         {movie.title}
                                     </h1>
-                                    <p className="mt-5 max-w-2xl text-lg leading-8 text-white/75">
+                                    <p className="mt-5 max-w-2xl text-lg leading-8 text-white/75 truncate">
                                         {movie.overview ||
                                             "A cinematic experience awaits, and the full synopsis will appear here soon."}
                                     </p>
@@ -195,7 +195,7 @@ export default function MovieDetail() {
                                     </div>
                                 </div>
 
-                                <div className="w-full max-w-sm rounded-[2rem] border border-white/10 bg-black/30 p-6 shadow-2xl shadow-black/30 backdrop-blur-xl">
+                                <div className="w-full max-w-sm rounded-[2rem] p-6 shadow-2xl ">
                                     <div className="flex items-center gap-3 text-xs uppercase tracking-[0.35em] text-white/60">
                                         <Ticket className="h-4 w-4" />
                                         At a glance
@@ -253,21 +253,20 @@ export default function MovieDetail() {
                                     </div>
                                 </div>
 
-                                <div className="flex gap-12 overflow-x-auto hide-scrollbar snap-x pb-6">
+                                <div className="flex gap-8 overflow-x-auto hide-scrollbar snap-x pb-6">
                                     {
                                         cast.length > 0 ? (
                                             cast.map((person: any) => (
                                                 <div
                                                     key={person.id}
-                                                    className="movie-card flex-none aspect-2/3 relative snap-start overflow-hidden group cursor-pointer"
+                                                    className="flex-none bg-accent border border-white/10 rounded-lg p-2 relative snap-start overflow-hidden group mt-6"
                                                 >
                                                     <img
                                                         src={`${IMAGE_BASE_URL}${person.profile_path}` ? `${IMAGE_BASE_URL}${person.profile_path}` : `${person.name?.charAt(0) || "A"}`}
-                                                        className="flex h-50 w-auto items-center justify-center rounded-sm bg-white/10 text-sm font-semibold uppercase text-white/70" />
-
+                                                        className="flex h-60 w-fit overflow-hidden rounded-sm" />
 
                                                     <div>
-                                                        <h3 className="font-medium text-white">
+                                                        <h3 className="font-medium text-lg text-white">
                                                             {person.name}
                                                         </h3>
                                                         <p className="text-sm text-white/60">
@@ -306,7 +305,7 @@ export default function MovieDetail() {
                                 </p>
 
                                 <div className="mt-8 flex flex-wrap gap-3">
-                                    {movie.genres?.slice(0, 6).map((genre: any) => (
+                                    {movie.genres?.map((genre: any) => (
                                         <span
                                             key={genre.id}
                                             className="rounded-full border border-white/10 bg-black/20 px-3 py-2 text-sm text-white/80"
@@ -315,7 +314,14 @@ export default function MovieDetail() {
                                         </span>
                                     ))}
                                 </div>
-                                <div className=" my-5 bg-accent p-3 rounded-xl">
+
+                                <div className="mt-4">
+                                    {/* <img className="w-full h-200" src={posterUrl} alt={movie.title} /> */}
+                                    <p className="text-left text-lg text-white/50 font-mediums">
+                                        {movie.overview}
+                                    </p>
+                                </div>
+                                {/* <div className=" my-5 bg-accent p-3 rounded-xl">
                                     {!findtrailer ? (
                                         <div>
                                             <iframe
@@ -332,7 +338,7 @@ export default function MovieDetail() {
                                             </h1>
                                         </div>
                                     )}
-                                </div>
+                                </div> */}
                             </div>
                         </section>
                     </>
