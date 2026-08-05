@@ -3,14 +3,61 @@ import { useEffect, useState } from "react";
 import { Footer } from "~/components/Footer";
 import { Headers } from "~/components/Headers";
 import API_KEY from "~/src/config/constantKey";
-import { Link } from "react-router"
-
-const apiKey = "eaca397b12af42ca89067ac3c10ff934";
+import { Link, useSearchParams } from "react-router"
+import { Button } from "~/components/ui/button";
+import {
+    Pagination,
+    PaginationContent,
+    PaginationEllipsis,
+    PaginationItem,
+    PaginationLink,
+    PaginationNext,
+    PaginationPrevious,
+} from "~/components/ui/pagination";
 
 export default function RecentMovie() {
-    const [movies, setMovies] = useState<any>({ results: [] });
+    const [topRated, setTopRated] = useState<any>({ results: [] });
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
+    const [searchParams, setSearchParams] = useSearchParams();
+
+    const page = Number(searchParams.get("page")) || topRated?.page || 1;
+
+    const nexPage = async () => {
+        try {
+            setLoading(true)
+            const response = await fetch(
+                `https://api.themoviedb.org/3/movie/top_rated?api_key=${API_KEY}&page=${page + 1}`,
+            );
+
+            const data = await response.json();
+            setTopRated(data)
+            setSearchParams({ page: page + 1 })
+            console.log("data of  pagination-->>", data);
+        } catch (error) {
+            return error;
+        } finally {
+            setLoading(false)
+        }
+    };
+
+    const prevPage = async () => {
+        try {
+            setLoading(true)
+            const response = await fetch(
+                `https://api.themoviedb.org/3/movie/top_rated?api_key=${API_KEY}&page=${page - 1}`,
+            );
+
+            const data = await response.json();
+            setTopRated(data)
+            setSearchParams({ page: page - 1 })
+            console.log("data of  pagination-->>", data);
+        } catch (error) {
+            return error;
+        } finally {
+            setLoading(false)
+        }
+    };
 
     const getTop_ratedMovies = async () => {
         try {
@@ -20,7 +67,7 @@ export default function RecentMovie() {
                 // `https://api.themoviedb.org/3/movie/popular?api_key=${apiKey}`
             );
             const data = await response.json();
-            setMovies(data);
+            setTopRated(data);
             console.log("movies data--> ", data);
 
         } catch (error) {
@@ -38,30 +85,6 @@ export default function RecentMovie() {
         <div>
             <Headers />
             <div className="mx-auto flex max-w-7xl flex-col gap-6">
-                {/* <header className="rounded-[2rem] border border-white/10 bg-white/5 p-6 shadow-[0_20px_80px_rgba(0,0,0,0.35)] backdrop-blur-sm sm:p-8 lg:p-10">
-                    <div className="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
-                        <div className="max-w-2xl">
-                            <p className="mb-3 text-xs font-semibold uppercase tracking-[0.35em] text-[#ff6b6b]">
-                                Movie collection
-                            </p>
-                            <h1 className="font-[Libre Caslon Text] text-3xl leading-tight sm:text-4xl lg:text-5xl">
-                                Top rated films
-                            </h1>
-                            <p className="mt-3 text-sm leading-7 text-white/70 sm:text-base">
-                                Discover a refined selection of acclaimed stories, from emotional dramas to modern classics.
-                            </p>
-                        </div>
-                        <div className="rounded-2xl border border-white/10 bg-[#11141d]/80 px-4 py-3 text-sm text-white/70">
-                            <span className="block text-xs uppercase tracking-[0.3em] text-white/40">
-                                Now showing
-                            </span>
-                            <span className="mt-1 block font-semibold text-white">
-                                {popularMovie?.results?.length ?? 0} featured titles
-                            </span>
-                        </div>
-                    </div>
-                </header> */}
-
                 <section className="p-4 sm:p-6 lg:p-8 mt-20">
                     <div className="mb-6 flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
                         <div>
@@ -82,7 +105,7 @@ export default function RecentMovie() {
                             {Array.from({ length: 8 }).map((_, index) => (
                                 <div
                                     key={index}
-                                    className="animate-pulse overflow-hidden rounded-[1.5rem] border border-white/10 bg-white/5"
+                                    className="animate-pulse overflow-hidden border border-white/10 bg-white/5"
                                 >
                                     <div className="aspect-2/3 bg-white/10" />
                                     <div className="space-y-2 p-4">
@@ -98,7 +121,7 @@ export default function RecentMovie() {
                         </div>
                     ) : (
                         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-                            {movies?.results?.map((movie: any) => {
+                            {topRated?.results?.map((movie: any) => {
                                 const releaseYear = movie.release_date?.split("-")[0] || "Coming soon";
 
                                 return (
@@ -141,6 +164,37 @@ export default function RecentMovie() {
                         </div>
                     )}
                 </section>
+                <div className="my-5">
+                    <Pagination>
+                        <PaginationContent>
+                            <PaginationItem>
+                                <Button disabled={page === 1} className={`hover:bg-accent cursor-pointer`}>
+                                    <PaginationPrevious onClick={() => prevPage()} />
+                                </Button>
+                            </PaginationItem>
+                            <PaginationItem>
+                                <PaginationEllipsis />
+                            </PaginationItem>
+                            <PaginationItem>
+                                <PaginationLink isActive>
+                                    {page}
+                                </PaginationLink>
+                            </PaginationItem>
+
+                            <PaginationItem>
+                                <PaginationEllipsis />
+                            </PaginationItem>
+                            <PaginationItem>
+                                <Button className={`hover:bg-accent cursor-pointer`}>
+                                    <PaginationNext
+                                        onClick={() => nexPage()}
+                                    />
+                                </Button>
+
+                            </PaginationItem>
+                        </PaginationContent>
+                    </Pagination>{" "}
+                </div>
             </div>
             <Footer />
         </div>

@@ -103,7 +103,7 @@ export default function PopularMovie() {
                             {Array.from({ length: 8 }).map((_, index) => (
                                 <div
                                     key={index}
-                                    className="animate-pulse overflow-hidden rounded-[1.5rem] border border-white/10 bg-white/5"
+                                    className="animate-pulse overflow-hidden border border-white/10 bg-white/5"
                                 >
                                     <div className="aspect-2/3 bg-white/10" />
                                     <div className="space-y-2 p-4">
@@ -124,8 +124,9 @@ export default function PopularMovie() {
                                     movie.release_date?.split("-")[0] || "Coming soon";
 
                                 return (
-                                    <article
+                                    <Link
                                         key={movie.id}
+                                        to={`/movie/${movie.id}`}
                                         className="movie-card group relative overflow-hidden rounded-xs border border-white/10 bg-[#11141d] shadow-[0_20px_60px_rgba(0,0,0,0.25)]"
                                     >
                                         <img
@@ -157,7 +158,7 @@ export default function PopularMovie() {
                                                 </div>
                                             </div>
                                         </div>
-                                    </article>
+                                    </Link>
                                 );
                             })}
                         </div>

@@ -1,15 +1,63 @@
 import { MoveRight } from "lucide-react";
 import { useEffect, useState } from "react";
-import { Link } from "react-router";
+import { Link, useSearchParams } from "react-router";
 import { Footer } from "~/components/Footer";
 import { Headers } from "~/components/Headers";
 import { Button } from "~/components/ui/button";
 import API_KEY from "~/src/config/constantKey";
+import {
+    Pagination,
+    PaginationContent,
+    PaginationEllipsis,
+    PaginationItem,
+    PaginationLink,
+    PaginationNext,
+    PaginationPrevious,
+} from "~/components/ui/pagination";
 
 export default function UpcomingMovie() {
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
     const [upcomingMovie, setUpcomingMovie] = useState<any>([])
+    const [searchParams, setSearchParams] = useSearchParams();
+
+    const page = Number(searchParams.get("page")) || upcomingMovie?.page || 1;
+
+    const nexPage = async () => {
+        try {
+            setLoading(true)
+            const response = await fetch(
+                `https://api.themoviedb.org/3/movie/upcoming?api_key=${API_KEY}&page=${page + 1}`,
+            );
+
+            const data = await response.json();
+            setUpcomingMovie(data)
+            setSearchParams({ page: page + 1 })
+            console.log("data of  pagination-->>", data);
+        } catch (error) {
+            return error;
+        } finally {
+            setLoading(false)
+        }
+    };
+
+    const prevPage = async () => {
+        try {
+            setLoading(true)
+            const response = await fetch(
+                `https://api.themoviedb.org/3/movie/upcoming?api_key=${API_KEY}&page=${page - 1}`,
+            );
+
+            const data = await response.json();
+            setUpcomingMovie(data)
+            setSearchParams({ page: page - 1 })
+            console.log("data of  pagination-->>", data);
+        } catch (error) {
+            return error;
+        } finally {
+            setLoading(false)
+        }
+    };
 
     const getUpcomingMovies = async () => {
         try {
@@ -56,7 +104,7 @@ export default function UpcomingMovie() {
                             {Array.from({ length: 8 }).map((_, index) => (
                                 <div
                                     key={index}
-                                    className="animate-pulse overflow-hidden rounded-[1.5rem] border border-white/10 bg-white/5"
+                                    className="animate-pulse overflow-hidden border border-white/10 bg-white/5"
                                 >
                                     <div className="aspect-2/3 bg-white/10" />
                                     <div className="space-y-2 p-4">
@@ -76,8 +124,9 @@ export default function UpcomingMovie() {
                                 const releaseYear = movie.release_date?.split("-")[0] || "Coming soon";
 
                                 return (
-                                    <article
+                                    <Link
                                         key={movie.id}
+                                        to={`/movie/${movie.id}`}
                                         className="movie-card group relative overflow-hidden rounded-xs border border-white/10 bg-[#11141d] shadow-[0_20px_60px_rgba(0,0,0,0.25)]"
                                     >
                                         <img
@@ -108,12 +157,43 @@ export default function UpcomingMovie() {
                                                 </div>
                                             </div>
                                         </div>
-                                    </article>
+                                    </Link>
                                 );
                             })}
                         </div>
                     )}
                 </section>
+                <div className="my-5">
+                    <Pagination>
+                        <PaginationContent>
+                            <PaginationItem>
+                                <Button disabled={page === 1} className={`hover:bg-accent cursor-pointer`}>
+                                    <PaginationPrevious onClick={() => prevPage()} />
+                                </Button>
+                            </PaginationItem>
+                            <PaginationItem>
+                                <PaginationEllipsis />
+                            </PaginationItem>
+                            <PaginationItem>
+                                <PaginationLink isActive>
+                                    {page}
+                                </PaginationLink>
+                            </PaginationItem>
+
+                            <PaginationItem>
+                                <PaginationEllipsis />
+                            </PaginationItem>
+                            <PaginationItem>
+                                <Button className={`hover:bg-accent cursor-pointer`}>
+                                    <PaginationNext
+                                        onClick={() => nexPage()}
+                                    />
+                                </Button>
+
+                            </PaginationItem>
+                        </PaginationContent>
+                    </Pagination>{" "}
+                </div>
             </div>
             <Footer />
         </div>
