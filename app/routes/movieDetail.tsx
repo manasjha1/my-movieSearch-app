@@ -141,7 +141,7 @@ export default function MovieDetail() {
             localStorage.setItem(WATCHLIST_STORAGE_KEY, JSON.stringify(next));
             setIsInWatchlist(!exists);
         } catch (error) {
-            console.error("Unable to update watchlist", error);
+            return error
         }
     };
 

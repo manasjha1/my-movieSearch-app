@@ -1,31 +1,18 @@
 import { useEffect, useMemo, useState } from "react";
 import { Footer } from "~/components/Footer";
 import { Headers } from "~/components/Headers";
-// hero uses simple crossfade; embla carousel removed for this section
 import {
-  Calendar,
-  ChevronRight,
-  Clock3,
   MoveRight,
-  Play,
   Plus,
   Share2,
   View,
 } from "lucide-react";
-import {
-  Pagination,
-  PaginationContent,
-  PaginationEllipsis,
-  PaginationItem,
-  PaginationLink,
-  PaginationNext,
-  PaginationPrevious,
-} from "~/components/ui/pagination";
 import { Link } from "react-router";
 import { Button } from "~/components/ui/button";
 import API_KEY from "~/src/config/constantKey";
 
 
+const WATCHLIST_STORAGE_KEY = "movie-watchlist";
 
 
 function Home() {
@@ -40,6 +27,47 @@ function Home() {
   const [autoplay, setAutoplay] = useState(true);
   const [isHovering, setIsHovering] = useState(false);
   const [slideCount, setSlideCount] = useState(8);
+  const [isInWatchlist, setIsInWatchlist] = useState(false);
+
+  useEffect(() => {
+    try {
+      const saved = localStorage.getItem(WATCHLIST_STORAGE_KEY);
+      if (saved) {
+        const parsed = JSON.parse(saved) as Array<{ id: number }>;
+        setIsInWatchlist(parsed.some((item) => item.id === item.id));
+      }
+    } catch (error) {
+      console.error("Unable to read watchlist", error);
+    }
+  }, []);
+
+  const handleWatchlistToggle = () => {
+    try {
+      const saved = localStorage.getItem(WATCHLIST_STORAGE_KEY);
+      const current = saved ? (JSON.parse(saved) as Array<any>) : [];
+      const exists = current.some((item) => item.id === movies.id);
+
+      const next = exists
+        ? current.filter((item) => item.id !== movies.id)
+        : [
+          ...current,
+          {
+            id: movies.id,
+            title: movies.title,
+            poster_path: movies.poster_path,
+            backdrop_path: movies.backdrop_path,
+            release_date: movies.release_date,
+            overview: movies.overview,
+            vote_average: movies.vote_average,
+          },
+        ];
+
+      localStorage.setItem(WATCHLIST_STORAGE_KEY, JSON.stringify(next));
+      setIsInWatchlist(!exists);
+    } catch (error) {
+      return error
+    }
+  };
 
   const getPopularMovies = async () => {
     try {
@@ -233,10 +261,12 @@ function Home() {
                       EXPLORE MOVIES
                       <MoveRight className="h-4 w-4" />
                     </button>
-                    <button className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-transparent px-10 py-4 text-[0.75rem] uppercase tracking-[0.35em] text-white transition hover:bg-white/10 cursor-pointer">
-                      <View className="h-4 w-4" />
-                      VIEW COLLECTION
-                    </button>
+                    <Link to="/watchlist">
+                      <button className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-transparent px-10 py-4 text-[0.75rem] uppercase tracking-[0.35em] text-white transition hover:bg-white/10 cursor-pointer">
+                        <View className="h-4 w-4" />
+                        VIEW WATCHLIST
+                      </button>
+                    </Link>
                     <button className="inline-flex items-center justify-center rounded-full border border-white/20 bg-transparent p-4 text-white transition hover:bg-white/10">
                       <Share2 className="h-4 w-4" />
                     </button>
@@ -269,6 +299,7 @@ function Home() {
                       <div
                         className="movie-card h-full relative overflow-hidden group cursor-pointer"
                       >
+
                         <img
                           className="w-full h-full object-cover"
                           src={
@@ -279,6 +310,7 @@ function Home() {
                           alt={movie.title}
                         />
                         <div className="absolute inset-0 bg-[#131313]/90 opacity-0 transition-opacity duration-500 flex flex-col justify-end p-6 group-hover:opacity-100">
+
                           <h3 className="font-[Libre Caslon Text] text-[1rem]">
                             {movie.title}
                           </h3>
@@ -436,6 +468,9 @@ function Home() {
                             <p className="font-[Manrope] text-[0.75rem] text-[#e5e2e1]/70 mt-2 line-clamp-3">
                               {movie.overview}
                             </p>
+                            <Button className={` mt-2 rounded-full border border-white/15 bg-black/50 px-2 text-white transition hover:bg-black/70 cursor-pointer uppercase`}>
+                              <Plus /> add to watchlist
+                            </Button>
                           </div>
                         </div>
                       </Link>
