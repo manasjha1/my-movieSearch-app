@@ -101,8 +101,9 @@ export default function RecentMovie() {
                                 const releaseYear = movie.release_date?.split("-")[0] || "Coming soon";
 
                                 return (
-                                    <article
+                                    <Link
                                         key={movie.id}
+                                        to={`/movie/${movie.id}`}
                                         className="movie-card group relative overflow-hidden rounded-xs border border-white/10 bg-[#11141d] shadow-[0_20px_60px_rgba(0,0,0,0.25)]"
                                     >
                                         <img
@@ -133,7 +134,7 @@ export default function RecentMovie() {
                                                 </div>
                                             </div>
                                         </div>
-                                    </article>
+                                    </Link>
                                 );
                             })}
                         </div>

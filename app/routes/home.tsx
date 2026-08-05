@@ -236,11 +236,9 @@ function Home() {
             <div className="flex gap-6 overflow-x-auto hide-scrollbar snap-x pb-6">
 
               {movies?.results?.slice(0, 8)?.map((movie: any) => (
-                <Link to={`/movie/${movie.id}`}>
-
+                <Link key={movie.id} to={`/movie/${movie.id}`} className="flex-none w-[60vw] md:w-[22vw] snap-start">
                   <div
-                    key={movie.id}
-                    className="movie-card flex-none w-[60vw] md:w-[22vw] aspect-2/3 relative snap-start overflow-hidden group cursor-pointer"
+                    className="movie-card h-full relative overflow-hidden group cursor-pointer"
                   >
                     <img
                       className="w-full h-full object-cover"
@@ -261,7 +259,6 @@ function Home() {
                     </div>
                   </div>
                 </Link>
-
               ))}
 
             </div>
@@ -286,28 +283,27 @@ function Home() {
             </div>
             <div className="flex gap-6 overflow-x-auto hide-scrollbar snap-x pb-6">
               {movies?.results?.slice(10, 20)?.map((movie: any) => (
-                <div
-                  key={movie.id}
-                  className="movie-card flex-none w-[60vw] md:w-[22vw] aspect-2/3 relative snap-start overflow-hidden group cursor-pointer"
-                >
-                  <img
-                    className="w-full h-full object-cover"
-                    src={
-                      movie.poster_path
-                        ? `https://image.tmdb.org/t/p/w500${movie.poster_path}`
-                        : "https://images.unsplash.com/photo-1517602302552-471fe67acf66?auto=format&fit=crop&w=900&q=80"
-                    }
-                    alt={movie.title}
-                  />
-                  <div className="absolute inset-0 bg-[#131313]/90 opacity-0 transition-opacity duration-500 flex flex-col justify-end p-6 group-hover:opacity-100">
-                    <h3 className="font-[Libre Caslon Text] text-[1rem]">
-                      {movie.title}
-                    </h3>
-                    <p className="font-[Manrope] text-[0.75rem] text-[#e5e2e1]/70 mt-2 line-clamp-3">
-                      {movie.overview}
-                    </p>
+                <Link key={movie.id} to={`/movie/${movie.id}`} className="flex-none w-[60vw] md:w-[22vw] snap-start">
+                  <div className="movie-card h-full relative overflow-hidden group cursor-pointer">
+                    <img
+                      className="w-full h-full object-cover"
+                      src={
+                        movie.poster_path
+                          ? `https://image.tmdb.org/t/p/w500${movie.poster_path}`
+                          : "https://images.unsplash.com/photo-1517602302552-471fe67acf66?auto=format&fit=crop&w=900&q=80"
+                      }
+                      alt={movie.title}
+                    />
+                    <div className="absolute inset-0 bg-[#131313]/90 opacity-0 transition-opacity duration-500 flex flex-col justify-end p-6 group-hover:opacity-100">
+                      <h3 className="font-[Libre Caslon Text] text-[1rem]">
+                        {movie.title}
+                      </h3>
+                      <p className="font-[Manrope] text-[0.75rem] text-[#e5e2e1]/70 mt-2 line-clamp-3">
+                        {movie.overview}
+                      </p>
+                    </div>
                   </div>
-                </div>
+                </Link>
               ))}
             </div>
           </section>
@@ -331,28 +327,27 @@ function Home() {
             </div>
             <div className="flex gap-6 overflow-x-auto hide-scrollbar snap-x pb-6">
               {movies?.results?.slice(9, 19)?.map((movie: any) => (
-                <div
-                  key={movie.id}
-                  className="movie-card flex-none w-[60vw] md:w-[22vw] aspect-2/3 relative snap-start overflow-hidden group cursor-pointer"
-                >
-                  <img
-                    className="w-full h-full object-cover"
-                    src={
-                      movie.poster_path
-                        ? `https://image.tmdb.org/t/p/w500${movie.poster_path}`
-                        : "https://images.unsplash.com/photo-1517602302552-471fe67acf66?auto=format&fit=crop&w=900&q=80"
-                    }
-                    alt={movie.title}
-                  />
-                  <div className="absolute inset-0 bg-[#131313]/90 opacity-0 transition-opacity duration-500 flex flex-col justify-end p-6 group-hover:opacity-100">
-                    <h3 className="font-[Libre Caslon Text] text-[1rem]">
-                      {movie.title}
-                    </h3>
-                    <p className="font-[Manrope] text-[0.75rem] text-[#e5e2e1]/70 mt-2 line-clamp-3">
-                      {movie.overview}
-                    </p>
+                <Link key={movie.id} to={`/movie/${movie.id}`} className="flex-none w-[60vw] md:w-[22vw] snap-start">
+                  <div className="movie-card h-full relative overflow-hidden group cursor-pointer">
+                    <img
+                      className="w-full h-full object-cover"
+                      src={
+                        movie.poster_path
+                          ? `https://image.tmdb.org/t/p/w500${movie.poster_path}`
+                          : "https://images.unsplash.com/photo-1517602302552-471fe67acf66?auto=format&fit=crop&w=900&q=80"
+                      }
+                      alt={movie.title}
+                    />
+                    <div className="absolute inset-0 bg-[#131313]/90 opacity-0 transition-opacity duration-500 flex flex-col justify-end p-6 group-hover:opacity-100">
+                      <h3 className="font-[Libre Caslon Text] text-[1rem]">
+                        {movie.title}
+                      </h3>
+                      <p className="font-[Manrope] text-[0.75rem] text-[#e5e2e1]/70 mt-2 line-clamp-3">
+                        {movie.overview}
+                      </p>
+                    </div>
                   </div>
-                </div>
+                </Link>
               ))}
             </div>
           </section>
@@ -394,39 +389,39 @@ function Home() {
 
               <div className="md:col-span-2 flex gap-6">
                 {movies?.results?.slice(0, 2)?.map((movie: any) => (
-                  <div
-                    key={movie.id}
-                    className="movie-card flex-none w-[60vw] md:w-[22vw] aspect-2/3 rounded-lg relative snap-start overflow-hidden group cursor-pointer"
-                  >
-                    <img
-                      className="w-full h-full object-cover"
-                      src={
-                        movie.poster_path
-                          ? `https://image.tmdb.org/t/p/w500${movie.poster_path}`
-                          : "https://images.unsplash.com/photo-1517602302552-471fe67acf66?auto=format&fit=crop&w=900&q=80"
-                      }
-                      alt={movie.title}
-                    />
-                    <div className="absolute inset-0 bg-[#131313]/90 opacity-0 transition-opacity duration-500 flex flex-col justify-end p-6 group-hover:opacity-100">
-                      <h3 className="font-[Libre Caslon Text] text-[1rem]">
-                        {movie.title}
-                      </h3>
-                      <p className="font-[Manrope] text-[0.75rem] text-[#e5e2e1]/70 mt-2 line-clamp-3">
-                        {movie.overview}
-                      </p>
+                  <Link key={movie.id} to={`/movie/${movie.id}`} className="movie-card flex-none w-[60vw] md:w-[22vw] rounded-lg relative snap-start overflow-hidden group cursor-pointer">
+                    <div className="h-full">
+                      <img
+                        className="w-full h-full object-cover"
+                        src={
+                          movie.poster_path
+                            ? `https://image.tmdb.org/t/p/w500${movie.poster_path}`
+                            : "https://images.unsplash.com/photo-1517602302552-471fe67acf66?auto=format&fit=crop&w=900&q=80"
+                        }
+                        alt={movie.title}
+                      />
+                      <div className="absolute inset-0 bg-[#131313]/90 opacity-0 transition-opacity duration-500 flex flex-col justify-end p-6 group-hover:opacity-100">
+                        <h3 className="font-[Libre Caslon Text] text-[1rem]">
+                          {movie.title}
+                        </h3>
+                        <p className="font-[Manrope] text-[0.75rem] text-[#e5e2e1]/70 mt-2 line-clamp-3">
+                          {movie.overview}
+                        </p>
+                      </div>
                     </div>
-                  </div>
+                  </Link>
                 ))}
               </div>
               {/* 2nd section */}
               <div className="md:col-span-4 flex gap-6">
                 {movies?.results?.slice(3, 5).map((movie: any) => (
-                  <div
+                  <Link
                     key={movie.id}
-                    className="relative group overflow-hidden rounded-[1.5rem] h-60"
+                    to={`/movie/${movie.id}`}
+                    className="relative group overflow-hidden rounded-[1.5rem] h-60 flex-1"
                   >
                     <img
-                      className="w-170 h-70 object-cover transition-transform duration-700 group-hover:scale-110"
+                      className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
                       src={
                         movie.poster_path
                           ? `https://image.tmdb.org/t/p/w500${movie.poster_path}`
@@ -436,9 +431,6 @@ function Home() {
                     />
                     <div className="absolute inset-0 bg-linear-to-t from-[#131313]/90 via-transparent to-transparent" />
                     <div className="absolute top-30 p-10">
-                      {/* <span className="bg-white text-[#131313] px-3 py-1 font-[Manrope] text-[10px] tracking-[0.2em] uppercase inline-block mb-4">
-                        EXCLUSIVE
-                      </span> */}
                       <h3 className="font-[Libre Caslon Text] font-bold text-[2rem] leading-tight">
                         {movie?.title}
                       </h3>
@@ -446,7 +438,7 @@ function Home() {
                         {movie?.overview}
                       </p>
                     </div>
-                  </div>
+                  </Link>
                 ))}
               </div>
               {/* <div className="md:col-span-2 relative group overflow-hidden rounded-[1.5rem] h-60">

@@ -27,18 +27,17 @@ export default function MovieDetail() {
         const fetchMovieDetail = async () => {
             try {
                 setLoading(true);
-                const [detailResponse, creditsResponse] =
-                    await Promise.all([
-                        fetch(
-                            `https://api.themoviedb.org/3/movie/${id}?api_key=${API_KEY}&language=en-US`,
-                        ),
-                        // fetch(
-                        //     `https://api.themoviedb.org/3/movie/${id}/videos?api_key=${API_KEY}&language=en-US`,
-                        // ),
-                        fetch(
-                            `https://api.themoviedb.org/3/movie/${id}/credits?api_key=${API_KEY}&language=en-US`,
-                        ),
-                    ]);
+                const [detailResponse, creditsResponse] = await Promise.all([
+                    fetch(
+                        `https://api.themoviedb.org/3/movie/${id}?api_key=${API_KEY}&language=en-US`,
+                    ),
+                    // fetch(
+                    //     `https://api.themoviedb.org/3/movie/${id}/videos?api_key=${API_KEY}&language=en-US`,
+                    // ),
+                    fetch(
+                        `https://api.themoviedb.org/3/movie/${id}/credits?api_key=${API_KEY}&language=en-US`,
+                    ),
+                ]);
 
                 const [detailData, creditsData] = await Promise.all([
                     detailResponse.json(),
@@ -236,8 +235,6 @@ export default function MovieDetail() {
                         </section>
 
                         <section className="mx-auto mt-12 grid gap-8 px-[5vw]">
-
-
                             <div className="rounded-[2rem] border border-white/10 bg-[#111111] p-8">
                                 <div className="flex items-center gap-3">
                                     <div className="rounded-full bg-white/10 p-3">
@@ -254,91 +251,115 @@ export default function MovieDetail() {
                                 </div>
 
                                 <div className="flex gap-8 overflow-x-auto hide-scrollbar snap-x pb-6">
-                                    {
-                                        cast.length > 0 ? (
-                                            cast.map((person: any) => (
-                                                <div
-                                                    key={person.id}
-                                                    className="flex-none bg-accent border border-white/10 rounded-lg p-2 relative snap-start overflow-hidden group mt-6"
-                                                >
-                                                    <img
-                                                        src={`${IMAGE_BASE_URL}${person.profile_path}` ? `${IMAGE_BASE_URL}${person.profile_path}` : `${person.name?.charAt(0) || "A"}`}
-                                                        className="flex h-60 w-fit overflow-hidden rounded-sm" />
+                                    {cast.length > 0 ? (
+                                        cast.map((person: any) => (
+                                            <div
+                                                key={person.id}
+                                                className="flex-none bg-accent border border-white/10 rounded-lg p-2 relative snap-start overflow-hidden group mt-6"
+                                            >
+                                                <img
+                                                    src={
+                                                        `${IMAGE_BASE_URL}${person.profile_path}`
+                                                            ? `${IMAGE_BASE_URL}${person.profile_path}`
+                                                            : `${person.name?.charAt(0) || "A"}`
+                                                    }
+                                                    className="flex h-60 w-fit overflow-hidden rounded-sm"
+                                                />
 
-                                                    <div>
-                                                        <h3 className="font-medium text-lg text-white">
-                                                            {person.name}
-                                                        </h3>
-                                                        <p className="text-sm text-white/60">
-                                                            {person.character || "Cast member"}
-                                                        </p>
-                                                    </div>
+                                                <div>
+                                                    <h3 className="font-medium text-lg text-white">
+                                                        {person.name}
+                                                    </h3>
+                                                    <p className="text-sm text-white/60">
+                                                        {person.character || "Cast member"}
+                                                    </p>
                                                 </div>
-                                            ))) : (
-                                            <p className="text-white/70">
-                                                Cast information is not available for this title yet.
-                                            </p>
-                                        )
-
-
-                                    }
+                                            </div>
+                                        ))
+                                    ) : (
+                                        <p className="text-white/70">
+                                            Cast information is not available for this title yet.
+                                        </p>
+                                    )}
                                 </div>
                             </div>
-                            <div className="rounded-[2rem] border border-white/10 bg-white/5 p-8 shadow-2xl shadow-black/20">
-                                <div className="flex items-center gap-3">
-                                    <div className="rounded-full bg-white/10 p-3">
-                                        <Star className="h-5 w-5 text-[#ffb703]" />
-                                    </div>
-                                    <div>
-                                        <p className="text-xs uppercase tracking-[0.35em] text-white/50">
-                                            Story & mood
+                            <div className="rounded-[2rem] border border-white/10 bg-[#111111] p-8 shadow-2xl shadow-black/20">
+                                <div className="grid gap-8 lg:grid-cols-[1.1fr_0.75fr]">
+                                    <div className="space-y-6">
+                                        <div className="flex items-center gap-3">
+                                            <div className="rounded-full bg-white/10 p-3">
+                                                <Star className="h-5 w-5 text-[#ffb703]" />
+                                            </div>
+                                            <div>
+                                                <p className="text-xs uppercase tracking-[0.35em] text-white/50">
+                                                    Popularity insight
+                                                </p>
+                                                <h2 className="font-[Libre Caslon Text] text-2xl">
+                                                    What makes this movie stand out
+                                                </h2>
+                                            </div>
+                                        </div>
+
+                                        <p className="text-lg leading-8 text-white/70">
+                                            {movie.tagline ||
+                                                "A high-impact story that resonates with audiences through strong characters, striking visuals, and a memorable emotional arc."}
                                         </p>
-                                        <h2 className="font-[Libre Caslon Text] text-2xl">
-                                            Why it stands out
-                                        </h2>
+
+                                        <div className="grid gap-4 sm:grid-cols-2">
+                                            <div className="p-4">
+                                                <p className="text-xs uppercase tracking-[0.35em] text-white/50">
+                                                    Release date
+                                                </p>
+                                                <p className="mt-2 text-base text-white">
+                                                    {formatDate(movie.release_date)}
+                                                </p>
+                                            </div>
+                                            <div className="p-4">
+                                                <p className="text-xs uppercase tracking-[0.35em] text-white/50">
+                                                    Runtime
+                                                </p>
+                                                <p className="mt-2 text-base text-white">
+                                                    {formatRuntime(movie.runtime)}
+                                                </p>
+                                            </div>
+                                            <div className="p-4">
+                                                <p className="text-xs uppercase tracking-[0.35em] text-white/50">
+                                                    Rating
+                                                </p>
+                                                <p className="mt-2 text-base text-white">
+                                                    {movie.vote_average?.toFixed(1) ?? "N/A"} / 10
+                                                </p>
+                                            </div>
+                                            <div className="p-4">
+                                                <p className="text-xs uppercase tracking-[0.35em] text-white/50">
+                                                    Genres
+                                                </p>
+                                                <p className="mt-2 text-base text-white">
+                                                    {movie.genres
+                                                        ?.map((genre: any) => genre.name)
+                                                        .join(" • ") || "Genre info unavailable"}
+                                                </p>
+                                            </div>
+                                        </div>
+
+                                        <div className="p-5">
+                                            <h3 className="text-sm uppercase tracking-[0.35em] text-white/60">
+                                                Overview
+                                            </h3>
+                                            <p className="mt-3 text-white/70 leading-7">
+                                                {movie?.overview}{" "}
+                                            </p>
+                                        </div>
+                                    </div>
+
+                                    <div className="rounded-[2rem] overflow-hidden border border-white/10 bg-black/20">
+                                        <img
+                                            src={posterUrl}
+                                            alt={movie.title}
+                                            className="h-full w-full object-cover"
+                                        />
                                     </div>
                                 </div>
-
-                                <p className="mt-6 text-lg leading-8 text-white/70">
-                                    {movie.tagline ||
-                                        "A beautifully crafted story that invites you to step into a fresh world of drama, tension, and cinematic wonder."}
-                                </p>
-
-                                <div className="mt-8 flex flex-wrap gap-3">
-                                    {movie.genres?.map((genre: any) => (
-                                        <span
-                                            key={genre.id}
-                                            className="rounded-full border border-white/10 bg-black/20 px-3 py-2 text-sm text-white/80"
-                                        >
-                                            {genre.name}
-                                        </span>
-                                    ))}
-                                </div>
-
-                                <div className="mt-4">
-                                    {/* <img className="w-full h-200" src={posterUrl} alt={movie.title} /> */}
-                                    <p className="text-left text-lg text-white/50 font-mediums">
-                                        {movie.overview}
-                                    </p>
-                                </div>
-                                {/* <div className=" my-5 bg-accent p-3 rounded-xl">
-                                    {!findtrailer ? (
-                                        <div>
-                                            <iframe
-                                                className="w-full h-full"
-                                                src={`https://www.youtube.com/embed/${findtrailer?.key}`}
-                                                title={findtrailer?.name}
-                                                allowFullScreen
-                                            />
-                                        </div>
-                                    ) : (
-                                        <div>
-                                            <h1 className="text-5xl text-left text-white font-medium">
-                                                Trailer not found
-                                            </h1>
-                                        </div>
-                                    )}
-                                </div> */}
                             </div>
                         </section>
                     </>
