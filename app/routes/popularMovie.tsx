@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { Link, useSearchParams } from "react-router";
 import { Footer } from "~/components/Footer";
 import { Headers } from "~/components/Headers";
+import { Button } from "~/components/ui/button";
 import {
     Pagination,
     PaginationContent,
@@ -22,8 +23,6 @@ export default function PopularMovie() {
     const [searchParams, setSearchParams] = useSearchParams();
 
     const page = Number(searchParams.get("page")) || popularMovie?.page || 1;
-    const limit =
-        Number(searchParams.get("limit")) || popularMovie?.results?.length || 20;
 
     const nexPage = async () => {
         try {
@@ -35,6 +34,24 @@ export default function PopularMovie() {
             const data = await response.json();
             setPopularMovie(data)
             setSearchParams({ page: page + 1 })
+            console.log("data of  pagination-->>", data);
+        } catch (error) {
+            return error;
+        } finally {
+            setLoading(false)
+        }
+    };
+
+    const prevPage = async () => {
+        try {
+            setLoading(true)
+            const response = await fetch(
+                `https://api.themoviedb.org/3/movie/popular?api_key=${API_KEY}&page=${page - 1}`,
+            );
+
+            const data = await response.json();
+            setPopularMovie(data)
+            setSearchParams({ page: page - 1 })
             console.log("data of  pagination-->>", data);
         } catch (error) {
             return error;
@@ -146,30 +163,33 @@ export default function PopularMovie() {
                         </div>
                     )}
                 </section>
-                <div className="flex items-center justify-between">
+                <div className="my-5">
                     <Pagination>
                         <PaginationContent>
                             <PaginationItem>
-                                <PaginationPrevious href="#" />
-                            </PaginationItem>
-                            <PaginationItem>
-                                <PaginationLink href="#">1</PaginationLink>
-                            </PaginationItem>
-                            <PaginationItem>
-                                <PaginationLink href="#" isActive>
-                                    {page}
-                                </PaginationLink>
-                            </PaginationItem>
-                            <PaginationItem>
-                                <PaginationLink href="#">3</PaginationLink>
+                                <Button disabled={page === 1} className={`hover:bg-accent cursor-pointer`}>
+                                    <PaginationPrevious onClick={() => prevPage()} />
+                                </Button>
                             </PaginationItem>
                             <PaginationItem>
                                 <PaginationEllipsis />
                             </PaginationItem>
                             <PaginationItem>
-                                <PaginationNext
-                                    onClick={() => nexPage()}
-                                />
+                                <PaginationLink isActive>
+                                    {page}
+                                </PaginationLink>
+                            </PaginationItem>
+
+                            <PaginationItem>
+                                <PaginationEllipsis />
+                            </PaginationItem>
+                            <PaginationItem>
+                                <Button className={`hover:bg-accent cursor-pointer`}>
+                                    <PaginationNext
+                                        onClick={() => nexPage()}
+                                    />
+                                </Button>
+
                             </PaginationItem>
                         </PaginationContent>
                     </Pagination>{" "}
