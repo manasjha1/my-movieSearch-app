@@ -32,7 +32,7 @@ export default function UpcomingMovie() {
 
             const data = await response.json();
             setUpcomingMovie(data)
-            setSearchParams({ page: page + 1 })
+            setSearchParams({ page: String(page + 1) })
             console.log("data of  pagination-->>", data);
         } catch (error) {
             return error;
@@ -50,7 +50,7 @@ export default function UpcomingMovie() {
 
             const data = await response.json();
             setUpcomingMovie(data)
-            setSearchParams({ page: page - 1 })
+            setSearchParams({ page: String(page - 1) })
             console.log("data of  pagination-->>", data);
         } catch (error) {
             return error;
