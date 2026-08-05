@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { Footer } from "~/components/Footer";
 import { Headers } from "~/components/Headers";
 import API_KEY from "~/src/config/constantKey";
+import { Link } from "react-router"
 
 const apiKey = "eaca397b12af42ca89067ac3c10ff934";
 

@@ -16,7 +16,7 @@ export const Footer = () => {
 
         <div>
           <ol className="flex items-center justify-evenly gap-8 ">
-            <Link to="/terms">
+            <Link to="/terms-of-service">
               <li className="text-sm text-[#e5e2e1]/60 hover:text-white cursor-pointer">
                 Terms of Service
               </li>

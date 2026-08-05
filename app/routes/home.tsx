@@ -30,16 +30,8 @@ import API_KEY from "~/src/config/constantKey";
 
 function Home() {
   // const { data: popularMovies } = usePpopularMovies()
-  const [searchParams, setSearchParams] = useSearchParams();
-  const movieIdParam = searchParams.get("movieId") || "550";
-  const [query, setQuery] = useState("");
   const [loading, setLoading] = useState(true);
   const [movies, setMovies] = useState<any>([]);
-  const navigate = useNavigate()
-
-  const page = Number(searchParams.get("page")) || movies?.page || 1;
-  const limit =
-    Number(searchParams.get("limit")) || movies?.results?.length || 20;
 
   const featuredMovie = useMemo(() => movies?.results?.[16], [movies]);
 
@@ -98,20 +90,6 @@ function Home() {
       year: "numeric",
     });
   };
-
-  // const movieDetail = async () => {
-  //   try {
-  //     const response = await fetch(`https://api.themoviedb.org/3/movie/${movies.id}?api_key=${API_KEY}&language=en-US`)
-
-  //     const data = response.json()
-  //     console.log("movie details issss -->", data);
-
-  //   } catch (error) {
-  //     return error
-  //   } finally {
-  //     navigate(`/movie/${movies?.results?.map((item: any) => item.id)}`)
-  //   }
-  // }
 
   const currentMovie = movies?.results?.[currentIndex] || featuredMovie;
 

@@ -1,15 +1,47 @@
 import { MoveRight } from "lucide-react";
 import { useEffect, useState } from "react";
-import { Link } from "react-router";
+import { Link, useSearchParams } from "react-router";
 import { Footer } from "~/components/Footer";
 import { Headers } from "~/components/Headers";
-import { Button } from "~/components/ui/button";
+import {
+    Pagination,
+    PaginationContent,
+    PaginationEllipsis,
+    PaginationItem,
+    PaginationLink,
+    PaginationNext,
+    PaginationPrevious,
+} from "~/components/ui/pagination";
+
 import API_KEY from "~/src/config/constantKey";
 
 export default function PopularMovie() {
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
-    const [popularMovie, setPopularMovie] = useState<any>([])
+    const [popularMovie, setPopularMovie] = useState<any>([]);
+    const [searchParams, setSearchParams] = useSearchParams();
+
+    const page = Number(searchParams.get("page")) || popularMovie?.page || 1;
+    const limit =
+        Number(searchParams.get("limit")) || popularMovie?.results?.length || 20;
+
+    const nexPage = async () => {
+        try {
+            setLoading(true)
+            const response = await fetch(
+                `https://api.themoviedb.org/3/movie/popular?api_key=${API_KEY}&page=${page + 1}`,
+            );
+
+            const data = await response.json();
+            setPopularMovie(data)
+            setSearchParams({ page: page + 1 })
+            console.log("data of  pagination-->>", data);
+        } catch (error) {
+            return error;
+        } finally {
+            setLoading(false)
+        }
+    };
 
     const getPopularMovies = async () => {
         try {
@@ -20,8 +52,6 @@ export default function PopularMovie() {
             );
             const data = await response.json();
             setPopularMovie(data);
-            console.log("movies data--> ", data, popularMovie);
-
         } catch (error) {
             console.log(error);
         } finally {
@@ -73,7 +103,8 @@ export default function PopularMovie() {
                     ) : (
                         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
                             {popularMovie?.results?.map((movie: any) => {
-                                const releaseYear = movie.release_date?.split("-")[0] || "Coming soon";
+                                const releaseYear =
+                                    movie.release_date?.split("-")[0] || "Coming soon";
 
                                 return (
                                     <article
@@ -102,7 +133,8 @@ export default function PopularMovie() {
                                                 </p>
                                                 <div className="flex items-center justify-between">
                                                     <p className="mt-2 text-sm text-white/70">
-                                                        {movie.vote_average?.toFixed(1) ?? "--"} / 10 • {movie.original_language?.toUpperCase() ?? "EN"}
+                                                        {movie.vote_average?.toFixed(1) ?? "--"} / 10 •{" "}
+                                                        {movie.original_language?.toUpperCase() ?? "EN"}
                                                     </p>
                                                     <MoveRight className="size-6 mt-3 text-white/70" />
                                                 </div>
@@ -114,8 +146,36 @@ export default function PopularMovie() {
                         </div>
                     )}
                 </section>
+                <div className="flex items-center justify-between">
+                    <Pagination>
+                        <PaginationContent>
+                            <PaginationItem>
+                                <PaginationPrevious href="#" />
+                            </PaginationItem>
+                            <PaginationItem>
+                                <PaginationLink href="#">1</PaginationLink>
+                            </PaginationItem>
+                            <PaginationItem>
+                                <PaginationLink href="#" isActive>
+                                    {page}
+                                </PaginationLink>
+                            </PaginationItem>
+                            <PaginationItem>
+                                <PaginationLink href="#">3</PaginationLink>
+                            </PaginationItem>
+                            <PaginationItem>
+                                <PaginationEllipsis />
+                            </PaginationItem>
+                            <PaginationItem>
+                                <PaginationNext
+                                    onClick={() => nexPage()}
+                                />
+                            </PaginationItem>
+                        </PaginationContent>
+                    </Pagination>{" "}
+                </div>
             </div>
             <Footer />
         </div>
-    )
+    );
 }
