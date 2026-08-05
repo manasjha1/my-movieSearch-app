@@ -9,4 +9,5 @@ export default [
   route("terms-of-service", "./routes/terms.tsx"),
   route("privacy-policy", "./routes/privacyPolicy.tsx"),
   route("contact", "./routes/contact.tsx"),
+  route("watchlist", "./routes/watchlist.tsx"),
 ] satisfies RouteConfig;

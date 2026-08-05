@@ -150,7 +150,7 @@ function Home() {
           </>
         ) : (
           <>
-            <section className="relative h-[85vh] w-full overflow-hidden flex flex-col justify-end">
+            <section className="relative h-screen w-full overflow-hidden flex flex-col justify-end">
               <div
                 className="absolute inset-0"
                 onMouseEnter={() => setIsHovering(true)}
@@ -186,7 +186,7 @@ function Home() {
                       </div>
                     ))}
 
-                  <div className="absolute left-1/2 -translate-x-1/2 bottom-6 z-40 flex gap-2">
+                  <div className="absolute left-1/2 -translate-x-1/2 top-190 z-40 flex gap-2">
                     {movies?.results
                       ?.slice(0, slideCount)
                       .map((_: any, i: number) => (
@@ -201,7 +201,7 @@ function Home() {
                 </div>
               </div>
 
-              <div className="relative z-20 px-[5vw] pb-24 grid md:grid-cols-2 items-end gap-12">
+              <div className="relative z-20 pb-25 px-[5vw] grid md:grid-cols-2 items-end gap-12">
                 <div>
                   <div className="flex flex-wrap items-center gap-3 mb-6">
                     <span className="rounded-full border border-white/20 bg-white/10 px-3 py-1 text-[0.65rem] uppercase tracking-[0.4em] text-white/90">
@@ -226,7 +226,7 @@ function Home() {
                   <div className="flex flex-wrap gap-4">
                     <button
                       onClick={() =>
-                        window.scrollTo({ top: 650, behavior: "smooth" })
+                        window.scrollTo({ top: 750, behavior: "smooth" })
                       }
                       className="inline-flex items-center gap-3 rounded-full bg-white px-10 py-4 text-[0.75rem] uppercase tracking-[0.35em] text-[#131313] transition hover:bg-[#e5e2e1]/90 cursor-pointer"
                     >

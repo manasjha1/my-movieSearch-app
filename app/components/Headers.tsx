@@ -1,6 +1,7 @@
 import { Link, useLocation } from "react-router";
 import { useEffect, useState } from "react";
 import { Button } from "./ui/button";
+import { Plus } from "lucide-react";
 
 export const Headers = () => {
     const { pathname } = useLocation();
@@ -43,7 +44,7 @@ export const Headers = () => {
 
                 <div className="flex items-center gap-4">
                     <span className="material-symbols-outlined text-[#e5e2e1]/80 hover:text-white transition-colors cursor-pointer">
-                        notifications
+                        search
                     </span>
                     <div className="hidden h-9 w-9 overflow-hidden rounded-full border border-white/10 bg-[#1a1a1a] md:block">
                         <img
@@ -52,10 +53,12 @@ export const Headers = () => {
                             src="https://images.unsplash.com/photo-1527980965255-d3b416303d12?auto=format&fit=crop&w=200&q=80"
                         />
                     </div>
+                    <Link to="/watchlist">
+                        <Button className="hidden rounded-full border border-white/15 bg-white/10 px-5 py-2 text-[0.75rem] uppercase tracking-[0.35em] text-white transition hover:bg-white/20 md:inline-flex">
+                            <Plus /> watchlist
+                        </Button>
+                    </Link>
 
-                    <Button className="hidden rounded-full border border-white/15 bg-white/10 px-5 py-2 text-[0.75rem] uppercase tracking-[0.35em] text-white transition hover:bg-white/20 md:inline-flex">
-                        Subscribe
-                    </Button>
                     <button
                         className="rounded-full border border-white/10 bg-white/10 p-2 text-white/80 transition hover:bg-white/15 md:hidden"
                         aria-label="Menu"

@@ -13,6 +13,8 @@ import { Footer } from "~/components/Footer";
 import { Headers } from "~/components/Headers";
 import API_KEY from "~/src/config/constantKey";
 
+const WATCHLIST_STORAGE_KEY = "movie-watchlist";
+
 const IMAGE_BASE_URL = "https://image.tmdb.org/t/p/original";
 const POSTER_BASE_URL = "https://image.tmdb.org/t/p/w500";
 
@@ -22,6 +24,7 @@ export default function MovieDetail() {
     const [movieVideo, setMovieVideo] = useState<any>(null);
     const [credits, setCredits] = useState<any>(null);
     const [loading, setLoading] = useState(true);
+    const [isInWatchlist, setIsInWatchlist] = useState(false);
 
     useEffect(() => {
         const fetchMovieDetail = async () => {
@@ -101,10 +104,46 @@ export default function MovieDetail() {
         : "https://images.unsplash.com/photo-1517602302552-471fe67acf66?auto=format&fit=crop&w=1600&q=80";
 
     const cast = credits?.cast?.slice(0, 10) || [];
-    console.log("cast is --->", cast);
 
-    const castData = movie?.results?.map((cast: []) => cast);
-    console.log("cast not is >>>>>>>>>>>", castData);
+    useEffect(() => {
+        try {
+            const saved = localStorage.getItem(WATCHLIST_STORAGE_KEY);
+            if (saved) {
+                const parsed = JSON.parse(saved) as Array<{ id: number }>;
+                setIsInWatchlist(parsed.some((item) => item.id === Number(id)));
+            }
+        } catch (error) {
+            console.error("Unable to read watchlist", error);
+        }
+    }, [id]);
+
+    const handleWatchlistToggle = () => {
+        try {
+            const saved = localStorage.getItem(WATCHLIST_STORAGE_KEY);
+            const current = saved ? (JSON.parse(saved) as Array<any>) : [];
+            const exists = current.some((item) => item.id === movie.id);
+
+            const next = exists
+                ? current.filter((item) => item.id !== movie.id)
+                : [
+                    ...current,
+                    {
+                        id: movie.id,
+                        title: movie.title,
+                        poster_path: movie.poster_path,
+                        backdrop_path: movie.backdrop_path,
+                        release_date: movie.release_date,
+                        overview: movie.overview,
+                        vote_average: movie.vote_average,
+                    },
+                ];
+
+            localStorage.setItem(WATCHLIST_STORAGE_KEY, JSON.stringify(next));
+            setIsInWatchlist(!exists);
+        } catch (error) {
+            console.error("Unable to update watchlist", error);
+        }
+    };
 
     return (
         <div className="min-h-screen bg-[#0f0f10] text-white">
@@ -142,7 +181,7 @@ export default function MovieDetail() {
                     <>
                         <section
                             key={movie.id}
-                            className="relative h-[85vh] w-full overflow-hidden"
+                            className="relative h-screen w-full overflow-hidden"
                         >
                             <div className="absolute inset-0">
                                 <img
@@ -188,8 +227,14 @@ export default function MovieDetail() {
                                             <Play className="h-4 w-4" />
                                             Watch trailer
                                         </button>
-                                        <button className="rounded-full border border-white/20 bg-transparent px-6 py-3 text-sm font-medium uppercase tracking-[0.25em] text-white transition hover:bg-white/10">
-                                            Add to watchlist
+                                        <button
+                                            onClick={handleWatchlistToggle}
+                                            className={`rounded-full border px-6 py-3 text-sm font-medium uppercase tracking-[0.25em] transition ${isInWatchlist
+                                                ? "border-[#ffb703] bg-[#ffb703]/15 text-[#ffb703] hover:bg-[#ffb703]/20"
+                                                : "border-white/20 bg-transparent text-white hover:bg-white/10"
+                                                }`}
+                                        >
+                                            {isInWatchlist ? "Saved to watchlist" : "Add to watchlist"}
                                         </button>
                                     </div>
                                 </div>
