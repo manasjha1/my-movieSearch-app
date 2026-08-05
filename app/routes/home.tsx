@@ -267,9 +267,7 @@ function Home() {
                         VIEW WATCHLIST
                       </button>
                     </Link>
-                    <button className="inline-flex items-center justify-center rounded-full border border-white/20 bg-transparent p-4 text-white transition hover:bg-white/10">
-                      <Share2 className="h-4 w-4" />
-                    </button>
+
                   </div>
                 </div>
               </div>
