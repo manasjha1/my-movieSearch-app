@@ -1,6 +1,6 @@
 {
   "$schema": "https://json.schemastore.org/package.json",
-  "name": "my-moviesearch-app",
+  "name": "my-movieSearch-app",
   "private": true,
   "type": "module",
   "scripts": {
