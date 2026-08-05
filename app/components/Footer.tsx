@@ -21,7 +21,7 @@ export const Footer = () => {
                 Terms of Service
               </li>
             </Link>
-            <Link to="/privacyPolicy">
+            <Link to="/privacy-policy">
               <li className="text-sm text-[#e5e2e1]/60 hover:text-white cursor-pointer">
                 Privacy Policy
               </li>

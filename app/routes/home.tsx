@@ -21,7 +21,7 @@ import {
   PaginationNext,
   PaginationPrevious,
 } from "~/components/ui/pagination";
-import { Link, useNavigate, useSearchParams } from "react-router";
+import { Link } from "react-router";
 import { Button } from "~/components/ui/button";
 import API_KEY from "~/src/config/constantKey";
 
@@ -92,360 +92,389 @@ function Home() {
   };
 
   const currentMovie = movies?.results?.[currentIndex] || featuredMovie;
+  const skeletonSections = [
+    { label: "EDITOR'S PICK", title: "Popular Right Now" },
+    { label: "COMING SOON", title: "Worth the Wait" },
+    { label: "HIGHEST RATED", title: "Critics' Choice" },
+  ];
 
   return (
     <div className="min-h-screen bg-[#131313] text-white">
       <Headers />
-
-      <main className="pt-20">
-        <section className="relative h-[85vh] w-full overflow-hidden flex flex-col justify-end">
-          <div
-            className="absolute inset-0"
-            onMouseEnter={() => setIsHovering(true)}
-            onMouseLeave={() => setIsHovering(false)}
-          >
-            <div className="h-full relative">
-              {movies?.results
-                ?.slice(0, slideCount)
-                .map((movie: any, idx: number) => (
-                  <div
-                    key={movie.id}
-                    className={`absolute inset-0 transition-opacity duration-700 ${currentIndex === idx
-                      ? "opacity-100 z-20"
-                      : "opacity-0 z-10"
-                      }`}
-                  >
-                    <img
-                      src={
-                        movie.backdrop_path
-                          ? `https://image.tmdb.org/t/p/original${movie.backdrop_path}`
-                          : movie.poster_path
-                            ? `https://image.tmdb.org/t/p/original${movie.poster_path}`
-                            : "https://images.unsplash.com/photo-1517602302552-471fe67acf66?auto=format&fit=crop&w=1600&q=80"
-                      }
-                      alt={
-                        movie.title ||
-                        featuredMovie?.title ||
-                        "CinéNoir hero image"
-                      }
-                      className={`h-full w-full object-cover grayscale-[0.2] contrast-[1.1]`}
-                    />
-                    <div className="absolute inset-0 bg-linear-to-t from-[#131313] via-[#131313]/80 to-transparent" />
+      <main>
+        {loading ? (
+          <>
+            <section className="relative h-[85vh] w-full overflow-hidden bg-[#161616] pt-80">
+              <div className="absolute inset-0 bg-[#0f0f0f]" />
+              <div className="absolute inset-0 bg-linear-to-t from-[#131313] via-[#131313]/80 to-transparent" />
+              <div className="relative z-20 px-[5vw] pb-24 grid md:grid-cols-2 items-end gap-12">
+                <div className="space-y-6 max-w-3xl">
+                  <div className="h-9 w-44 rounded-full bg-white/10 animate-pulse" />
+                  <div className="h-24 w-full max-w-xl rounded-3xl bg-white/10 animate-pulse" />
+                  <div className="h-5 w-96 rounded-full bg-white/10 animate-pulse" />
+                  <div className="h-5 w-72 rounded-full bg-white/10 animate-pulse" />
+                  <div className="flex flex-wrap gap-4 pt-4">
+                    <div className="h-12 w-40 rounded-full bg-white/10 animate-pulse" />
+                    <div className="h-12 w-40 rounded-full bg-white/10 animate-pulse" />
+                    <div className="h-12 w-12 rounded-full bg-white/10 animate-pulse" />
                   </div>
-                ))}
-
-              {/* indicators */}
-              <div className="absolute left-1/2 -translate-x-1/2 bottom-6 z-40 flex gap-2">
-                {movies?.results
-                  ?.slice(0, slideCount)
-                  .map((_: any, i: number) => (
-                    <button
-                      key={`dot-${i}`}
-                      onClick={() => setCurrentIndex(i)}
-                      className={`h-2 w-8 rounded-full transition-all duration-300 ${currentIndex === i ? "bg-white" : "bg-white/20"}`}
-                      aria-label={`Go to slide ${i + 1}`}
-                    />
-                  ))}
+                </div>
               </div>
-            </div>
-          </div>
+            </section>
 
-          <div className="relative z-20 px-[5vw] pb-24 grid md:grid-cols-2 items-end gap-12">
-            <div>
-              <div className="flex flex-wrap items-center gap-3 mb-6">
-                <span className="rounded-full border border-white/20 bg-white/10 px-3 py-1 text-[0.65rem] uppercase tracking-[0.4em] text-white/90">
-                  FEATURE FILM
-                </span>
-                <span className="text-[0.75rem] uppercase tracking-[0.35em] text-[#e5e2e1]/70">
-                  TRENDING • TOP RATED • UPCOMING
-                </span>
-              </div>
-
-              <h1 className="font-[Libre Caslon Text] font-semibold text-6xl leading-[0.9] md:text-[5rem] md:leading-[0.9]">
-                Every Story Starts Here
-              </h1>
-              <p className="mt-4 max-w-xl text-[1.125rem] leading-8 text-[#e5e2e1]/75 md:text-[1.125rem]">
-                Step into a world of unforgettable stories. Explore thousands of
-                films, discover what's trending, and build your personal
-                watchlist.{" "}
-              </p>
-            </div>
-
-            <div className="flex flex-col md:items-end gap-6">
-              <div className="flex flex-wrap gap-4">
-                <button
-                  onClick={() =>
-                    window.scrollTo({ top: 700, behavior: "smooth" })
-                  }
-                  className="inline-flex items-center gap-3 rounded-full bg-white px-10 py-4 text-[0.75rem] uppercase tracking-[0.35em] text-[#131313] transition hover:bg-[#e5e2e1]/90 cursor-pointer"
-                >
-                  EXPLORE MOVIES
-                  <MoveRight className="h-4 w-4" />
-                </button>
-                <button className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-transparent px-10 py-4 text-[0.75rem] uppercase tracking-[0.35em] text-white transition hover:bg-white/10 cursor-pointer">
-                  <View className="h-4 w-4" />
-                  VIEW COLLECTION
-                </button>
-                <button className="inline-flex items-center justify-center rounded-full border border-white/20 bg-transparent p-4 text-white transition hover:bg-white/10">
-                  <Share2 className="h-4 w-4" />
-                </button>
-              </div>
-            </div>
-          </div>
-        </section>
-        {/* Popular Movies */}
-        <div className="flex flex-col gap-16 py-16">
-          <section className="px-[5vw]">
-            <div className="flex justify-between items-baseline mb-8">
-              <div>
-                <p className="text-xs uppercase tracking-[0.35em] text-white/40">
-                  EDITOR'S PICK
-                </p>
-                <h2 className="font-[Libre Caslon Text] font-semibold text-2xl sm:text-3xl">
-                  Popular Right Now
-                </h2>
-              </div>
-              <Link to="/popularMovie">
-                <Button className="font-[Manrope] text-[0.75rem] uppercase tracking-[0.35em] text-[#e5e2e1]/70 bg-transparent hover:bg-transparent transition hover:text-white cursor-pointer">
-                  VIEW ALL
-                </Button>
-              </Link>
-            </div>
-            <div className="flex gap-6 overflow-x-auto hide-scrollbar snap-x pb-6">
-
-              {movies?.results?.slice(0, 8)?.map((movie: any) => (
-                <Link key={movie.id} to={`/movie/${movie.id}`} className="flex-none w-[60vw] md:w-[22vw] snap-start">
-                  <div
-                    className="movie-card h-full relative overflow-hidden group cursor-pointer"
-                  >
-                    <img
-                      className="w-full h-full object-cover"
-                      src={
-                        movie.poster_path
-                          ? `https://image.tmdb.org/t/p/w500${movie.poster_path}`
-                          : "https://images.unsplash.com/photo-1517602302552-471fe67acf66?auto=format&fit=crop&w=900&q=80"
-                      }
-                      alt={movie.title}
-                    />
-                    <div className="absolute inset-0 bg-[#131313]/90 opacity-0 transition-opacity duration-500 flex flex-col justify-end p-6 group-hover:opacity-100">
-                      <h3 className="font-[Libre Caslon Text] text-[1rem]">
-                        {movie.title}
-                      </h3>
-                      <p className="font-[Manrope] text-[0.75rem] text-[#e5e2e1]/70 mt-2 line-clamp-3">
-                        {movie.overview}
-                      </p>
+            <div className="flex flex-col gap-16 py-16 mt-10">
+              {skeletonSections.map((section) => (
+                <section className="px-[5vw]" key={section.title}>
+                  <div className="flex justify-between items-baseline mb-8">
+                    <div>
+                      <div className="h-4 w-32 rounded-full bg-white/10 animate-pulse mb-3" />
+                      <div className="h-9 w-64 rounded-full bg-white/10 animate-pulse" />
                     </div>
+                    <div className="h-10 w-28 rounded-full bg-white/10 animate-pulse" />
                   </div>
-                </Link>
-              ))}
-
-            </div>
-          </section>
-          {/* Upcoming movies */}
-          <section className="px-[5vw]">
-            <div className="flex justify-between items-baseline mb-8">
-              <div>
-                <p className="text-xs uppercase tracking-[0.35em] text-white/40">
-                  COMING SOON
-
-                </p>
-                <h2 className="font-[Libre Caslon Text] font-semibold text-2xl sm:text-3xl">
-                  Worth the Wait
-                </h2>
-              </div>
-              <Link to="/upcomingMovie">
-                <Button className="font-[Manrope] text-[0.75rem] uppercase tracking-[0.35em] text-[#e5e2e1]/70 bg-transparent hover:bg-transparent transition hover:text-white">
-                  VIEW ALL
-                </Button>
-              </Link>
-            </div>
-            <div className="flex gap-6 overflow-x-auto hide-scrollbar snap-x pb-6">
-              {movies?.results?.slice(10, 20)?.map((movie: any) => (
-                <Link key={movie.id} to={`/movie/${movie.id}`} className="flex-none w-[60vw] md:w-[22vw] snap-start">
-                  <div className="movie-card h-full relative overflow-hidden group cursor-pointer">
-                    <img
-                      className="w-full h-full object-cover"
-                      src={
-                        movie.poster_path
-                          ? `https://image.tmdb.org/t/p/w500${movie.poster_path}`
-                          : "https://images.unsplash.com/photo-1517602302552-471fe67acf66?auto=format&fit=crop&w=900&q=80"
-                      }
-                      alt={movie.title}
-                    />
-                    <div className="absolute inset-0 bg-[#131313]/90 opacity-0 transition-opacity duration-500 flex flex-col justify-end p-6 group-hover:opacity-100">
-                      <h3 className="font-[Libre Caslon Text] text-[1rem]">
-                        {movie.title}
-                      </h3>
-                      <p className="font-[Manrope] text-[0.75rem] text-[#e5e2e1]/70 mt-2 line-clamp-3">
-                        {movie.overview}
-                      </p>
-                    </div>
+                  <div className="flex gap-6 overflow-x-auto hide-scrollbar snap-x pb-6">
+                    {Array.from({ length: 4 }).map((_, idx) => (
+                      <div
+                        key={idx}
+                        className="flex-none w-[60vw] md:w-[22vw] snap-start overflow-hidden rounded-[1.25rem] bg-[#171717] p-4 animate-pulse"
+                      >
+                        <div className="h-64 w-full rounded-[1rem] bg-white/10 mb-4" />
+                        <div className="h-4 w-2/3 rounded-full bg-white/10 mb-3" />
+                        <div className="h-3 w-1/2 rounded-full bg-white/10" />
+                      </div>
+                    ))}
                   </div>
-                </Link>
+                </section>
               ))}
             </div>
-          </section>
-          {/* Top rated movies */}
-          <section className="px-[5vw]">
-            <div className="flex justify-between items-baseline mb-8">
-              <div>
-                <p className="text-xs uppercase tracking-[0.35em] text-white/40">
-                  HIGHEST RATED
+          </>
+        ) : (
+          <>
+            <section className="relative h-[85vh] w-full overflow-hidden flex flex-col justify-end">
+              <div
+                className="absolute inset-0"
+                onMouseEnter={() => setIsHovering(true)}
+                onMouseLeave={() => setIsHovering(false)}
+              >
+                <div className="h-full relative">
+                  {movies?.results
+                    ?.slice(0, slideCount)
+                    .map((movie: any, idx: number) => (
+                      <div
+                        key={movie.id}
+                        className={`absolute inset-0 transition-opacity duration-700 ${currentIndex === idx
+                          ? "opacity-100 z-20"
+                          : "opacity-0 z-10"
+                          }`}
+                      >
+                        <img
+                          src={
+                            movie.backdrop_path
+                              ? `https://image.tmdb.org/t/p/original${movie.backdrop_path}`
+                              : movie.poster_path
+                                ? `https://image.tmdb.org/t/p/original${movie.poster_path}`
+                                : "https://images.unsplash.com/photo-1517602302552-471fe67acf66?auto=format&fit=crop&w=1600&q=80"
+                          }
+                          alt={
+                            movie.title ||
+                            featuredMovie?.title ||
+                            "CinéNoir hero image"
+                          }
+                          className={`h-full w-full object-cover grayscale-[0.2] contrast-[1.1]`}
+                        />
+                        <div className="absolute inset-0 bg-linear-to-t from-[#131313] via-[#131313]/80 to-transparent" />
+                      </div>
+                    ))}
 
-                </p>
-                <h2 className="font-[Libre Caslon Text] font-semibold text-2xl sm:text-3xl">
-                  Critics' Choice
-                </h2>
-              </div>
-              <Link to="/top_ratedMovie">
-                <Button className="font-[Manrope] text-[0.75rem] uppercase tracking-[0.35em] text-[#e5e2e1]/70 bg-transparent hover:bg-transparent transition hover:text-white">
-                  VIEW ALL
-                </Button>
-              </Link>
-            </div>
-            <div className="flex gap-6 overflow-x-auto hide-scrollbar snap-x pb-6">
-              {movies?.results?.slice(9, 19)?.map((movie: any) => (
-                <Link key={movie.id} to={`/movie/${movie.id}`} className="flex-none w-[60vw] md:w-[22vw] snap-start">
-                  <div className="movie-card h-full relative overflow-hidden group cursor-pointer">
-                    <img
-                      className="w-full h-full object-cover"
-                      src={
-                        movie.poster_path
-                          ? `https://image.tmdb.org/t/p/w500${movie.poster_path}`
-                          : "https://images.unsplash.com/photo-1517602302552-471fe67acf66?auto=format&fit=crop&w=900&q=80"
-                      }
-                      alt={movie.title}
-                    />
-                    <div className="absolute inset-0 bg-[#131313]/90 opacity-0 transition-opacity duration-500 flex flex-col justify-end p-6 group-hover:opacity-100">
-                      <h3 className="font-[Libre Caslon Text] text-[1rem]">
-                        {movie.title}
-                      </h3>
-                      <p className="font-[Manrope] text-[0.75rem] text-[#e5e2e1]/70 mt-2 line-clamp-3">
-                        {movie.overview}
-                      </p>
-                    </div>
+                  <div className="absolute left-1/2 -translate-x-1/2 bottom-6 z-40 flex gap-2">
+                    {movies?.results
+                      ?.slice(0, slideCount)
+                      .map((_: any, i: number) => (
+                        <button
+                          key={`dot-${i}`}
+                          onClick={() => setCurrentIndex(i)}
+                          className={`h-2 w-8 rounded-full transition-all duration-300 ${currentIndex === i ? "bg-white" : "bg-white/20"}`}
+                          aria-label={`Go to slide ${i + 1}`}
+                        />
+                      ))}
                   </div>
-                </Link>
-              ))}
-            </div>
-          </section>
-          {/* director's cut */}
-          <section className="px-[5vw]">
-            <div className="mb-8">
-              <p className="text-xs uppercase tracking-[0.35em] text-white/40">
-                SIGNATURE COLLECTION
-              </p>
-              <h2 className="font-[Libre Caslon Text] font-semibold text-2xl sm:text-3xl">
-                Director's cut
-              </h2>
-            </div>
-            <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-              <div className="md:col-span-2 relative group overflow-hidden rounded-[1.5rem] h-105">
-                <img
-                  className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
-                  src={
-                    featuredMovie?.backdrop_path
-                      ? `https://image.tmdb.org/t/p/original${featuredMovie.backdrop_path}`
-                      : "https://images.unsplash.com/photo-1517602302552-471fe67acf66?auto=format&fit=crop&w=1200&q=80"
-                  }
-                  alt={featuredMovie?.title || "Director Cut"}
-                />
-                <div className="absolute inset-0 bg-linear-to-t from-[#131313]/90 via-transparent to-transparent" />
-                <div className="absolute top-50 p-10">
-                  <span className="bg-white text-[#131313] px-3 py-1 font-[Manrope] text-[10px] tracking-[0.2em] uppercase inline-block mb-4">
-                    EXCLUSIVE
-                  </span>
-                  <h3 className="font-[Libre Caslon Text] font-bold text-[2rem] leading-tight">
-                    Visions of the Void
-                  </h3>
-                  <p className="font-[Manrope] font-medium text-[0.875rem] text-[#e5e2e1]/70 mt-2 max-w-sm">
-                    A retrospective on minimalism in modern cinema by acclaimed
-                    director Marcus Thorne.
-                  </p>
                 </div>
               </div>
 
-              <div className="md:col-span-2 flex gap-6">
-                {movies?.results?.slice(0, 2)?.map((movie: any) => (
-                  <Link key={movie.id} to={`/movie/${movie.id}`} className="movie-card flex-none w-[60vw] md:w-[22vw] rounded-lg relative snap-start overflow-hidden group cursor-pointer">
-                    <div className="h-full">
-                      <img
-                        className="w-full h-full object-cover"
-                        src={
-                          movie.poster_path
-                            ? `https://image.tmdb.org/t/p/w500${movie.poster_path}`
-                            : "https://images.unsplash.com/photo-1517602302552-471fe67acf66?auto=format&fit=crop&w=900&q=80"
-                        }
-                        alt={movie.title}
-                      />
-                      <div className="absolute inset-0 bg-[#131313]/90 opacity-0 transition-opacity duration-500 flex flex-col justify-end p-6 group-hover:opacity-100">
-                        <h3 className="font-[Libre Caslon Text] text-[1rem]">
-                          {movie.title}
-                        </h3>
-                        <p className="font-[Manrope] text-[0.75rem] text-[#e5e2e1]/70 mt-2 line-clamp-3">
-                          {movie.overview}
-                        </p>
-                      </div>
-                    </div>
-                  </Link>
-                ))}
+              <div className="relative z-20 px-[5vw] pb-24 grid md:grid-cols-2 items-end gap-12">
+                <div>
+                  <div className="flex flex-wrap items-center gap-3 mb-6">
+                    <span className="rounded-full border border-white/20 bg-white/10 px-3 py-1 text-[0.65rem] uppercase tracking-[0.4em] text-white/90">
+                      FEATURE FILM
+                    </span>
+                    <span className="text-[0.75rem] uppercase tracking-[0.35em] text-[#e5e2e1]/70">
+                      TRENDING • TOP RATED • UPCOMING
+                    </span>
+                  </div>
+
+                  <h1 className="font-[Libre Caslon Text] font-semibold text-6xl leading-[0.9] md:text-[5rem] md:leading-[0.9]">
+                    Every Story Starts Here
+                  </h1>
+                  <p className="mt-4 max-w-xl text-[1.125rem] leading-8 text-[#e5e2e1]/75 md:text-[1.125rem]">
+                    Step into a world of unforgettable stories. Explore thousands of
+                    films, discover what's trending, and build your personal
+                    watchlist.{" "}
+                  </p>
+                </div>
+
+                <div className="flex flex-col md:items-end gap-6">
+                  <div className="flex flex-wrap gap-4">
+                    <button
+                      onClick={() =>
+                        window.scrollTo({ top: 650, behavior: "smooth" })
+                      }
+                      className="inline-flex items-center gap-3 rounded-full bg-white px-10 py-4 text-[0.75rem] uppercase tracking-[0.35em] text-[#131313] transition hover:bg-[#e5e2e1]/90 cursor-pointer"
+                    >
+                      EXPLORE MOVIES
+                      <MoveRight className="h-4 w-4" />
+                    </button>
+                    <button className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-transparent px-10 py-4 text-[0.75rem] uppercase tracking-[0.35em] text-white transition hover:bg-white/10 cursor-pointer">
+                      <View className="h-4 w-4" />
+                      VIEW COLLECTION
+                    </button>
+                    <button className="inline-flex items-center justify-center rounded-full border border-white/20 bg-transparent p-4 text-white transition hover:bg-white/10">
+                      <Share2 className="h-4 w-4" />
+                    </button>
+                  </div>
+                </div>
               </div>
-              {/* 2nd section */}
-              <div className="md:col-span-4 flex gap-6">
-                {movies?.results?.slice(3, 5).map((movie: any) => (
-                  <Link
-                    key={movie.id}
-                    to={`/movie/${movie.id}`}
-                    className="relative group overflow-hidden rounded-[1.5rem] h-60 flex-1"
-                  >
+            </section>
+            {/* Popular Movies */}
+            <div className="flex flex-col gap-16 py-16 mt-10">
+              <section className="px-[5vw]">
+                <div className="flex justify-between items-baseline mb-8">
+                  <div>
+                    <p className="text-xs uppercase tracking-[0.35em] text-white/40">
+                      EDITOR'S PICK
+                    </p>
+                    <h2 className="font-[Libre Caslon Text] font-semibold text-2xl sm:text-3xl">
+                      Popular Right Now
+                    </h2>
+                  </div>
+                  <Link to="/popular-movie">
+                    <Button className="font-[Manrope] text-[0.75rem] uppercase tracking-[0.35em] text-[#e5e2e1]/70 bg-transparent hover:bg-transparent transition hover:text-white cursor-pointer">
+                      VIEW ALL
+                    </Button>
+                  </Link>
+                </div>
+                <div className="flex gap-6 overflow-x-auto hide-scrollbar snap-x pb-6">
+
+                  {movies?.results?.slice(0, 8)?.map((movie: any) => (
+                    <Link key={movie.id} to={`/movie/${movie.id}`} className="flex-none w-[60vw] md:w-[22vw] snap-start">
+                      <div
+                        className="movie-card h-full relative overflow-hidden group cursor-pointer"
+                      >
+                        <img
+                          className="w-full h-full object-cover"
+                          src={
+                            movie.poster_path
+                              ? `https://image.tmdb.org/t/p/w500${movie.poster_path}`
+                              : "https://images.unsplash.com/photo-1517602302552-471fe67acf66?auto=format&fit=crop&w=900&q=80"
+                          }
+                          alt={movie.title}
+                        />
+                        <div className="absolute inset-0 bg-[#131313]/90 opacity-0 transition-opacity duration-500 flex flex-col justify-end p-6 group-hover:opacity-100">
+                          <h3 className="font-[Libre Caslon Text] text-[1rem]">
+                            {movie.title}
+                          </h3>
+                          <p className="font-[Manrope] text-[0.75rem] text-[#e5e2e1]/70 mt-2 line-clamp-3">
+                            {movie.overview}
+                          </p>
+                        </div>
+                      </div>
+                    </Link>
+                  ))}
+
+                </div>
+              </section>
+              {/* Upcoming movies */}
+              <section className="px-[5vw]">
+                <div className="flex justify-between items-baseline mb-8">
+                  <div>
+                    <p className="text-xs uppercase tracking-[0.35em] text-white/40">
+                      COMING SOON
+
+                    </p>
+                    <h2 className="font-[Libre Caslon Text] font-semibold text-2xl sm:text-3xl">
+                      Worth the Wait
+                    </h2>
+                  </div>
+                  <Link to="/upcoming-movie">
+                    <Button className="font-[Manrope] text-[0.75rem] uppercase tracking-[0.35em] text-[#e5e2e1]/70 bg-transparent hover:bg-transparent transition hover:text-white cursor-pointer">
+                      VIEW ALL
+                    </Button>
+                  </Link>
+                </div>
+                <div className="flex gap-6 overflow-x-auto hide-scrollbar snap-x pb-6">
+                  {movies?.results?.slice(10, 20)?.map((movie: any) => (
+                    <Link key={movie.id} to={`/movie/${movie.id}`} className="flex-none w-[60vw] md:w-[22vw] snap-start">
+                      <div className="movie-card h-full relative overflow-hidden group cursor-pointer">
+                        <img
+                          className="w-full h-full object-cover"
+                          src={
+                            movie.poster_path
+                              ? `https://image.tmdb.org/t/p/w500${movie.poster_path}`
+                              : "https://images.unsplash.com/photo-1517602302552-471fe67acf66?auto=format&fit=crop&w=900&q=80"
+                          }
+                          alt={movie.title}
+                        />
+                        <div className="absolute inset-0 bg-[#131313]/90 opacity-0 transition-opacity duration-500 flex flex-col justify-end p-6 group-hover:opacity-100">
+                          <h3 className="font-[Libre Caslon Text] text-[1rem]">
+                            {movie.title}
+                          </h3>
+                          <p className="font-[Manrope] text-[0.75rem] text-[#e5e2e1]/70 mt-2 line-clamp-3">
+                            {movie.overview}
+                          </p>
+                        </div>
+                      </div>
+                    </Link>
+                  ))}
+                </div>
+              </section>
+              {/* Top rated movies */}
+              <section className="px-[5vw]">
+                <div className="flex justify-between items-baseline mb-8">
+                  <div>
+                    <p className="text-xs uppercase tracking-[0.35em] text-white/40">
+                      HIGHEST RATED
+
+                    </p>
+                    <h2 className="font-[Libre Caslon Text] font-semibold text-2xl sm:text-3xl">
+                      Critics' Choice
+                    </h2>
+                  </div>
+                  <Link to="/top_rated-movie">
+                    <Button className="font-[Manrope] text-[0.75rem] uppercase tracking-[0.35em] text-[#e5e2e1]/70 bg-transparent hover:bg-transparent transition hover:text-white cursor-pointer">
+                      VIEW ALL
+                    </Button>
+                  </Link>
+                </div>
+                <div className="flex gap-6 overflow-x-auto hide-scrollbar snap-x pb-6">
+                  {movies?.results?.slice(9, 19)?.map((movie: any) => (
+                    <Link key={movie.id} to={`/movie/${movie.id}`} className="flex-none w-[60vw] md:w-[22vw] snap-start">
+                      <div className="movie-card h-full relative overflow-hidden group cursor-pointer">
+                        <img
+                          className="w-full h-full object-cover"
+                          src={
+                            movie.poster_path
+                              ? `https://image.tmdb.org/t/p/w500${movie.poster_path}`
+                              : "https://images.unsplash.com/photo-1517602302552-471fe67acf66?auto=format&fit=crop&w=900&q=80"
+                          }
+                          alt={movie.title}
+                        />
+                        <div className="absolute inset-0 bg-[#131313]/90 opacity-0 transition-opacity duration-500 flex flex-col justify-end p-6 group-hover:opacity-100">
+                          <h3 className="font-[Libre Caslon Text] text-[1rem]">
+                            {movie.title}
+                          </h3>
+                          <p className="font-[Manrope] text-[0.75rem] text-[#e5e2e1]/70 mt-2 line-clamp-3">
+                            {movie.overview}
+                          </p>
+                        </div>
+                      </div>
+                    </Link>
+                  ))}
+                </div>
+              </section>
+              {/* director's cut */}
+              <section className="px-[5vw]">
+                <div className="mb-8">
+                  <p className="text-xs uppercase tracking-[0.35em] text-white/40">
+                    SIGNATURE COLLECTION
+                  </p>
+                  <h2 className="font-[Libre Caslon Text] font-semibold text-2xl sm:text-3xl">
+                    Director's cut
+                  </h2>
+                </div>
+                <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
+                  <div className="md:col-span-2 relative group overflow-hidden rounded-[1.5rem] h-105">
                     <img
                       className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
                       src={
-                        movie.poster_path
-                          ? `https://image.tmdb.org/t/p/w500${movie.poster_path}`
-                          : "https://images.unsplash.com/photo-1517602302552-471fe67acf66?auto=format&fit=crop&w=900&q=80"
+                        featuredMovie?.backdrop_path
+                          ? `https://image.tmdb.org/t/p/original${featuredMovie.backdrop_path}`
+                          : "https://images.unsplash.com/photo-1517602302552-471fe67acf66?auto=format&fit=crop&w=1200&q=80"
                       }
-                      alt={movie.title}
+                      alt={featuredMovie?.title || "Director Cut"}
                     />
                     <div className="absolute inset-0 bg-linear-to-t from-[#131313]/90 via-transparent to-transparent" />
-                    <div className="absolute top-30 p-10">
+                    <div className="absolute top-50 p-10">
+                      <span className="bg-white text-[#131313] px-3 py-1 font-[Manrope] text-[10px] tracking-[0.2em] uppercase inline-block mb-4">
+                        EXCLUSIVE
+                      </span>
                       <h3 className="font-[Libre Caslon Text] font-bold text-[2rem] leading-tight">
-                        {movie?.title}
+                        Visions of the Void
                       </h3>
-                      <p className="font-[Manrope] text-[0.875rem] text-[#e5e2e1]/70 mt-2 max-w-sm truncate">
-                        {movie?.overview}
+                      <p className="font-[Manrope] font-medium text-[0.875rem] text-[#e5e2e1]/70 mt-2 max-w-sm">
+                        A retrospective on minimalism in modern cinema by acclaimed
+                        director Marcus Thorne.
                       </p>
                     </div>
-                  </Link>
-                ))}
-              </div>
-              {/* <div className="md:col-span-2 relative group overflow-hidden rounded-[1.5rem] h-60">
-                <img
-                  className="w-full h-60 object-cover transition-transform duration-700 group-hover:scale-110"
-                  src={
-                    featuredMovie?.backdrop_path
-                      ? `https://image.tmdb.org/t/p/original${featuredMovie.backdrop_path}`
-                      : "https://images.unsplash.com/photo-1517602302552-471fe67acf66?auto=format&fit=crop&w=1200&q=80"
-                  }
-                  alt={featuredMovie?.title || "Director Cut"}
-                />
-                <div className="absolute inset-0 bg-linear-to-t from-[#131313]/90 via-transparent to-transparent" />
-                <div className="absolute top-8 p-10">
-                  <span className="bg-white text-[#131313] px-3 py-1 font-[Manrope] text-[10px] tracking-[0.2em] uppercase inline-block mb-4">
-                    EXCLUSIVE
-                  </span>
-                  <h3 className="font-[Libre Caslon Text] text-[2rem] leading-tight">
-                    Visions of the Void
-                  </h3>
-                  <p className="font-[Manrope] text-[0.875rem] text-[#e5e2e1]/70 mt-2 max-w-sm">
-                    A retrospective on minimalism in modern cinema by acclaimed
-                    director Marcus Thorne.
-                  </p>
+                  </div>
+
+                  <div className="md:col-span-2 flex gap-6">
+                    {movies?.results?.slice(0, 2)?.map((movie: any) => (
+                      <Link key={movie.id} to={`/movie/${movie.id}`} className="movie-card flex-none w-[60vw] md:w-[22vw] rounded-lg relative snap-start overflow-hidden group cursor-pointer">
+                        <div className="h-full">
+                          <img
+                            className="w-full h-full object-cover"
+                            src={
+                              movie.poster_path
+                                ? `https://image.tmdb.org/t/p/w500${movie.poster_path}`
+                                : "https://images.unsplash.com/photo-1517602302552-471fe67acf66?auto=format&fit=crop&w=900&q=80"
+                            }
+                            alt={movie.title}
+                          />
+                          <div className="absolute inset-0 bg-[#131313]/90 opacity-0 transition-opacity duration-500 flex flex-col justify-end p-6 group-hover:opacity-100">
+                            <h3 className="font-[Libre Caslon Text] text-[1rem]">
+                              {movie.title}
+                            </h3>
+                            <p className="font-[Manrope] text-[0.75rem] text-[#e5e2e1]/70 mt-2 line-clamp-3">
+                              {movie.overview}
+                            </p>
+                          </div>
+                        </div>
+                      </Link>
+                    ))}
+                  </div>
+                  {/* 2nd section */}
+                  <div className="md:col-span-4 flex gap-6">
+                    {movies?.results?.slice(3, 5).map((movie: any) => (
+                      <Link
+                        key={movie.id}
+                        to={`/movie/${movie.id}`}
+                        className="relative group overflow-hidden rounded-[1.5rem] h-60 flex-1"
+                      >
+                        <img
+                          className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                          src={
+                            movie.poster_path
+                              ? `https://image.tmdb.org/t/p/w500${movie.poster_path}`
+                              : "https://images.unsplash.com/photo-1517602302552-471fe67acf66?auto=format&fit=crop&w=900&q=80"
+                          }
+                          alt={movie.title}
+                        />
+                        <div className="absolute inset-0 bg-linear-to-t from-[#131313]/90 via-transparent to-transparent" />
+                        <div className="absolute top-30 p-10">
+                          <h3 className="font-[Libre Caslon Text] font-bold text-[2rem] leading-tight">
+                            {movie?.title}
+                          </h3>
+                          <p className="font-[Manrope] text-[0.875rem] text-[#e5e2e1]/70 mt-2 max-w-sm truncate">
+                            {movie?.overview}
+                          </p>
+                        </div>
+                      </Link>
+                    ))}
+                  </div>
                 </div>
-              </div> */}
+              </section>
             </div>
-          </section>
-        </div>
+          </>
+        )}
       </main>
 
       <Footer />
@@ -469,7 +498,7 @@ function Home() {
           </a>
         ))}
       </nav>
-    </div>
+    </div >
   );
 }
 

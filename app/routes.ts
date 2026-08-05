@@ -7,6 +7,6 @@ export default [
   route("upcoming-movie", "./routes/upcomingMovie.tsx"),
   route("popular-movie", "./routes/popularMovie.tsx"),
   route("terms-of-service", "./routes/terms.tsx"),
-  route("privacyPolicy", "./routes/privacyPolicy.tsx"),
+  route("privacy-policy", "./routes/privacyPolicy.tsx"),
   route("contact", "./routes/contact.tsx"),
 ] satisfies RouteConfig;

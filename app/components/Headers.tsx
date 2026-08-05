@@ -1,10 +1,25 @@
-import { Link } from "react-router";
+import { Link, useLocation } from "react-router";
+import { useEffect, useState } from "react";
 import { Button } from "./ui/button";
 
-
 export const Headers = () => {
+    const { pathname } = useLocation();
+    const isHome = pathname === "/";
+    const [isVisible, setIsVisible] = useState(!isHome);
+
+    useEffect(() => {
+        const updateVisibility = () => {
+            const visible = !isHome || window.scrollY > 5;
+            setIsVisible(visible);
+        };
+
+        updateVisibility();
+        window.addEventListener("scroll", updateVisibility, { passive: true });
+        return () => window.removeEventListener("scroll", updateVisibility);
+    }, [isHome]);
+
     return (
-        <header className="fixed inset-x-0 top-0 z-50 border-b border-white/10 bg-[#131313]/80 backdrop-blur-sm">
+        <header className={`fixed inset-x-0 top-0 z-50 border-b border-white/10 bg-[#131313]/80 backdrop-blur-sm transition-all duration-300 ${isVisible ? "opacity-100 pointer-events-auto" : "opacity-0 pointer-events-none"}`}>
             <nav className="mx-auto flex h-20 max-w-7xl items-center justify-between px-[5vw]">
                 <Link to="/">
                     <div className="font-[Libre Caslon Text] font-bold text-[1.6rem] tracking-tighter text-white">
