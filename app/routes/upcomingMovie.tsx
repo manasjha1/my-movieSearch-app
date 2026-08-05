@@ -4,7 +4,7 @@ import { Link, useSearchParams } from "react-router";
 import { Footer } from "~/components/Footer";
 import { Headers } from "~/components/Headers";
 import { Button } from "~/components/ui/button";
-import API_KEY from "~/src/config/constantKey";
+import API_KEY from "../src/config/constantKey";
 import {
     Pagination,
     PaginationContent,

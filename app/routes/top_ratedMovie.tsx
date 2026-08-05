@@ -2,7 +2,7 @@ import { MoveRight } from "lucide-react";
 import { useEffect, useState } from "react";
 import { Footer } from "~/components/Footer";
 import { Headers } from "~/components/Headers";
-import API_KEY from "~/src/config/constantKey";
+import API_KEY from "../src/config/constantKey";
 import { Link, useSearchParams } from "react-router"
 import { Button } from "~/components/ui/button";
 import {

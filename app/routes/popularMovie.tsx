@@ -14,7 +14,7 @@ import {
     PaginationPrevious,
 } from "~/components/ui/pagination";
 
-import API_KEY from "~/src/config/constantKey";
+import API_KEY from "../src/config/constantKey";
 
 export default function PopularMovie() {
     const [loading, setLoading] = useState(false);
