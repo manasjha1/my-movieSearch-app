@@ -9,7 +9,7 @@ import {
 } from "lucide-react";
 import { Link } from "react-router";
 import { Button } from "~/components/ui/button";
-import API_KEY from "~/src/config/constantKey";
+import API_KEY from "../src/config/constantKey";
 
 
 const WATCHLIST_STORAGE_KEY = "movie-watchlist";
