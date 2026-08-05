@@ -468,9 +468,7 @@ function Home() {
                             <p className="font-[Manrope] text-[0.75rem] text-[#e5e2e1]/70 mt-2 line-clamp-3">
                               {movie.overview}
                             </p>
-                            <Button className={` mt-2 rounded-full border border-white/15 bg-black/50 px-2 text-white transition hover:bg-black/70 cursor-pointer uppercase`}>
-                              <Plus /> add to watchlist
-                            </Button>
+
                           </div>
                         </div>
                       </Link>
