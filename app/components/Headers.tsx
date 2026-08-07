@@ -43,16 +43,19 @@ export const Headers = () => {
                 </div>
 
                 <div className="flex items-center gap-4">
+                    <span className="material-symbols-outlined text-[#e5e2e1]/80 hover:text-white transition-colors cursor-pointer">
+                        search
+                    </span>
                     {/* <span className="material-symbols-outlined text-[#e5e2e1]/80 hover:text-white transition-colors cursor-pointer">
                         search
                     </span>
-                    <div className="hidden h-9 w-9 overflow-hidden rounded-full border border-white/10 bg-[#1a1a1a] md:block">
-                        <img
-                            className="h-full w-full object-cover"
-                            alt="Profile"
-                            src="https://images.unsplash.com/photo-1527980965255-d3b416303d12?auto=format&fit=crop&w=200&q=80"
-                        />
-                    </div> */}
+                    // <div className="hidden h-9 w-9 overflow-hidden rounded-full border border-white/10 bg-[#1a1a1a] md:block">
+                    //     <img
+                    //         className="h-full w-full object-cover"
+                    //         alt="Profile"
+                    //         src="https://images.unsplash.com/photo-1527980965255-d3b416303d12?auto=format&fit=crop&w=200&q=80"
+                    //     />
+                    // </div> */}
                     <Link to="/watchlist">
                         <Button className="cursor-pointer hidden rounded-full border border-white/15 bg-white/10 px-5 py-2 text-[0.75rem] uppercase tracking-[0.35em] text-white transition hover:bg-white/20 md:inline-flex">
                             <Plus /> watchlist
