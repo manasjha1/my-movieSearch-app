@@ -295,7 +295,7 @@ function Home() {
                   {movies?.results?.slice(0, 8)?.map((movie: any) => (
                     <Link key={movie.id} to={`/movie/${movie.id}`} className="flex-none w-[60vw] md:w-[22vw] snap-start">
                       <div
-                        className="movie-card h-full relative overflow-hidden group cursor-pointer"
+                        className="movie-card h-full relative overflow-hidden group"
                       >
 
                         <img
@@ -315,6 +315,8 @@ function Home() {
                           <p className="font-[Manrope] text-[0.75rem] text-[#e5e2e1]/70 mt-2 line-clamp-3">
                             {movie.overview}
                           </p>
+                          <Button className={`text-yellow-500 bg-accent/10 hover:bg-accent/50 w-full mt-2 rounded-full border border-white/30 cursor-pointer`}>See detail</Button>
+
                         </div>
                       </div>
                     </Link>
@@ -331,7 +333,7 @@ function Home() {
 
                     </p>
                     <h2 className="font-[Libre Caslon Text] font-semibold text-2xl sm:text-3xl">
-                      Worth the Wait
+                      Worth the wait
                     </h2>
                   </div>
                   <Link to="/upcoming-movie">
@@ -360,6 +362,8 @@ function Home() {
                           <p className="font-[Manrope] text-[0.75rem] text-[#e5e2e1]/70 mt-2 line-clamp-3">
                             {movie.overview}
                           </p>
+                          <Button className={`text-yellow-500 bg-accent/10 hover:bg-accent/50 w-full mt-2 rounded-full border border-white/30 cursor-pointer`}>See detail</Button>
+
                         </div>
                       </div>
                     </Link>
@@ -404,6 +408,8 @@ function Home() {
                           <p className="font-[Manrope] text-[0.75rem] text-[#e5e2e1]/70 mt-2 line-clamp-3">
                             {movie.overview}
                           </p>
+                          <Button className={`text-yellow-500 bg-accent/10 hover:bg-accent/50 w-full mt-2 rounded-full border border-white/30 cursor-pointer`}>See detail</Button>
+
                         </div>
                       </div>
                     </Link>
@@ -466,6 +472,7 @@ function Home() {
                             <p className="font-[Manrope] text-[0.75rem] text-[#e5e2e1]/70 mt-2 line-clamp-3">
                               {movie.overview}
                             </p>
+                            <Button className={`text-yellow-500 bg-accent/10 hover:bg-accent/50 w-full mt-2 rounded-full border border-white/30 cursor-pointer`}>See detail</Button>
 
                           </div>
                         </div>

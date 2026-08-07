@@ -190,6 +190,8 @@ export default function MovieDetail() {
                                     className="h-full w-full object-cover"
                                 />
                                 <div className="absolute inset-0 bg-linear-to-r from-[#0f0f10] via-[#0f0f10]/85 to-[#0f0f10]/20" />
+                                <div className="absolute inset-0 bg-linear-to-t from-[#131313] via-[#131313]/80 to-transparent" />
+
                             </div>
 
                             <div className="relative mx-auto flex max-w-9xl flex-col gap-10 px-[5vw] py-20 lg:flex-row lg:items-end lg:justify-between">
