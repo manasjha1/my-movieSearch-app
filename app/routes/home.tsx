@@ -321,8 +321,10 @@ function Home() {
                       </div>
                     </Link>
                   ))}
-
                 </div>
+                <span className="text-sm text-white/20 font-medium flex items-center justify-end gap-2">
+                  Scroll <MoveRight className="size-5" />
+                </span>
               </section>
               {/* Upcoming movies */}
               <section className="px-[5vw]">
@@ -369,6 +371,9 @@ function Home() {
                     </Link>
                   ))}
                 </div>
+                <span className="text-sm text-white/20 font-medium flex items-center justify-end gap-2">
+                  Scroll <MoveRight className="size-5" />
+                </span>
               </section>
               {/* Top rated movies */}
               <section className="px-[5vw]">
@@ -415,6 +420,9 @@ function Home() {
                     </Link>
                   ))}
                 </div>
+                <span className="text-sm text-white/20 font-medium flex items-center justify-end gap-2">
+                  Scroll <MoveRight className="size-5" />
+                </span>
               </section>
               {/* director's cut */}
               <section className="px-[5vw]">
