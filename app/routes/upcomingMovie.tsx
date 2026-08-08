@@ -85,18 +85,40 @@ export default function UpcomingMovie() {
             <Headers />
             <div className="mx-auto flex max-w-7xl flex-col gap-6">
                 <section className="p-4 sm:p-6 lg:p-8 mt-20">
-                    <div className="mb-6 flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
-                        <div>
-                            <p className="text-xs uppercase tracking-[0.35em] text-white/40">
-                                timeless picks
-                            </p>
-                            <h2 className="font-[Libre Caslon Text] font-semibold text-2xl sm:text-3xl">
-                                Upcoming movies
-                            </h2>
+                    <div className="relative mb-6 overflow-hidden rounded-[2rem] border border-white/10 bg-[linear-gradient(135deg,rgba(255,183,3,0.16),rgba(255,255,255,0.04))] p-6 shadow-[0_20px_60px_rgba(0,0,0,0.2)] sm:p-8">
+                        <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(255,183,3,0.2),transparent_46%)]" />
+                        <div className="relative flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
+                            <div className="max-w-2xl">
+                                <div className="inline-flex items-center gap-2 rounded-full border border-[#ffb703]/30 bg-[#ffb703]/10 px-3 py-1 text-[0.7rem] font-semibold uppercase tracking-[0.32em] text-[#ffb703]">
+                                    <span className="h-2 w-2 rounded-full bg-[#ffb703]" />
+                                    Timeless picks
+                                </div>
+                                <h2 className="mt-4 font-[Libre Caslon Text] text-3xl font-semibold sm:text-4xl">
+                                    Upcoming movies
+                                </h2>
+                                <p className="mt-3 max-w-xl text-sm leading-7 text-white/70 sm:text-base">
+                                    Get a first look at the releases arriving soon, with the most exciting stories already on the horizon.
+                                </p>
+                            </div>
+                            <div className="flex flex-wrap gap-3">
+                                <div className="rounded-2xl border border-white/10 bg-black/20 px-4 py-3 backdrop-blur">
+                                    <p className="text-[0.65rem] uppercase tracking-[0.32em] text-white/40">
+                                        Next up
+                                    </p>
+                                    <p className="mt-1 text-sm font-medium text-white">
+                                        Fresh arrivals
+                                    </p>
+                                </div>
+                                <div className="rounded-2xl border border-white/10 bg-black/20 px-4 py-3 backdrop-blur">
+                                    <p className="text-[0.65rem] uppercase tracking-[0.32em] text-white/40">
+                                        Mood
+                                    </p>
+                                    <p className="mt-1 text-sm font-medium text-white">
+                                        Anticipation builds
+                                    </p>
+                                </div>
+                            </div>
                         </div>
-                        <p className="max-w-xl text-sm leading-6 text-white/60">
-                            A polished browsing experience built to feel effortless.
-                        </p>
                     </div>
 
                     {loading ? (
