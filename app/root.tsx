@@ -45,8 +45,10 @@ export function Layout({ children }: { children: React.ReactNode }) {
         <Meta />
         <Links />
       </head>
-      <body className="selection:bg-white selection:text-black">
-        {children}
+      <body className="min-h-screen overflow-x-hidden selection:bg-white selection:text-black">
+        <div className="min-w-0 overflow-x-hidden">
+          {children}
+        </div>
         <ScrollRestoration />
         <Scripts />
       </body>
@@ -55,9 +57,13 @@ export function Layout({ children }: { children: React.ReactNode }) {
 }
 const queryClient = new QueryClient();
 export default function App() {
-  return <QueryClientProvider client={queryClient}>
-    <Outlet />
-  </QueryClientProvider>;
+  return (
+    <QueryClientProvider client={queryClient}>
+      <div className="min-w-0 overflow-x-hidden">
+        <Outlet />
+      </div>
+    </QueryClientProvider>
+  );
 }
 
 export function ErrorBoundary({ error }: Route.ErrorBoundaryProps) {

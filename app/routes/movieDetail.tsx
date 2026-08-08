@@ -313,11 +313,11 @@ export default function MovieDetail() {
                                                     className="flex h-60 w-fit overflow-hidden rounded-sm"
                                                 />
 
-                                                <div>
-                                                    <h3 className="font-medium text-lg text-white">
+                                                <div className="flex-1 justify-start pr-2">
+                                                    <h3 className={`font-medium text-lg text-white ${person.name?.length > 5 ? "text-wrap" : "line-clamp-1"}`}>
                                                         {person.name}
                                                     </h3>
-                                                    <p className="text-sm text-white/60">
+                                                    <p className="text-sm text-white/60 truncate">
                                                         {person.character || "Cast member"}
                                                     </p>
                                                 </div>
