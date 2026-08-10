@@ -1,19 +1,12 @@
 import { useEffect, useMemo, useState } from "react";
 import { Footer } from "~/components/Footer";
 import { Headers } from "~/components/Headers";
-import {
-  MoveRight,
-  Plus,
-  Share2,
-  View,
-} from "lucide-react";
+import { MoveRight, Plus, Share2, View } from "lucide-react";
 import { Link } from "react-router";
 import { Button } from "~/components/ui/button";
 import API_KEY from "../constantKey";
 
-
 const WATCHLIST_STORAGE_KEY = "movie-watchlist";
-
 
 function Home() {
   // const { data: popularMovies } = usePpopularMovies()
@@ -27,67 +20,22 @@ function Home() {
   const [autoplay, setAutoplay] = useState(true);
   const [isHovering, setIsHovering] = useState(false);
   const [slideCount, setSlideCount] = useState(8);
-  const [isInWatchlist, setIsInWatchlist] = useState(false);
-
-  useEffect(() => {
-    try {
-      const saved = localStorage.getItem(WATCHLIST_STORAGE_KEY);
-      if (saved) {
-        const parsed = JSON.parse(saved) as Array<{ id: number }>;
-        setIsInWatchlist(parsed.some((item) => item.id === item.id));
-      }
-    } catch (error) {
-      console.error("Unable to read watchlist", error);
-    }
-  }, []);
-
-  const handleWatchlistToggle = () => {
-    try {
-      const saved = localStorage.getItem(WATCHLIST_STORAGE_KEY);
-      const current = saved ? (JSON.parse(saved) as Array<any>) : [];
-      const exists = current.some((item) => item.id === movies.id);
-
-      const next = exists
-        ? current.filter((item) => item.id !== movies.id)
-        : [
-          ...current,
-          {
-            id: movies.id,
-            title: movies.title,
-            poster_path: movies.poster_path,
-            backdrop_path: movies.backdrop_path,
-            release_date: movies.release_date,
-            overview: movies.overview,
-            vote_average: movies.vote_average,
-          },
-        ];
-
-      localStorage.setItem(WATCHLIST_STORAGE_KEY, JSON.stringify(next));
-      setIsInWatchlist(!exists);
-    } catch (error) {
-      return error
-    }
-  };
 
   const getPopularMovies = async () => {
     try {
       setLoading(true);
       const response = await fetch(
         `https://api.themoviedb.org/3/movie/popular?api_key=${API_KEY}`,
-        // `https://api.themoviedb.org/3/movie/popular?api_key=${apiKey}`
       );
       const data = await response.json();
       setMovies(data);
       console.log("movies data--> ", data, movies);
-
     } catch (error) {
       console.log(error);
     } finally {
       setLoading(false);
     }
   };
-
-
 
   useEffect(() => {
     getPopularMovies();
@@ -244,9 +192,9 @@ function Home() {
                     Every Story Starts Here
                   </h1>
                   <p className="mt-4 max-w-xl text-[1.125rem] leading-8 text-[#e5e2e1]/75 md:text-[1.125rem]">
-                    Step into a world of unforgettable stories. Explore thousands of
-                    films, discover what's trending, and build your personal
-                    watchlist.{" "}
+                    Step into a world of unforgettable stories. Explore
+                    thousands of films, discover what's trending, and build your
+                    personal watchlist.{" "}
                   </p>
                 </div>
 
@@ -267,7 +215,6 @@ function Home() {
                         VIEW WATCHLIST
                       </button>
                     </Link>
-
                   </div>
                 </div>
               </div>
@@ -291,13 +238,13 @@ function Home() {
                   </Link>
                 </div>
                 <div className="flex gap-6 overflow-x-auto hide-scrollbar snap-x pb-6">
-
                   {movies?.results?.slice(0, 8)?.map((movie: any) => (
-                    <Link key={movie.id} to={`/movie/${movie.id}`} className="flex-none w-[60vw] md:w-[22vw] snap-start">
-                      <div
-                        className="movie-card h-full relative rounded-lg overflow-hidden group"
-                      >
-
+                    <Link
+                      key={movie.id}
+                      to={`/movie/${movie.id}`}
+                      className="flex-none w-[60vw] md:w-[22vw] snap-start"
+                    >
+                      <div className="movie-card h-full relative rounded-lg overflow-hidden group">
                         <img
                           className="w-full h-full object-cover"
                           src={
@@ -307,16 +254,19 @@ function Home() {
                           }
                           alt={movie.title}
                         />
-                        <div className="absolute inset-0 bg-[#131313]/90 opacity-0 transition-opacity duration-500 flex flex-col justify-end p-6 group-hover:opacity-100">
 
+                        <div className="absolute inset-0 bg-[#131313]/90 opacity-0 transition-opacity duration-500 flex flex-col justify-end p-6 group-hover:opacity-100">
                           <h3 className="font-[Libre Caslon Text] text-[1rem]">
                             {movie.title}
                           </h3>
                           <p className="font-[Manrope] text-[0.75rem] text-[#e5e2e1]/70 mt-2 line-clamp-3">
                             {movie.overview}
                           </p>
-                          <Button className={`text-yellow-500 bg-accent/10 hover:bg-accent/50 w-full mt-2 rounded-full border border-white/30 cursor-pointer`}>See detail</Button>
-
+                          <Button
+                            className={`text-yellow-500 bg-accent/10 hover:bg-accent/50 w-full mt-2 rounded-full border border-white/30 cursor-pointer`}
+                          >
+                            See detail
+                          </Button>
                         </div>
                       </div>
                     </Link>
@@ -332,7 +282,6 @@ function Home() {
                   <div>
                     <p className="text-xs uppercase tracking-[0.35em] text-white/40">
                       COMING SOON
-
                     </p>
                     <h2 className="font-[Libre Caslon Text] font-semibold text-2xl sm:text-3xl">
                       Worth the wait
@@ -346,7 +295,11 @@ function Home() {
                 </div>
                 <div className="flex gap-6 overflow-x-auto hide-scrollbar snap-x pb-6">
                   {movies?.results?.slice(10, 20)?.map((movie: any) => (
-                    <Link key={movie.id} to={`/movie/${movie.id}`} className="flex-none w-[60vw] md:w-[22vw] snap-start">
+                    <Link
+                      key={movie.id}
+                      to={`/movie/${movie.id}`}
+                      className="flex-none w-[60vw] md:w-[22vw] snap-start"
+                    >
                       <div className="movie-card h-full relative rounded-lg overflow-hidden group cursor-pointer">
                         <img
                           className="w-full h-full object-cover"
@@ -364,8 +317,11 @@ function Home() {
                           <p className="font-[Manrope] text-[0.75rem] text-[#e5e2e1]/70 mt-2 line-clamp-3">
                             {movie.overview}
                           </p>
-                          <Button className={`text-yellow-500 bg-accent/10 hover:bg-accent/50 w-full mt-2 rounded-full border border-white/30 cursor-pointer`}>See detail</Button>
-
+                          <Button
+                            className={`text-yellow-500 bg-accent/10 hover:bg-accent/50 w-full mt-2 rounded-full border border-white/30 cursor-pointer`}
+                          >
+                            See detail
+                          </Button>
                         </div>
                       </div>
                     </Link>
@@ -381,7 +337,6 @@ function Home() {
                   <div>
                     <p className="text-xs uppercase tracking-[0.35em] text-white/40">
                       HIGHEST RATED
-
                     </p>
                     <h2 className="font-[Libre Caslon Text] font-semibold text-2xl sm:text-3xl">
                       Critics' Choice
@@ -395,7 +350,11 @@ function Home() {
                 </div>
                 <div className="flex gap-6 overflow-x-auto hide-scrollbar snap-x pb-6">
                   {movies?.results?.slice(9, 19)?.map((movie: any) => (
-                    <Link key={movie.id} to={`/movie/${movie.id}`} className="flex-none w-[60vw] md:w-[22vw] snap-start">
+                    <Link
+                      key={movie.id}
+                      to={`/movie/${movie.id}`}
+                      className="flex-none w-[60vw] md:w-[22vw] snap-start"
+                    >
                       <div className="movie-card h-full relative rounded-lg overflow-hidden group cursor-pointer">
                         <img
                           className="w-full h-full object-cover"
@@ -413,8 +372,11 @@ function Home() {
                           <p className="font-[Manrope] text-[0.75rem] text-[#e5e2e1]/70 mt-2 line-clamp-3">
                             {movie.overview}
                           </p>
-                          <Button className={`text-yellow-500 bg-accent/10 hover:bg-accent/50 w-full mt-2 rounded-full border border-white/30 cursor-pointer`}>See detail</Button>
-
+                          <Button
+                            className={`text-yellow-500 bg-accent/10 hover:bg-accent/50 w-full mt-2 rounded-full border border-white/30 cursor-pointer`}
+                          >
+                            See detail
+                          </Button>
                         </div>
                       </div>
                     </Link>
@@ -454,15 +416,19 @@ function Home() {
                         Visions of the Void
                       </h3>
                       <p className="font-[Manrope] font-medium text-[0.875rem] text-[#e5e2e1]/70 mt-2 max-w-sm">
-                        A retrospective on minimalism in modern cinema by acclaimed
-                        director Marcus Thorne.
+                        A retrospective on minimalism in modern cinema by
+                        acclaimed director Marcus Thorne.
                       </p>
                     </div>
                   </div>
 
                   <div className="md:col-span-2 flex gap-6">
                     {movies?.results?.slice(0, 2)?.map((movie: any) => (
-                      <Link key={movie.id} to={`/movie/${movie.id}`} className="movie-card flex-none w-[60vw] md:w-[22vw] rounded-lg relative snap-start overflow-hidden group cursor-pointer">
+                      <Link
+                        key={movie.id}
+                        to={`/movie/${movie.id}`}
+                        className="movie-card flex-none w-[60vw] md:w-[22vw] rounded-lg relative snap-start overflow-hidden group cursor-pointer"
+                      >
                         <div className="h-full">
                           <img
                             className="w-full h-full object-cover"
@@ -480,8 +446,11 @@ function Home() {
                             <p className="font-[Manrope] text-[0.75rem] text-[#e5e2e1]/70 mt-2 line-clamp-3">
                               {movie.overview}
                             </p>
-                            <Button className={`text-yellow-500 bg-accent/10 hover:bg-accent/50 w-full mt-2 rounded-full border border-white/30 cursor-pointer`}>See detail</Button>
-
+                            <Button
+                              className={`text-yellow-500 bg-accent/10 hover:bg-accent/50 w-full mt-2 rounded-full border border-white/30 cursor-pointer`}
+                            >
+                              See detail
+                            </Button>
                           </div>
                         </div>
                       </Link>
@@ -544,7 +513,7 @@ function Home() {
           </a>
         ))}
       </nav>
-    </div >
+    </div>
   );
 }
 
