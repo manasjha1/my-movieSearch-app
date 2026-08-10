@@ -153,7 +153,7 @@ function Home() {
             <div className="flex flex-col gap-16 py-16 mt-10">
               {skeletonSections.map((section) => (
                 <section className="px-[5vw]" key={section.title}>
-                  <div className="flex justify-between items-baseline mb-8">
+                  <div className="flex justify-between items-baseline bg-amber-300 mb-8">
                     <div>
                       <div className="h-4 w-32 rounded-full bg-white/10 animate-pulse mb-3" />
                       <div className="h-9 w-64 rounded-full bg-white/10 animate-pulse" />
@@ -166,7 +166,7 @@ function Home() {
                         key={idx}
                         className="flex-none w-[60vw] md:w-[22vw] snap-start overflow-hidden rounded-[1.25rem] bg-[#171717] p-4 animate-pulse"
                       >
-                        <div className="h-64 w-full rounded-[1rem] bg-white/10 mb-4" />
+                        <div className="h-84 w-full rounded-[1rem] bg-white/10 mb-4" />
                         <div className="h-4 w-2/3 rounded-full bg-white/10 mb-3" />
                         <div className="h-3 w-1/2 rounded-full bg-white/10" />
                       </div>
@@ -295,7 +295,7 @@ function Home() {
                   {movies?.results?.slice(0, 8)?.map((movie: any) => (
                     <Link key={movie.id} to={`/movie/${movie.id}`} className="flex-none w-[60vw] md:w-[22vw] snap-start">
                       <div
-                        className="movie-card h-full relative overflow-hidden group"
+                        className="movie-card h-full relative rounded-lg overflow-hidden group"
                       >
 
                         <img
@@ -347,7 +347,7 @@ function Home() {
                 <div className="flex gap-6 overflow-x-auto hide-scrollbar snap-x pb-6">
                   {movies?.results?.slice(10, 20)?.map((movie: any) => (
                     <Link key={movie.id} to={`/movie/${movie.id}`} className="flex-none w-[60vw] md:w-[22vw] snap-start">
-                      <div className="movie-card h-full relative overflow-hidden group cursor-pointer">
+                      <div className="movie-card h-full relative rounded-lg overflow-hidden group cursor-pointer">
                         <img
                           className="w-full h-full object-cover"
                           src={
@@ -396,7 +396,7 @@ function Home() {
                 <div className="flex gap-6 overflow-x-auto hide-scrollbar snap-x pb-6">
                   {movies?.results?.slice(9, 19)?.map((movie: any) => (
                     <Link key={movie.id} to={`/movie/${movie.id}`} className="flex-none w-[60vw] md:w-[22vw] snap-start">
-                      <div className="movie-card h-full relative overflow-hidden group cursor-pointer">
+                      <div className="movie-card h-full relative rounded-lg overflow-hidden group cursor-pointer">
                         <img
                           className="w-full h-full object-cover"
                           src={
@@ -435,7 +435,7 @@ function Home() {
                   </h2>
                 </div>
                 <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-                  <div className="md:col-span-2 relative group overflow-hidden rounded-[1.5rem] h-105">
+                  <div className="md:col-span-2 relative group overflow-hidden rounded-[1.5rem] h-fit">
                     <img
                       className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
                       src={

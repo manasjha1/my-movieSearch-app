@@ -292,12 +292,12 @@ export default function MovieDetail() {
                                             Featured cast
                                         </p>
                                         <h2 className="font-[Libre Caslon Text] text-2xl">
-                                            Meet the crew
+                                            Meet the cast
                                         </h2>
                                     </div>
                                 </div>
 
-                                <div className="flex gap-8 overflow-x-auto hide-scrollbar snap-x pb-6">
+                                <div className="flex gap-8 overflow-x-auto overflow-hidden w-7xl hide-scrollbar snap-x pb-6">
                                     {cast.length > 0 ? (
                                         cast.map((person: any) => (
                                             <div
@@ -310,7 +310,7 @@ export default function MovieDetail() {
                                                             ? `${IMAGE_BASE_URL}${person.profile_path}`
                                                             : `${person.name?.charAt(0) || "A"}`
                                                     }
-                                                    className="flex h-60 w-fit overflow-hidden rounded-sm"
+                                                    className="flex h-80 w-60 overflow-hidden rounded-sm"
                                                 />
 
                                                 <div className="flex-1 justify-start pr-2">
