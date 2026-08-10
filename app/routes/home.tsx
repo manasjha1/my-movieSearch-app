@@ -101,7 +101,7 @@ function Home() {
             <div className="flex flex-col gap-16 py-16 mt-10">
               {skeletonSections.map((section) => (
                 <section className="px-[5vw]" key={section.title}>
-                  <div className="flex justify-between items-baseline bg-amber-300 mb-8">
+                  <div className="flex justify-between items-baseline mb-8">
                     <div>
                       <div className="h-4 w-32 rounded-full bg-white/10 animate-pulse mb-3" />
                       <div className="h-9 w-64 rounded-full bg-white/10 animate-pulse" />
