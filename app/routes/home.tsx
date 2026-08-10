@@ -154,7 +154,7 @@ function Home() {
                           alt={
                             movie.title ||
                             featuredMovie?.title ||
-                            "CinéNoir hero image"
+                            "Cinemax hero image"
                           }
                           className={`h-full w-full object-cover grayscale-[0.2] contrast-[1.1]`}
                         />

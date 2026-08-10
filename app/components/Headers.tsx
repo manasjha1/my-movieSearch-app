@@ -22,7 +22,7 @@ export const Headers = () => {
             <nav className="mx-auto flex h-20 max-w-7xl items-center justify-between px-[5vw]">
                 <Link to="/">
                     <div className="font-[Libre Caslon Text] font-bold text-[1.6rem] tracking-tighter text-white">
-                        CinéNoir
+                        Cinémax
                     </div>
                 </Link>
 
