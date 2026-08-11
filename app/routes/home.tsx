@@ -23,7 +23,7 @@ function Home() {
 
   const filterMovies = () => {
     const searchMovie = setTimeout(() => {
-      console.log("searching movie", query);
+      console.log("searching movie" + query);
 
     }, 1000);
     console.log("search movie is", searchMovie);
@@ -87,7 +87,7 @@ function Home() {
 
   return (
     <div className="min-h-screen bg-[#131313] text-white">
-      <Headers movies={movies} />
+      <Headers movies={movies} filterMovies={filterMovies} />
       <main>
         {loading ? (
           <>

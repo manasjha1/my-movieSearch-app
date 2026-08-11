@@ -82,7 +82,7 @@ export default function UpcomingMovie() {
     }, []);
     return (
         <div>
-            <Headers />
+            <Headers movies={null} filterMovies={() => void {}} />
             <div className="mx-auto flex max-w-7xl flex-col gap-6">
                 <section className="p-4 sm:p-6 lg:p-8 mt-20">
                     <div className="relative mb-6 overflow-hidden rounded-[2rem] border border-white/10 bg-[linear-gradient(135deg,rgba(255,183,3,0.16),rgba(255,255,255,0.04))] p-6 shadow-[0_20px_60px_rgba(0,0,0,0.2)] sm:p-8">

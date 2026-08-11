@@ -12,11 +12,12 @@ import {
 import { useState } from "react";
 
 interface MovieProps {
+    filterMovies: () => void;
     movies: null;
 }
 
 export const Headers = ({
-
+    filterMovies,
     movies,
 }: MovieProps) => {
     return (
@@ -53,7 +54,7 @@ export const Headers = ({
                 <div className="flex items-center gap-4">
 
                     <Combobox>
-                        <ComboboxInput className={`rounded-full`} placeholder="Search a movie" showClear />
+                        <ComboboxInput onChange={() => filterMovies()} className={`rounded-full`} placeholder="Search a movie" showClear />
                         <ComboboxContent>
                             <ComboboxEmpty>No items found.</ComboboxEmpty>
                             <ComboboxList>
