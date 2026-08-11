@@ -1,20 +1,24 @@
 import { Link } from "react-router";
 import { Button } from "./ui/button";
-import { Plus } from "lucide-react";
+import { MoveRight, Plus } from "lucide-react";
 import {
-    Command,
-    CommandDialog,
-    CommandEmpty,
-    CommandGroup,
-    CommandInput,
-    CommandItem,
-    CommandList,
-    CommandSeparator,
-} from "~/components/ui/command";
+    Combobox,
+    ComboboxContent,
+    ComboboxEmpty,
+    ComboboxInput,
+    ComboboxItem,
+    ComboboxList,
+} from "~/components/ui/combobox";
 import { useState } from "react";
 
-export const Headers = () => {
-    const [open, setOpen] = useState(false);
+interface MovieProps {
+    movies: null;
+}
+
+export const Headers = ({
+
+    movies,
+}: MovieProps) => {
     return (
         <header
             className={`fixed inset-x-0 top-0 z-50 border-b border-white/10 bg-[#131313]/80 backdrop-blur-sm transition-all duration-300`}
@@ -47,31 +51,57 @@ export const Headers = () => {
                 </div>
 
                 <div className="flex items-center gap-4">
-                    <button
-                        onClick={() => setOpen(true)}
-                        className="material-symbols-outlined search text-[#e5e2e1]/80 hover:text-white transition-colors cursor-pointer"
-                    >
-                        search
-                    </button>
-                    <CommandDialog open={open} onOpenChange={setOpen}>
-                        <Command className="rounded-lg border">
-                            <CommandInput placeholder="Type a command or search..." />
-                            <CommandList>
-                                <CommandEmpty>No results found.</CommandEmpty>
-                                <CommandGroup heading="Suggestions">
-                                    <CommandItem>Calendar</CommandItem>
-                                    <CommandItem>Search Emoji</CommandItem>
-                                    <CommandItem>Calculator</CommandItem>
-                                </CommandGroup>
-                                <CommandSeparator />
-                                <CommandGroup heading="Settings">
-                                    <CommandItem>Profile</CommandItem>
-                                    <CommandItem>Billing</CommandItem>
-                                    <CommandItem>Settings</CommandItem>
-                                </CommandGroup>
-                            </CommandList>
-                        </Command>
-                    </CommandDialog>
+
+                    <Combobox>
+                        <ComboboxInput className={`rounded-full`} placeholder="Search a movie" showClear />
+                        <ComboboxContent>
+                            <ComboboxEmpty>No items found.</ComboboxEmpty>
+                            <ComboboxList>
+                                {movies?.results?.slice(0, 5)?.map((movie: any) => (
+                                    <ComboboxItem
+                                        key={movie.id}
+                                        className={`hover:bg-none`}
+
+                                    >
+                                        <Link
+                                            to={`/movie/${movie.id}`}
+                                            className="flex relative overflow-hidden rounded-lg p-2 border border-white/10 bg-ink shadow-[0_20px_60px_rgba(0,0,0,0.25)]"
+                                        >
+                                            <img
+                                                className="w-10 h-2 aspect-square rounded-sm object-cover"
+                                                src={
+                                                    movie.poster_path
+                                                        ? `https://image.tmdb.org/t/p/w500${movie.poster_path}`
+                                                        : "https://images.unsplash.com/photo-1517602302552-471fe67acf66?auto=format&fit=crop&w=900&q=80"
+                                                }
+                                                alt={movie.title}
+                                            />
+                                            <div className="flex flex-col cursor-pointer">
+                                                <div className="p-2 w-40">
+                                                    {/* <p className="text-xs uppercase tracking-[0.3em] text-[#ff6b6b]">
+                                                        {movie.releaseYear}
+                                                    </p> */}
+                                                    <h3 className="font-[Libre Caslon Text] text-base text-white sm:text-sm truncate">
+                                                        {movie.title}
+                                                    </h3>
+                                                    <p className="mt-1 font-[Libre Caslon Text] text-xs text-white/80 truncate">
+                                                        {movie.overview}
+                                                    </p>
+                                                    {/* <div className="flex items-center justify-between">
+                                                        <p className="mt-2 text-sm text-white/70">
+                                                            {movie.vote_average?.toFixed(1) ?? "--"} / 10 •{" "}
+                                                            {movie.original_language?.toUpperCase() ?? "EN"}
+                                                        </p>
+                                                        <MoveRight className="size-6 mt-3 text-white/70" />
+                                                    </div> */}
+                                                </div>
+                                            </div>
+                                        </Link>
+                                    </ComboboxItem>
+                                ))}
+                            </ComboboxList>
+                        </ComboboxContent>
+                    </Combobox>
                     {/* <span className="material-symbols-outlined text-[#e5e2e1]/80 hover:text-white transition-colors cursor-pointer">
                         search
                     </span>

@@ -7,7 +7,7 @@ export const Footer = () => {
       <div className="mx-auto flex max-w-7xl flex-col gap-8 md:flex-row md:items-center md:justify-between">
         <div className="flex flex-col gap-3 text-center md:text-left">
           <div className="font-[Libre Caslon Text] text-2xl text-white">
-            CinéNoir
+            Cinémax
           </div>
           <p className="text-sm text-[#e5e2e1]/70">
             © 2024 CINÉNOIR STUDIOS. ALL RIGHTS RESERVED.

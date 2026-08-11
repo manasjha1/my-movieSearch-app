@@ -6,12 +6,12 @@ import { Link } from "react-router";
 import { Button } from "~/components/ui/button";
 import API_KEY from "../constantKey";
 
-const WATCHLIST_STORAGE_KEY = "movie-watchlist";
 
 function Home() {
   // const { data: popularMovies } = usePpopularMovies()
   const [loading, setLoading] = useState(true);
   const [movies, setMovies] = useState<any>([]);
+  const [query, setQuery] = useState("")
 
   const featuredMovie = useMemo(() => movies?.results?.[16], [movies]);
 
@@ -20,6 +20,17 @@ function Home() {
   const [autoplay, setAutoplay] = useState(true);
   const [isHovering, setIsHovering] = useState(false);
   const [slideCount, setSlideCount] = useState(8);
+
+  const filterMovies = () => {
+    const searchMovie = setTimeout(() => {
+      console.log("searching movie", query);
+
+    }, 1000);
+    console.log("search movie is", searchMovie);
+
+    return clearTimeout(searchMovie)
+  }
+
 
   const getPopularMovies = async () => {
     try {
@@ -76,7 +87,7 @@ function Home() {
 
   return (
     <div className="min-h-screen bg-[#131313] text-white">
-      <Headers />
+      <Headers movies={movies} />
       <main>
         {loading ? (
           <>
