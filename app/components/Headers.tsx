@@ -1,6 +1,6 @@
 import { Link } from "react-router";
 import { Button } from "./ui/button";
-import { MoveRight, Plus } from "lucide-react";
+import { MoveRight, Plus, Search, Star, TrendingUp } from "lucide-react";
 import {
     Combobox,
     ComboboxContent,
@@ -9,8 +9,25 @@ import {
     ComboboxItem,
     ComboboxList,
 } from "~/components/ui/combobox";
-import { useState } from "react";
-
+import {
+    Drawer,
+    DrawerClose,
+    DrawerContent,
+    DrawerDescription,
+    DrawerFooter,
+    DrawerHeader,
+    DrawerTitle,
+    DrawerTrigger,
+} from "~/components/ui/drawer"
+import { Input } from "./ui/input";
+import {
+    InputGroup,
+    InputGroupAddon,
+    InputGroupButton,
+    InputGroupInput,
+    InputGroupText,
+    InputGroupTextarea,
+} from "~/components/ui/input-group"
 interface MovieProps {
     filterMovies: () => void;
     movies: null;
@@ -52,57 +69,68 @@ export const Headers = ({
                 </div>
 
                 <div className="flex items-center gap-4">
+                    <Drawer showSwipeHandle>
+                        <DrawerTrigger className={`bg-transparent hover:bg-transparent cursor-pointer hover:scale-95`} render={<Button variant="secondary"><Search className="size-6" /></Button>} />
+                        <DrawerContent className={`px-2`}>
+                            <DrawerHeader>
+                                <DrawerTitle className={`text-2xl`}>Cinémax</DrawerTitle>
+                                <DrawerDescription>Your Gateway to Movie Madness.</DrawerDescription>
+                                <InputGroup>
+                                    <InputGroupInput type="search" placeholder="Search a movie..." />
+                                    <InputGroupAddon>
+                                        <Search />
+                                    </InputGroupAddon>
+                                </InputGroup>
+                            </DrawerHeader>
+                            <section className="flex-col my-3">
+                                <span className="text-left text-xl text-white font-heading font-medium flex items-center gap-2 mt-3
+                                px-4">
+                                    <TrendingUp /> Trending
+                                </span>
+                                <div className="grid grid-cols-1 md:grid-cols-2 gap-y-1 gap-x-4">
 
-                    <Combobox>
-                        <ComboboxInput onClick={() => filterMovies()} onChange={() => filterMovies()} className={`rounded-full`} placeholder="Search a movie" showClear />
-                        <ComboboxContent>
-                            <ComboboxEmpty>No items found.</ComboboxEmpty>
-                            <ComboboxList>
-                                {movies?.results?.slice(0, 5)?.map((movie: any) => (
-                                    <ComboboxItem
-                                        key={movie.id}
-                                        className={`hover:bg-none`}
+                                    {movies?.results?.slice(0, 7)?.map((movie: any) => (
+                                        <div
+                                            key={movie.id}
+                                            className={`px-4 py-2`}
 
-                                    >
-                                        <Link
-                                            to={`/movie/${movie.id}`}
-                                            className="flex relative overflow-hidden rounded-lg p-2 border border-white/10 bg-ink shadow-[0_20px_60px_rgba(0,0,0,0.25)]"
                                         >
-                                            <img
-                                                className="w-10 h-2 aspect-square rounded-sm object-cover"
-                                                src={
-                                                    movie.poster_path
-                                                        ? `https://image.tmdb.org/t/p/w500${movie.poster_path}`
-                                                        : "https://images.unsplash.com/photo-1517602302552-471fe67acf66?auto=format&fit=crop&w=900&q=80"
-                                                }
-                                                alt={movie.title}
-                                            />
-                                            <div className="flex flex-col cursor-pointer">
-                                                <div className="p-2 w-40">
-                                                    {/* <p className="text-xs uppercase tracking-[0.3em] text-[#ff6b6b]">
-                                                        {movie.releaseYear}
-                                                    </p> */}
-                                                    <h3 className="font-[Libre Caslon Text] text-base text-white sm:text-sm truncate">
+                                            <Link
+                                                to={`/movie/${movie.id}`}
+                                                className="flex relative overflow-hidden rounded-lg p-2 gap-2 border border-white/10 hover:bg-white/5  bg-ink shadow-[0_20px_60px_rgba(0,0,0,0.25)]"
+                                            >
+                                                <img
+                                                    className="w-10 h-2 aspect-square rounded-sm object-cover"
+                                                    src={
+                                                        movie.poster_path
+                                                            ? `https://image.tmdb.org/t/p/w500${movie.poster_path}`
+                                                            : "https://images.unsplash.com/photo-1517602302552-471fe67acf66?auto=format&fit=crop&w=900&q=80"
+                                                    }
+                                                    alt={movie.title}
+                                                />
+                                                <div className="flex flex-col cursor-pointer w-120">
+                                                    <h3 className="font-[Libre Caslon Text] text-base text-white sm:text-md truncate">
                                                         {movie.title}
                                                     </h3>
                                                     <p className="mt-1 font-[Libre Caslon Text] text-xs text-white/80 truncate">
                                                         {movie.overview}
                                                     </p>
-                                                    {/* <div className="flex items-center justify-between">
-                                                        <p className="mt-2 text-sm text-white/70">
-                                                            {movie.vote_average?.toFixed(1) ?? "--"} / 10 •{" "}
-                                                            {movie.original_language?.toUpperCase() ?? "EN"}
+                                                    <div className="flex items-center justify-between">
+                                                        <p className="text-xs text-white/70 flex items-center gap-1">
+                                                            {movie.vote_average?.toFixed(1) ?? "--"} <Star className="size-3" />
                                                         </p>
-                                                        <MoveRight className="size-6 mt-3 text-white/70" />
-                                                    </div> */}
+                                                    </div>
                                                 </div>
-                                            </div>
-                                        </Link>
-                                    </ComboboxItem>
-                                ))}
-                            </ComboboxList>
-                        </ComboboxContent>
-                    </Combobox>
+                                            </Link>
+                                        </div>
+                                    ))}
+                                </div>
+                            </section>
+                            <DrawerFooter>
+                                <DrawerClose className={`cursor-pointer`} render={<Button>Close</Button>} />
+                            </DrawerFooter>
+                        </DrawerContent>
+                    </Drawer>
                     {/* <span className="material-symbols-outlined text-[#e5e2e1]/80 hover:text-white transition-colors cursor-pointer">
                         search
                     </span>
