@@ -54,7 +54,7 @@ export const Headers = ({
                 <div className="flex items-center gap-4">
 
                     <Combobox>
-                        <ComboboxInput onChange={() => filterMovies()} className={`rounded-full`} placeholder="Search a movie" showClear />
+                        <ComboboxInput onClick={() => filterMovies()} onChange={() => filterMovies()} className={`rounded-full`} placeholder="Search a movie" showClear />
                         <ComboboxContent>
                             <ComboboxEmpty>No items found.</ComboboxEmpty>
                             <ComboboxList>

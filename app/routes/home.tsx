@@ -25,12 +25,17 @@ function Home() {
     const searchMovie = setTimeout(() => {
       console.log("searching movie" + query);
 
-    }, 1000);
-    console.log("search movie is", searchMovie);
+    }, 10000);
+    console.log("search movie is", typeof (searchMovie));
+    console.log("movie movie" + query);
+
 
     return clearTimeout(searchMovie)
   }
 
+  useEffect(() => {
+    filterMovies()
+  }, [query])
 
   const getPopularMovies = async () => {
     try {
