@@ -154,11 +154,102 @@ export default function MovieDetail() {
 
             <main className="pt-20 pb-16">
                 {loading ? (
-                    <div className="mx-auto flex max-w-7xl flex-col gap-8 px-[5vw] py-16">
-                        <div className="h-80 animate-pulse rounded-[2rem] bg-white/10" />
-                        <div className="grid gap-8 lg:grid-cols-[1.2fr_0.8fr]">
-                            <div className="h-64 animate-pulse rounded-[2rem] bg-white/10" />
-                            <div className="h-64 animate-pulse rounded-[2rem] bg-white/10" />
+                    <div className="mx-auto flex max-w-9xl flex-col gap-8 px-[5vw] py-16">
+                        {/* Backdrop Hero Skeleton */}
+                        <div className="h-screen w-full animate-pulse rounded-[2rem] bg-white/10" />
+
+                        {/* Content Section Skeleton */}
+                        <div className="grid gap-8 lg:grid-cols-[1fr_0.35fr]">
+                            {/* Main Content Column */}
+                            <div className="space-y-6">
+                                {/* Back Button & Tags Skeleton */}
+                                <div className="space-y-4">
+                                    <div className="h-10 w-32 animate-pulse rounded-full bg-white/10" />
+                                    <div className="flex flex-wrap gap-3">
+                                        <div className="h-8 w-16 animate-pulse rounded-full bg-white/10" />
+                                        <div className="h-8 w-20 animate-pulse rounded-full bg-white/10" />
+                                        <div className="h-8 w-20 animate-pulse rounded-full bg-white/10" />
+                                    </div>
+                                </div>
+
+                                {/* Title Skeleton */}
+                                <div className="space-y-3">
+                                    <div className="h-10 w-3/4 animate-pulse rounded-lg bg-white/10" />
+                                    <div className="h-10 w-2/3 animate-pulse rounded-lg bg-white/10" />
+                                </div>
+
+                                {/* Overview Skeleton */}
+                                <div className="space-y-2">
+                                    <div className="h-6 w-full animate-pulse rounded-lg bg-white/10" />
+                                    <div className="h-6 w-5/6 animate-pulse rounded-lg bg-white/10" />
+                                    <div className="h-6 w-4/5 animate-pulse rounded-lg bg-white/10" />
+                                </div>
+
+                                {/* Buttons Skeleton */}
+                                <div className="flex flex-wrap gap-4 pt-4">
+                                    <div className="h-12 w-40 animate-pulse rounded-full bg-white/10" />
+                                    <div className="h-12 w-40 animate-pulse rounded-full bg-white/10" />
+                                </div>
+                            </div>
+
+                            {/* Sidebar Info Box Skeleton */}
+                            <div className="space-y-4 rounded-[2rem] border border-white/10 bg-white/5 p-6 animate-pulse">
+                                <div className="h-6 w-24 rounded-lg bg-white/10" />
+                                <div className="space-y-4">
+                                    <div className="space-y-2 border-b border-white/10 pb-3">
+                                        <div className="h-4 w-16 rounded bg-white/10" />
+                                        <div className="h-4 w-24 rounded bg-white/10" />
+                                    </div>
+                                    <div className="space-y-2 border-b border-white/10 pb-3">
+                                        <div className="h-4 w-16 rounded bg-white/10" />
+                                        <div className="h-4 w-20 rounded bg-white/10" />
+                                    </div>
+                                    <div className="space-y-2 border-b border-white/10 pb-3">
+                                        <div className="h-4 w-16 rounded bg-white/10" />
+                                        <div className="h-4 w-12 rounded bg-white/10" />
+                                    </div>
+                                    <div className="space-y-2">
+                                        <div className="h-4 w-20 rounded bg-white/10" />
+                                        <div className="h-4 w-16 rounded bg-white/10" />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        {/* Cast Section Skeleton */}
+                        <div className="space-y-6 rounded-[2rem] border border-white/10 bg-[#111111] p-8 animate-pulse">
+                            <div className="h-6 w-40 rounded-lg bg-white/10" />
+                            <div className="flex gap-4 overflow-x-auto pb-4">
+                                {[...Array(5)].map((_, i) => (
+                                    <div key={i} className="flex-none">
+                                        <div className="h-80 w-60 rounded-lg bg-white/10" />
+                                        <div className="mt-2 h-4 w-40 rounded bg-white/10" />
+                                        <div className="mt-1 h-3 w-32 rounded bg-white/10" />
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+
+                        {/* Details Section Skeleton */}
+                        <div className="space-y-6 rounded-[2rem] border border-white/10 bg-[#111111] p-8 animate-pulse">
+                            <div className="grid gap-8 lg:grid-cols-[1.1fr_0.75fr]">
+                                <div className="space-y-6">
+                                    <div className="h-6 w-48 rounded-lg bg-white/10" />
+                                    <div className="space-y-2">
+                                        <div className="h-4 w-full rounded bg-white/10" />
+                                        <div className="h-4 w-5/6 rounded bg-white/10" />
+                                    </div>
+                                    <div className="grid gap-4 sm:grid-cols-2">
+                                        {[...Array(4)].map((_, i) => (
+                                            <div key={i} className="space-y-2">
+                                                <div className="h-3 w-20 rounded bg-white/10" />
+                                                <div className="h-4 w-32 rounded bg-white/10" />
+                                            </div>
+                                        ))}
+                                    </div>
+                                </div>
+                                <div className="h-96 w-full rounded-[2rem] bg-white/10" />
+                            </div>
                         </div>
                     </div>
                 ) : !movie ? (
