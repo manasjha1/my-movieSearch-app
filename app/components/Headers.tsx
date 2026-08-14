@@ -68,7 +68,7 @@ export const Headers = ({ filterMovies = () => { } }: MovieProps) => {
             setMovieSuggestion(data);
             console.log("search results--> ", data);
         } catch (error) {
-            console.log("Search error:", error);
+            console.error("Search error:", error);
             setMovieSuggestion(null);
         } finally {
             setIsSearching(false);
@@ -138,84 +138,116 @@ export const Headers = ({ filterMovies = () => { } }: MovieProps) => {
                         />
                         <DrawerContent className={`px-2`}>
                             <DrawerHeader>
-                                <DrawerTitle className={`text-2xl`}>Cinémax</DrawerTitle>
-                                <DrawerDescription>
+                                <DrawerTitle
+                                    className={`text-3xl font-[Libre Caslon Text] tracking-tight`}
+                                >
+                                    Cinémax
+                                </DrawerTitle>
+                                <DrawerDescription className="text-base text-white/60">
                                     Your Gateway to Movie Madness.
                                 </DrawerDescription>
                                 <InputGroup>
                                     <InputGroupInput
                                         value={query}
                                         onChange={(e) => {
-                                            setQuery(e.target.value);
-                                            movieSearch(e.target.value);
+                                            (setQuery(e.target.value), movieSearch(e.target.value));
                                         }}
-                                        type="search"
-                                        placeholder="Search a movie..."
+                                        id="inline-start-input"
+                                        placeholder="Search..."
                                     />
-                                    <InputGroupAddon>
-                                        <Search />
+                                    <InputGroupAddon align="inline-start">
+                                        <Search className="text-muted-foreground" />
                                     </InputGroupAddon>
                                 </InputGroup>
                             </DrawerHeader>
-                            <section className="flex-col my-3">
-                                <span
-                                    className="text-left text-xl text-white font-heading font-medium flex items-center gap-2 mt-3
-                                px-4"
-                                >
-                                    {query ? (
-                                        <>
-                                            <Search /> Search Results {isSearching && "(Loading...)"}
-                                        </>
-                                    ) : (
-                                        <>
-                                            <TrendingUp /> Trending
-                                        </>
-                                    )}
-                                </span>
-                                <ScrollArea className="h-100 w-full rounded-md border bg-transparent border-none">
-                                    <div>
+                            <section className="flex-col my-4">
+                                <div className="px-4 mb-4">
+                                    <span className="text-lg text-white font-heading font-semibold flex items-center gap-3">
+                                        {query ? (
+                                            <>
+                                                <div className="p-2 rounded-lg bg-white/10">
+                                                    <Search className="size-5" />
+                                                </div>
+                                                <div>
+                                                    <div>Search Results</div>
+                                                    {isSearching && (
+                                                        <div className="text-xs text-white/50">
+                                                            Finding movies...
+                                                        </div>
+                                                    )}
+                                                </div>
+                                            </>
+                                        ) : (
+                                            <>
+                                                <div className="p-2 rounded-lg bg-white/10">
+                                                    <TrendingUp className="size-5" />
+                                                </div>
+                                                <div>Trending Now</div>
+                                            </>
+                                        )}
+                                    </span>
+                                </div>
+                                <ScrollArea className="h-100 w-full rounded-lg bg-transparent">
+                                    <div className="px-4">
                                         {movieSuggestion ? (
-                                            <div className="grid grid-cols-1 md:grid-cols-2 gap-y-1 gap-x-4">
+                                            <div className="grid grid-cols-1 gap-3 pb-4">
                                                 {movieSuggestion?.results
                                                     ?.slice(0, 11)
                                                     ?.map((movie: MovieType) => (
-                                                        <div key={movie.id} className={`px-4 py-2`}>
-                                                            <Link
-                                                                to={`/movie/${movie.id}`}
-                                                                className="flex relative overflow-hidden rounded-lg p-2 gap-2 border border-white/10 hover:bg-white/5  bg-ink shadow-[0_20px_60px_rgba(0,0,0,0.25)]"
-                                                            >
-                                                                <img
-                                                                    className="w-10 h-2 aspect-square rounded-sm object-cover"
-                                                                    src={
-                                                                        movie.poster_path
-                                                                            ? `https://image.tmdb.org/t/p/w500${movie.poster_path}`
-                                                                            : "https://images.unsplash.com/photo-1517602302552-471fe67acf66?auto=format&fit=crop&w=900&q=80"
-                                                                    }
-                                                                    alt={movie.title}
-                                                                />
-                                                                <div className="flex flex-col cursor-pointer w-120">
-                                                                    <h3 className="font-[Libre Caslon Text] text-base text-white sm:text-md truncate">
-                                                                        {movie.title}
-                                                                    </h3>
-                                                                    <p className="mt-0.5 font-[Libre Caslon Text] text-xs text-white/80 truncate">
-                                                                        {movie.overview}
-                                                                    </p>
-                                                                    <div className="flex items-center justify-between">
-                                                                        <p className="text-xs text-white/70 flex items-center gap-1">
-                                                                            {movie.vote_average?.toFixed(1) ?? "--"}{" "}
-                                                                            <Star className="size-3" />
+                                                        <Link
+                                                            key={movie.id}
+                                                            to={`/movie/${movie.id}`}
+                                                            className="group relative overflow-hidden rounded-xl border border-white/10 bg-linear-to-br from-white/5 to-white/2 hover:from-white/10 hover:to-white/5 hover:border-white/20 transition-all duration-300 hover:shadow-lg hover:shadow-white/10 p-3"
+                                                        >
+                                                            <div className="flex gap-3">
+                                                                <div className="relative shrink-0">
+                                                                    <img
+                                                                        className="w-16 h-24 rounded-lg object-cover group-hover:scale-105 transition-transform duration-300"
+                                                                        src={
+                                                                            movie.poster_path
+                                                                                ? `https://image.tmdb.org/t/p/w500${movie.poster_path}`
+                                                                                : "https://images.unsplash.com/photo-1517602302552-471fe67acf66?auto=format&fit=crop&w=900&q=80"
+                                                                        }
+                                                                        alt={movie.title}
+                                                                    />
+                                                                </div>
+                                                                <div className="flex flex-col justify-between flex-1 min-w-0">
+                                                                    <div>
+                                                                        <h3 className="font-semibold text-white text-sm group-hover:text-white/90 transition-colors truncate">
+                                                                            {movie.title}
+                                                                        </h3>
+                                                                        <p className="text-xs text-white/50 mt-1 line-clamp-2 group-hover:text-white/60 transition-colors">
+                                                                            {movie.overview ||
+                                                                                "No description available"}
                                                                         </p>
                                                                     </div>
+                                                                    <div className="flex items-center justify-between pt-2">
+                                                                        <span className="text-xs text-white/60">
+                                                                            {movie.release_date?.split("-")[0] ||
+                                                                                "N/A"}
+                                                                        </span>
+                                                                        <div className="flex items-center gap-1 bg-white/10 px-2 py-1 rounded-lg group-hover:bg-white/15 transition-colors">
+                                                                            <Star className="size-3 fill-yellow-400 text-yellow-400" />
+                                                                            <span className="text-xs font-semibold text-yellow-400">
+                                                                                {movie.vote_average?.toFixed(1) ?? "--"}
+                                                                            </span>
+                                                                        </div>
+                                                                    </div>
                                                                 </div>
-                                                            </Link>
-                                                        </div>
+                                                            </div>
+                                                        </Link>
                                                     ))}
                                             </div>
                                         ) : (
-                                            <div className="">
-                                                <p className="text-white/30 text-xl text-center font-medium font-heading flex-col items-center justify-center p-4">
-                                                    <AlertTriangle className="mx-auto size-20" />
-                                                    Movies not found please search one above.
+                                            <div className="flex flex-col items-center justify-center py-12">
+                                                <div className="p-4 rounded-full bg-white/5 mb-4">
+                                                    <AlertTriangle className="size-8 text-white/40" />
+                                                </div>
+                                                <p className="text-white/50 text-center text-sm font-medium">
+                                                    No movies found
+                                                </p>
+                                                <p className="text-white/30 text-xs text-center mt-1">
+                                                    Try searching for a different movie title
                                                 </p>
                                             </div>
                                         )}
