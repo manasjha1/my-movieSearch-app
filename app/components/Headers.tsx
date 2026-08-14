@@ -50,12 +50,29 @@ export const Headers = ({ filterMovies = () => { } }: MovieProps) => {
     const [movieSuggestion, setMovieSuggestion] =
         useState<MovieListResponse | null>(null);
     const [loading, setLoading] = useState(false);
+    const [isSearching, setIsSearching] = useState(false);
 
-    const movieSearch = () => {
-        const filterMovie = movieSuggestion?.results?.filter((film: any) =>
-            film.title.includes(query.toLowerCase()),
-        );
-        console.log("filter movie is --? ", filterMovie);
+    const movieSearch = async (searchQuery: string) => {
+        if (!searchQuery.trim()) {
+            // If search is empty, show trending movies
+            getMovieSuggestion();
+            return;
+        }
+
+        try {
+            setIsSearching(true);
+            const response = await fetch(
+                `https://api.themoviedb.org/3/search/movie?api_key=${API_KEY}&query=${encodeURIComponent(searchQuery)}`,
+            );
+            const data = (await response.json()) as MovieListResponse;
+            setMovieSuggestion(data);
+            console.log("search results--> ", data);
+        } catch (error) {
+            console.log("Search error:", error);
+            setMovieSuggestion(null);
+        } finally {
+            setIsSearching(false);
+        }
     };
 
     const getMovieSuggestion = async () => {
@@ -127,7 +144,11 @@ export const Headers = ({ filterMovies = () => { } }: MovieProps) => {
                                 </DrawerDescription>
                                 <InputGroup>
                                     <InputGroupInput
-                                        onChange={() => movieSearch()}
+                                        value={query}
+                                        onChange={(e) => {
+                                            setQuery(e.target.value);
+                                            movieSearch(e.target.value);
+                                        }}
                                         type="search"
                                         placeholder="Search a movie..."
                                     />
@@ -141,7 +162,15 @@ export const Headers = ({ filterMovies = () => { } }: MovieProps) => {
                                     className="text-left text-xl text-white font-heading font-medium flex items-center gap-2 mt-3
                                 px-4"
                                 >
-                                    <TrendingUp /> Trending
+                                    {query ? (
+                                        <>
+                                            <Search /> Search Results {isSearching && "(Loading...)"}
+                                        </>
+                                    ) : (
+                                        <>
+                                            <TrendingUp /> Trending
+                                        </>
+                                    )}
                                 </span>
                                 <ScrollArea className="h-100 w-full rounded-md border bg-transparent border-none">
                                     <div>
