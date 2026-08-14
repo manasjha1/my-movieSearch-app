@@ -221,6 +221,7 @@ export default function PopularMovie() {
                         </PaginationContent>
                     </Pagination>{" "}
                 </div>
+                
             </div>
             <Footer />
         </div>

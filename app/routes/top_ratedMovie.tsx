@@ -187,8 +187,11 @@ export default function RecentMovie() {
                         </div>
                     )}
                 </section>
-                <div className="my-5">
-                    <Pagination>
+                <div className="flex items-baseline justify-between px-8 mb-6">
+                    <span className="w-full">
+                        Showing page: {page} of total {topRated.total_pages}
+                    </span>
+                    <Pagination className="w-100">
                         <PaginationContent>
                             <PaginationItem>
                                 <Button disabled={page === 1} className={`hover:bg-accent cursor-pointer`}>
