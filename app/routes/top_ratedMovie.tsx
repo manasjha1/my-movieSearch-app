@@ -5,6 +5,7 @@ import { Headers } from "~/components/Headers";
 import API_KEY from "../constantKey";
 import { Link, useSearchParams } from "react-router"
 import { Button } from "~/components/ui/button";
+import type { MovieListResponse, MovieType } from "~/types/movie.types";
 import {
     Pagination,
     PaginationContent,
@@ -16,7 +17,7 @@ import {
 } from "~/components/ui/pagination";
 
 export default function RecentMovie() {
-    const [topRated, setTopRated] = useState<any>({ results: [] });
+    const [topRated, setTopRated] = useState<MovieListResponse>({ results: [] });
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
     const [searchParams, setSearchParams] = useSearchParams();
@@ -30,7 +31,7 @@ export default function RecentMovie() {
                 `https://api.themoviedb.org/3/movie/top_rated?api_key=${API_KEY}&page=${page + 1}`,
             );
 
-            const data = await response.json();
+            const data = (await response.json()) as MovieListResponse;
             setTopRated(data)
             setSearchParams({ page: String(page + 1) })
             console.log("data of  pagination-->>", data);
@@ -48,7 +49,7 @@ export default function RecentMovie() {
                 `https://api.themoviedb.org/3/movie/top_rated?api_key=${API_KEY}&page=${page - 1}`,
             );
 
-            const data = await response.json();
+            const data = (await response.json()) as MovieListResponse;
             setTopRated(data)
             setSearchParams({ page: String(page - 1) })
             console.log("data of  pagination-->>", data);
@@ -66,7 +67,7 @@ export default function RecentMovie() {
                 `https://api.themoviedb.org/3/movie/top_rated?api_key=${API_KEY}`,
                 // `https://api.themoviedb.org/3/movie/popular?api_key=${apiKey}`
             );
-            const data = await response.json();
+            const data = (await response.json()) as MovieListResponse;
             setTopRated(data);
             console.log("movies data--> ", data);
 
@@ -83,7 +84,7 @@ export default function RecentMovie() {
 
     return (
         <div>
-            <Headers movies={null} filterMovies={() => void{}} />
+            <Headers movies={null} filterMovies={() => void {}} />
             <div className="mx-auto flex max-w-7xl flex-col gap-6">
                 <section className="p-4 sm:p-6 lg:p-8 mt-20">
                     <div className="relative mb-6 overflow-hidden rounded-[2rem] border border-white/10 bg-[linear-gradient(135deg,rgba(255,183,3,0.16),rgba(255,255,255,0.04))] p-6 shadow-[0_20px_60px_rgba(0,0,0,0.2)] sm:p-8">
@@ -143,7 +144,7 @@ export default function RecentMovie() {
                         </div>
                     ) : (
                         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-                            {topRated?.results?.map((movie: any) => {
+                            {topRated?.results?.map((movie: MovieType) => {
                                 const releaseYear = movie.release_date?.split("-")[0] || "Coming soon";
 
                                 return (

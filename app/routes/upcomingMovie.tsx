@@ -4,6 +4,7 @@ import { Link, useSearchParams } from "react-router";
 import { Footer } from "~/components/Footer";
 import { Headers } from "~/components/Headers";
 import { Button } from "~/components/ui/button";
+import type { MovieListResponse, MovieType } from "~/types/movie.types";
 import API_KEY from "../constantKey";
 import {
     Pagination,
@@ -18,7 +19,7 @@ import {
 export default function UpcomingMovie() {
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
-    const [upcomingMovie, setUpcomingMovie] = useState<any>([])
+    const [upcomingMovie, setUpcomingMovie] = useState<MovieListResponse>({ results: [] })
     const [searchParams, setSearchParams] = useSearchParams();
 
     const page = Number(searchParams.get("page")) || upcomingMovie?.page || 1;
@@ -30,7 +31,7 @@ export default function UpcomingMovie() {
                 `https://api.themoviedb.org/3/movie/upcoming?api_key=${API_KEY}&page=${page + 1}`,
             );
 
-            const data = await response.json();
+            const data = (await response.json()) as MovieListResponse;
             setUpcomingMovie(data)
             setSearchParams({ page: String(page + 1) })
             console.log("data of  pagination-->>", data);
@@ -48,7 +49,7 @@ export default function UpcomingMovie() {
                 `https://api.themoviedb.org/3/movie/upcoming?api_key=${API_KEY}&page=${page - 1}`,
             );
 
-            const data = await response.json();
+            const data = (await response.json()) as MovieListResponse;
             setUpcomingMovie(data)
             setSearchParams({ page: String(page - 1) })
             console.log("data of  pagination-->>", data);
@@ -66,7 +67,7 @@ export default function UpcomingMovie() {
                 `https://api.themoviedb.org/3/movie/upcoming?api_key=${API_KEY}`,
                 // `https://api.themoviedb.org/3/movie/popular?api_key=${apiKey}`
             );
-            const data = await response.json();
+            const data = (await response.json()) as MovieListResponse;
             setUpcomingMovie(data);
             console.log("movies data--> ", data);
 
@@ -142,7 +143,7 @@ export default function UpcomingMovie() {
                         </div>
                     ) : (
                         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-                            {upcomingMovie?.results?.map((movie: any) => {
+                            {upcomingMovie?.results?.map((movie: MovieType) => {
                                 const releaseYear = movie.release_date?.split("-")[0] || "Coming soon";
 
                                 return (

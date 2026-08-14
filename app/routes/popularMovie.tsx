@@ -4,6 +4,7 @@ import { Link, useSearchParams } from "react-router";
 import { Footer } from "~/components/Footer";
 import { Headers } from "~/components/Headers";
 import { Button } from "~/components/ui/button";
+import type { MovieListResponse, MovieType } from "~/types/movie.types";
 import {
     Pagination,
     PaginationContent,
@@ -19,7 +20,7 @@ import API_KEY from "../constantKey";
 export default function PopularMovie() {
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
-    const [popularMovie, setPopularMovie] = useState<any>([]);
+    const [popularMovie, setPopularMovie] = useState<MovieListResponse>({ results: [] });
     const [searchParams, setSearchParams] = useSearchParams();
 
     const page = Number(searchParams.get("page")) || popularMovie?.page || 1;
@@ -31,7 +32,7 @@ export default function PopularMovie() {
                 `https://api.themoviedb.org/3/movie/popular?api_key=${API_KEY}&page=${page + 1}`,
             );
 
-            const data = await response.json();
+            const data = (await response.json()) as MovieListResponse;
             setPopularMovie(data)
             setSearchParams({ page: String(page + 1) })
             console.log("data of  pagination-->>", data);
@@ -49,7 +50,7 @@ export default function PopularMovie() {
                 `https://api.themoviedb.org/3/movie/popular?api_key=${API_KEY}&page=${page - 1}`,
             );
 
-            const data = await response.json();
+            const data = (await response.json()) as MovieListResponse;
             setPopularMovie(data)
             setSearchParams({ page: String(page - 1) })
             console.log("data of  pagination-->>", data);
@@ -67,7 +68,7 @@ export default function PopularMovie() {
                 `https://api.themoviedb.org/3/movie/popular?api_key=${API_KEY}`,
                 // `https://api.themoviedb.org/3/movie/popular?api_key=${apiKey}`
             );
-            const data = await response.json();
+            const data = (await response.json()) as MovieListResponse;
             setPopularMovie(data);
         } catch (error) {
             console.log(error);
@@ -141,7 +142,7 @@ export default function PopularMovie() {
                         </div>
                     ) : (
                         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-                            {popularMovie?.results?.map((movie: any) => {
+                            {popularMovie?.results?.map((movie: MovieType) => {
                                 const releaseYear =
                                     movie.release_date?.split("-")[0] || "Coming soon";
 

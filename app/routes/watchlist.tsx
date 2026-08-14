@@ -3,16 +3,7 @@ import { Link } from "react-router";
 import { ArrowLeft, CalendarDays, Film, Sparkles, Trash2 } from "lucide-react";
 import { Footer } from "~/components/Footer";
 import { Headers } from "~/components/Headers";
-
-type WatchlistMovie = {
-    id: number;
-    title: string;
-    poster_path?: string;
-    backdrop_path?: string;
-    release_date?: string;
-    overview?: string;
-    vote_average?: number;
-};
+import type { WatchlistMovie } from "~/types/movie.types";
 
 const WATCHLIST_STORAGE_KEY = "movie-watchlist";
 

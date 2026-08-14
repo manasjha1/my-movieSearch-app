@@ -4,13 +4,14 @@ import { Headers } from "~/components/Headers";
 import { MoveRight, Plus, Share2, View } from "lucide-react";
 import { Link } from "react-router";
 import { Button } from "~/components/ui/button";
+import type { MovieListResponse, MovieType } from "~/types/movie.types";
 import API_KEY from "../constantKey";
 
 
 function Home() {
   // const { data: popularMovies } = usePpopularMovies()
   const [loading, setLoading] = useState(true);
-  const [movies, setMovies] = useState<any>([]);
+  const [movies, setMovies] = useState<MovieListResponse | null>(null);
   const [query, setQuery] = useState("")
 
   const featuredMovie = useMemo(() => movies?.results?.[16], [movies]);
@@ -23,11 +24,10 @@ function Home() {
 
   const filterMovies = () => {
     const searchMovie = setTimeout(() => {
-      console.log("searching movie" + query);
-
+      movies?.results?.filter((movie: MovieType) => movie.title.toLowerCase() === query.toLowerCase())
     }, 10000);
     console.log("search movie is", typeof (searchMovie));
-    console.log("movie movie" + query);
+    console.log("movie movie" + searchMovie);
 
 
     return clearTimeout(searchMovie)
@@ -43,7 +43,7 @@ function Home() {
       const response = await fetch(
         `https://api.themoviedb.org/3/movie/popular?api_key=${API_KEY}`,
       );
-      const data = await response.json();
+      const data = (await response.json()) as MovieListResponse;
       setMovies(data);
       console.log("movies data--> ", data, movies);
     } catch (error) {
@@ -151,7 +151,7 @@ function Home() {
                 <div className="h-full relative">
                   {movies?.results
                     ?.slice(0, slideCount)
-                    .map((movie: any, idx: number) => (
+                    .map((movie: MovieType, idx: number) => (
                       <div
                         key={movie.id}
                         className={`absolute inset-0 transition-opacity duration-700 ${currentIndex === idx
@@ -181,7 +181,7 @@ function Home() {
                   <div className="absolute left-1/2 -translate-x-1/2 top-190 z-40 flex gap-2">
                     {movies?.results
                       ?.slice(0, slideCount)
-                      .map((_: any, i: number) => (
+                      .map((_: MovieType, i: number) => (
                         <button
                           key={`dot-${i}`}
                           onClick={() => setCurrentIndex(i)}
@@ -254,7 +254,7 @@ function Home() {
                   </Link>
                 </div>
                 <div className="flex gap-6 overflow-x-auto hide-scrollbar snap-x pb-6">
-                  {movies?.results?.slice(0, 8)?.map((movie: any) => (
+                  {movies?.results?.slice(0, 8)?.map((movie: MovieType) => (
                     <Link
                       key={movie.id}
                       to={`/movie/${movie.id}`}
@@ -310,7 +310,7 @@ function Home() {
                   </Link>
                 </div>
                 <div className="flex gap-6 overflow-x-auto hide-scrollbar snap-x pb-6">
-                  {movies?.results?.slice(10, 20)?.map((movie: any) => (
+                  {movies?.results?.slice(10, 20)?.map((movie: MovieType) => (
                     <Link
                       key={movie.id}
                       to={`/movie/${movie.id}`}
@@ -365,7 +365,7 @@ function Home() {
                   </Link>
                 </div>
                 <div className="flex gap-6 overflow-x-auto hide-scrollbar snap-x pb-6">
-                  {movies?.results?.slice(9, 19)?.map((movie: any) => (
+                  {movies?.results?.slice(9, 19)?.map((movie: MovieType) => (
                     <Link
                       key={movie.id}
                       to={`/movie/${movie.id}`}
@@ -439,7 +439,7 @@ function Home() {
                   </div>
 
                   <div className="md:col-span-2 flex gap-6">
-                    {movies?.results?.slice(0, 2)?.map((movie: any) => (
+                    {movies?.results?.slice(0, 2)?.map((movie: MovieType) => (
                       <Link
                         key={movie.id}
                         to={`/movie/${movie.id}`}
@@ -474,7 +474,7 @@ function Home() {
                   </div>
                   {/* 2nd section */}
                   <div className="md:col-span-4 flex gap-6">
-                    {movies?.results?.slice(3, 5).map((movie: any) => (
+                    {movies?.results?.slice(3, 5).map((movie: MovieType) => (
                       <Link
                         key={movie.id}
                         to={`/movie/${movie.id}`}

@@ -11,6 +11,7 @@ import {
 import { Link, useParams, useSearchParams } from "react-router";
 import { Footer } from "~/components/Footer";
 import { Headers } from "~/components/Headers";
+import type { CastMember, MovieType, WatchlistMovie } from "~/types/movie.types";
 import API_KEY from "../constantKey";
 
 const WATCHLIST_STORAGE_KEY = "movie-watchlist";
@@ -20,9 +21,9 @@ const POSTER_BASE_URL = "https://image.tmdb.org/t/p/w500";
 
 export default function MovieDetail() {
     const { id } = useParams();
-    const [movie, setMovie] = useState<any>({});
+    const [movie, setMovie] = useState<MovieType | null>(null);
     const [movieVideo, setMovieVideo] = useState<any>(null);
-    const [credits, setCredits] = useState<any>(null);
+    const [credits, setCredits] = useState<{ cast?: CastMember[] } | null>(null);
     const [loading, setLoading] = useState(true);
     const [isInWatchlist, setIsInWatchlist] = useState(false);
 
@@ -43,8 +44,8 @@ export default function MovieDetail() {
                 ]);
 
                 const [detailData, creditsData] = await Promise.all([
-                    detailResponse.json(),
-                    creditsResponse.json(),
+                    detailResponse.json() as Promise<MovieType>,
+                    creditsResponse.json() as Promise<{ cast?: CastMember[] }>,
                 ]);
 
                 setMovie(detailData);
@@ -109,7 +110,7 @@ export default function MovieDetail() {
         try {
             const saved = localStorage.getItem(WATCHLIST_STORAGE_KEY);
             if (saved) {
-                const parsed = JSON.parse(saved) as Array<{ id: number }>;
+                const parsed = JSON.parse(saved) as WatchlistMovie[];
                 setIsInWatchlist(parsed.some((item) => item.id === Number(id)));
             }
         } catch (error) {
@@ -119,8 +120,10 @@ export default function MovieDetail() {
 
     const handleWatchlistToggle = () => {
         try {
+            if (!movie) return;
+
             const saved = localStorage.getItem(WATCHLIST_STORAGE_KEY);
-            const current = saved ? (JSON.parse(saved) as Array<any>) : [];
+            const current = saved ? (JSON.parse(saved) as WatchlistMovie[]) : [];
             const exists = current.some((item) => item.id === movie.id);
 
             const next = exists
@@ -299,7 +302,7 @@ export default function MovieDetail() {
 
                                 <div className="flex gap-8 overflow-x-auto overflow-hidden w-7xl hide-scrollbar snap-x pb-6">
                                     {cast.length > 0 ? (
-                                        cast.map((person: any) => (
+                                        cast.map((person: CastMember) => (
                                             <div
                                                 key={person.id}
                                                 className="flex-none bg-accent border border-white/10 rounded-lg p-2 relative snap-start overflow-hidden group mt-6"
@@ -383,7 +386,7 @@ export default function MovieDetail() {
                                                 </p>
                                                 <p className="mt-2 text-base text-white">
                                                     {movie.genres
-                                                        ?.map((genre: any) => genre.name)
+                                                        ?.map((genre) => genre.name)
                                                         .join(" • ") || "Genre info unavailable"}
                                                 </p>
                                             </div>
