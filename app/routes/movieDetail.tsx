@@ -402,7 +402,7 @@ export default function MovieDetail() {
                                                 <Ticket className="h-4 w-4" />
                                                 {isInWatchlist ? "In Watchlist" : "Add to Watchlist"}
                                             </button>
-                                            <button className="inline-flex items-center gap-2 rounded-full border border-white/30 bg-white/10 px-6 py-3 text-sm font-semibold uppercase tracking-[0.2em] text-white transition duration-300 hover:bg-white/20">
+                                            <button onClick={() => scrollTo({ top: 1400, behavior: "smooth" })} className="inline-flex items-center gap-2 rounded-full border border-white/30 bg-white/10 px-6 py-3 text-sm font-semibold uppercase tracking-[0.2em] text-white transition duration-300 hover:bg-white/20">
                                                 <Play className="h-4 w-4" />
                                                 Watch trailer
                                             </button>
