@@ -13,6 +13,7 @@ import { Footer } from "~/components/Footer";
 import { Headers } from "~/components/Headers";
 import type { CastMember, MovieType, WatchlistMovie } from "~/types/movie.types";
 import API_KEY from "../constantKey";
+import Trailer from "~/components/Trailer";
 
 const WATCHLIST_STORAGE_KEY = "movie-watchlist";
 
@@ -31,30 +32,33 @@ export default function MovieDetail() {
         const fetchMovieDetail = async () => {
             try {
                 setLoading(true);
-                const [detailResponse, creditsResponse] = await Promise.all([
+                const [detailResponse, creditsResponse, videoResponse] = await Promise.all([
                     fetch(
                         `https://api.themoviedb.org/3/movie/${id}?api_key=${API_KEY}&language=en-US`,
                     ),
-                    // fetch(
-                    //     `https://api.themoviedb.org/3/movie/${id}/videos?api_key=${API_KEY}&language=en-US`,
-                    // ),
+
                     fetch(
                         `https://api.themoviedb.org/3/movie/${id}/credits?api_key=${API_KEY}&language=en-US`,
                     ),
+                    fetch(
+                        `https://api.themoviedb.org/3/movie/${id}/videos?api_key=${API_KEY}&language=en-US`,
+                    ),
                 ]);
 
-                const [detailData, creditsData] = await Promise.all([
+                const [detailData, creditsData, videoData] = await Promise.all([
                     detailResponse.json() as Promise<MovieType>,
                     creditsResponse.json() as Promise<{ cast?: CastMember[] }>,
+                    videoResponse.json()
                 ]);
 
                 setMovie(detailData);
                 setCredits(creditsData);
+                setMovieVideo(videoData)
                 console.log(
                     "data by it type---->>>>",
                     detailData,
-                    // videoData,
                     creditsData,
+                    "video data --> ", videoData
                 );
             } catch (error) {
                 error;
@@ -66,17 +70,14 @@ export default function MovieDetail() {
         fetchMovieDetail();
     }, [id]);
 
-    const findtrailer = movieVideo?.results?.find(
-        movieVideo?.results?.find(
-            (video: any) => video.site === "YouTube" && video.type === "Trailer",
-        ),
+    const findTrailer = movieVideo?.results?.find(
+        (video: any) =>
+            video.site === "YouTube" &&
+            video.type === "Trailer" &&
+            video.official === true
     );
+    console.log("trailer type is --> ", findTrailer);
 
-    const youtubeVideo = movieVideo?.results?.find(
-        (video: any) => video.site === "YouTube",
-    );
-
-    console.log(youtubeVideo);
 
     const formatDate = (date?: string) => {
         if (!date) return "Coming soon";
@@ -506,7 +507,7 @@ export default function MovieDetail() {
                     </>
                 )}
             </main>
-
+            <Trailer findTrailer={findTrailer} />
             <Footer />
         </div>
     );
