@@ -422,47 +422,6 @@ export default function MovieDetail() {
                                             </div>
                                         )}
                                     </div>
-
-                                    {/* Right Sidebar: Score Card */}
-                                    {/* <div className="absolute right-6 top-120 hidden -translate-y-1/2 flex-col items-center rounded-2xl border border-white/10 bg-white/5 p-6 backdrop-blur-sm lg:flex">
-                                        <div className="relative h-32 w-32">
-                                            <svg className="h-full w-full -rotate-90 transform">
-                                                <circle
-                                                    cx="64"
-                                                    cy="64"
-                                                    r="56"
-                                                    fill="none"
-                                                    stroke="rgba(255,255,255,0.1)"
-                                                    strokeWidth="3"
-                                                />
-                                                <circle
-                                                    cx="64"
-                                                    cy="64"
-                                                    r="56"
-                                                    fill="none"
-                                                    stroke="url(#gradient)"
-                                                    strokeWidth="3"
-                                                    strokeDasharray={`${(movie.vote_average ?? 0) * 35.16} 351.6`}
-                                                    className="transition-all duration-1000 rounded-full"
-                                                />
-                                                <defs>
-                                                    <linearGradient id="gradient" x1="0%" y1="0%" x2="100%" y2="100%">
-                                                        <stop offset="0%" stopColor="#06b6d4" />
-                                                        <stop offset="100%" stopColor="#0891b2" />
-                                                    </linearGradient>
-                                                </defs>
-                                            </svg>
-                                            <div className="absolute inset-0 flex items-center justify-center gap-1">
-                                                <span className="text-3xl font-bold text-white">
-                                                    {Math.round(((movie.vote_average ?? 0) / 10) * 100)}
-                                                </span>
-                                                <span className="text-xl text-white/60">%</span>
-                                            </div>
-                                        </div>
-                                        <p className="mt-4 text-center text-xs uppercase tracking-[0.15em] text-white/70">
-                                            User Score
-                                        </p>
-                                    </div> */}
                                 </div>
                             </div>
                         </section>
@@ -518,91 +477,12 @@ export default function MovieDetail() {
                                     )}
                                 </div>
                             </div>
-                            <div className="w-full border border-white/10 bg-fuchsia-500/30 p-8 shadow-2xl shadow-black/20">
-                                <div className="grid gap-8 lg:grid-cols-[1.1fr_0.75fr]">
-                                    <div className="space-y-6">
-
-                                        <div className="flex items-center gap-3">
-                                            <div className="rounded-[2rem] overflow-hidden border border-white/10 bg-black/20">
-                                                <img
-                                                    src={posterUrl}
-                                                    alt={movie.title}
-                                                    className="h-full w-full object-cover"
-                                                />
-                                            </div>
-                                            <div className="rounded-full bg-white/10 p-3">
-                                                <Star className="h-5 w-5 text-[#ffb703]" />
-                                            </div>
-                                            <div>
-                                                <p className="text-xs uppercase tracking-[0.35em] text-white/50">
-                                                    Popularity insight
-                                                </p>
-                                                <h2 className="font-[Libre Caslon Text] text-2xl">
-                                                    What makes this movie stand out
-                                                </h2>
-                                            </div>
-                                        </div>
-
-                                        <p className="text-lg leading-8 text-white/70">
-                                            {movie.tagline ||
-                                                "A high-impact story that resonates with audiences through strong characters, striking visuals, and a memorable emotional arc."}
-                                        </p>
-
-                                        <div className="grid gap-4 sm:grid-cols-2">
-                                            <div className="p-4">
-                                                <p className="text-xs uppercase tracking-[0.35em] text-white/50">
-                                                    Release date
-                                                </p>
-                                                <p className="mt-2 text-base text-white">
-                                                    {formatDate(movie.release_date)}
-                                                </p>
-                                            </div>
-                                            <div className="p-4">
-                                                <p className="text-xs uppercase tracking-[0.35em] text-white/50">
-                                                    Runtime
-                                                </p>
-                                                <p className="mt-2 text-base text-white">
-                                                    {formatRuntime(movie.runtime)}
-                                                </p>
-                                            </div>
-                                            <div className="p-4">
-                                                <p className="text-xs uppercase tracking-[0.35em] text-white/50">
-                                                    Rating
-                                                </p>
-                                                <p className="mt-2 text-base text-white">
-                                                    {movie.vote_average?.toFixed(1) ?? "N/A"} / 10
-                                                </p>
-                                            </div>
-                                            <div className="p-4">
-                                                <p className="text-xs uppercase tracking-[0.35em] text-white/50">
-                                                    Genres
-                                                </p>
-                                                <p className="mt-2 text-base text-white">
-                                                    {movie.genres
-                                                        ?.map((genre) => genre.name)
-                                                        .join(" • ") || "Genre info unavailable"}
-                                                </p>
-                                            </div>
-                                        </div>
-
-                                        <div className="p-5">
-                                            <h3 className="text-sm uppercase tracking-[0.35em] text-white/60">
-                                                Overview
-                                            </h3>
-                                            <p className="mt-3 text-white/70 leading-7">
-                                                {movie?.overview}{" "}
-                                            </p>
-                                        </div>
-                                    </div>
-
-
-                                </div>
-                            </div>
+                            <Trailer findTrailer={findTrailer} />
                         </section>
                     </>
                 )}
             </main>
-            <Trailer findTrailer={findTrailer} />
+
             <Footer />
         </div>
     );

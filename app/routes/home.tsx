@@ -257,7 +257,7 @@ function Home() {
                   {movies?.results?.slice(0, 8)?.map((movie: MovieType) => (
                     <Link
                       key={movie.id}
-                      to={`/movie/${movie.id}`}
+                      to={`/movie/${movie.id}-${movie.title}`}
                       className="flex-none w-[60vw] md:w-[22vw] snap-start"
                     >
                       <div className="movie-card h-full relative rounded-lg overflow-hidden group">
