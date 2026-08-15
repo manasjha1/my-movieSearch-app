@@ -110,7 +110,7 @@ export default function MovieDetail() {
         ? `${POSTER_BASE_URL}${movie.poster_path}`
         : "https://images.unsplash.com/photo-1517602302552-471fe67acf66?auto=format&fit=crop&w=1600&q=80";
 
-    const cast = credits?.cast?.slice(0, 10) || [];
+    // const cast = credits?.cast?.slice(0, 10) || [];
 
     useEffect(() => {
         try {
@@ -443,8 +443,8 @@ export default function MovieDetail() {
                                 </div>
 
                                 <div className="flex gap-8 overflow-x-auto overflow-hidden w-7xl hide-scrollbar snap-x pb-6">
-                                    {cast.length > 0 ? (
-                                        cast.map((person: CastMember) => (
+                                    {credits?.cast ? (
+                                        credits?.cast?.slice(0, 10)?.map((person: CastMember) => (
                                             <div
                                                 key={person.id}
                                                 className="flex-none bg-accent border border-white/10 rounded-lg p-2 relative snap-start overflow-hidden group mt-6"
@@ -468,6 +468,7 @@ export default function MovieDetail() {
                                                         {person.character || "Cast member"}
                                                     </p>
                                                 </div>
+
                                             </div>
                                         ))
                                     ) : (
@@ -476,6 +477,9 @@ export default function MovieDetail() {
                                         </p>
                                     )}
                                 </div>
+                                <Link className="text-white/50 text-lg font-medium hover:underline hover:scale-95" to="/cast&crew">
+                                    View more cast
+                                </Link>
                             </div>
                             <Trailer findTrailer={findTrailer} />
                         </section>

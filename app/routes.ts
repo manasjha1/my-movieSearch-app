@@ -10,4 +10,5 @@ export default [
   route("privacy-policy", "./routes/privacyPolicy.tsx"),
   route("contact", "./routes/contact.tsx"),
   route("watchlist", "./routes/watchlist.tsx"),
+  route("cast&crew", "./routes/cast.tsx"),
 ] satisfies RouteConfig;
