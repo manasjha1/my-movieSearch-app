@@ -11,7 +11,11 @@ import {
 import { Link, useParams, useSearchParams } from "react-router";
 import { Footer } from "~/components/Footer";
 import { Headers } from "~/components/Headers";
-import type { CastMember, MovieType, WatchlistMovie } from "~/types/movie.types";
+import type {
+    CastMember,
+    MovieType,
+    WatchlistMovie,
+} from "~/types/movie.types";
 import API_KEY from "../constantKey";
 import Trailer from "~/components/Trailer";
 
@@ -32,33 +36,35 @@ export default function MovieDetail() {
         const fetchMovieDetail = async () => {
             try {
                 setLoading(true);
-                const [detailResponse, creditsResponse, videoResponse] = await Promise.all([
-                    fetch(
-                        `https://api.themoviedb.org/3/movie/${id}?api_key=${API_KEY}&language=en-US`,
-                    ),
+                const [detailResponse, creditsResponse, videoResponse] =
+                    await Promise.all([
+                        fetch(
+                            `https://api.themoviedb.org/3/movie/${id}?api_key=${API_KEY}&language=en-US`,
+                        ),
 
-                    fetch(
-                        `https://api.themoviedb.org/3/movie/${id}/credits?api_key=${API_KEY}&language=en-US`,
-                    ),
-                    fetch(
-                        `https://api.themoviedb.org/3/movie/${id}/videos?api_key=${API_KEY}&language=en-US`,
-                    ),
-                ]);
+                        fetch(
+                            `https://api.themoviedb.org/3/movie/${id}/credits?api_key=${API_KEY}&language=en-US`,
+                        ),
+                        fetch(
+                            `https://api.themoviedb.org/3/movie/${id}/videos?api_key=${API_KEY}&language=en-US`,
+                        ),
+                    ]);
 
                 const [detailData, creditsData, videoData] = await Promise.all([
                     detailResponse.json() as Promise<MovieType>,
                     creditsResponse.json() as Promise<{ cast?: CastMember[] }>,
-                    videoResponse.json()
+                    videoResponse.json(),
                 ]);
 
                 setMovie(detailData);
                 setCredits(creditsData);
-                setMovieVideo(videoData)
+                setMovieVideo(videoData);
                 console.log(
                     "data by it type---->>>>",
                     detailData,
                     creditsData,
-                    "video data --> ", videoData
+                    "video data --> ",
+                    videoData,
                 );
             } catch (error) {
                 error;
@@ -74,10 +80,9 @@ export default function MovieDetail() {
         (video: any) =>
             video.site === "YouTube" &&
             video.type === "Trailer" &&
-            video.official === true
+            video.official === true,
     );
     console.log("trailer type is --> ", findTrailer);
-
 
     const formatDate = (date?: string) => {
         if (!date) return "Coming soon";
@@ -145,7 +150,7 @@ export default function MovieDetail() {
             localStorage.setItem(WATCHLIST_STORAGE_KEY, JSON.stringify(next));
             setIsInWatchlist(!exists);
         } catch (error) {
-            return error
+            return error;
         }
     };
 
@@ -276,8 +281,9 @@ export default function MovieDetail() {
                     <>
                         <section
                             key={movie.id}
-                            className="relative h-screen w-full overflow-hidden"
+                            className="relative min-h-screen w-full overflow-hidden"
                         >
+                            {/* Background Image with Gradient Overlay */}
                             <div className="absolute inset-0">
                                 <img
                                     src={backdropUrl}
@@ -285,93 +291,178 @@ export default function MovieDetail() {
                                     className="h-full w-full object-cover"
                                 />
                                 <div className="absolute inset-0 bg-linear-to-r from-[#0f0f10] via-[#0f0f10]/85 to-[#0f0f10]/20" />
-                                <div className="absolute inset-0 bg-linear-to-t from-[#131313] via-[#131313]/80 to-transparent" />
-
+                                <div className="absolute inset-0 bg-linear-to-t from-[#131313] via-[#131313]/60 to-transparent" />
                             </div>
 
-                            <div className="relative mx-auto flex max-w-9xl flex-col gap-10 px-[5vw] py-20 lg:flex-row lg:items-end lg:justify-between">
-                                <div className="max-w-3xl lg:h-20">
-                                    <Link
-                                        to="/"
-                                        className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/10 px-4 py-2 text-sm text-white/80 transition hover:bg-white/15"
-                                    >
-                                        <ArrowLeft className="h-4 w-4" />
-                                        Back to browse
-                                    </Link>
+                            {/* Hero Content Container */}
+                            <div className="relative z-10 mx-auto max-w-7xl px-6 py-10 md:px-8">
+                                <div className="grid grid-cols-1 gap-12 md:grid-cols-[1fr_1.5fr] lg:gap-2">
 
-                                    <div className="mt-6 flex flex-wrap gap-3">
-                                        <span className="rounded-full border border-white/10 bg-white/10 px-3 py-1 text-[0.7rem] uppercase tracking-[0.35em] text-white/70">
-                                            {movie.release_date?.slice(0, 4) || "New release"}
-                                        </span>
-                                        <span className="rounded-full border border-white/10 bg-white/10 px-3 py-1 text-[0.7rem] uppercase tracking-[0.35em] text-white/70">
-                                            {formatRuntime(movie.runtime)}
-                                        </span>
-                                        <span className="rounded-full border border-white/10 bg-white/10 px-3 py-1 text-[0.7rem] uppercase tracking-[0.35em] text-white/70">
-                                            {movie.vote_average?.toFixed(1)} / 10
-                                        </span>
-                                    </div>
-
-                                    <h1 className="mt-6 font-[Libre Caslon Text] text-4xl font-semibold leading-tight sm:text-5xl lg:text-6xl">
-                                        {movie.title}
-                                    </h1>
-                                    <p className="mt-5 max-w-2xl text-lg leading-8 text-white/75 truncate">
-                                        {movie.overview ||
-                                            "A cinematic experience awaits, and the full synopsis will appear here soon."}
-                                    </p>
-
-                                    <div className="mt-8 flex flex-wrap gap-4">
-                                        <button className="inline-flex items-center gap-2 rounded-full bg-white px-6 py-3 text-sm font-medium uppercase tracking-[0.25em] text-[#0f0f10] transition hover:bg-[#e5e2e1]">
-                                            <Play className="h-4 w-4" />
-                                            Watch trailer
-                                        </button>
-                                        <button
-                                            onClick={handleWatchlistToggle}
-                                            className={`rounded-full border px-6 py-3 text-sm font-medium uppercase tracking-[0.25em] transition ${isInWatchlist
-                                                ? "border-[#ffb703] bg-[#ffb703]/15 text-[#ffb703] hover:bg-[#ffb703]/20"
-                                                : "border-white/20 bg-transparent text-white hover:bg-white/10"
-                                                }`}
-                                        >
-                                            {isInWatchlist ? "Saved to watchlist" : "Add to watchlist"}
-                                        </button>
-                                    </div>
-                                </div>
-
-                                <div className="w-full max-w-sm rounded-[2rem] p-6 shadow-2xl ">
-                                    <div className="flex items-center gap-3 text-xs uppercase tracking-[0.35em] text-white/60">
-                                        <Ticket className="h-4 w-4" />
-                                        At a glance
-                                    </div>
-
-                                    <div className="mt-6 space-y-4 text-sm text-white/80">
-                                        <div className="flex items-center justify-between border-b border-white/10 pb-3">
-                                            <span className="flex items-center gap-2">
-                                                <CalendarDays className="h-4 w-4 text-[#ffb703]" />
-                                                Release
-                                            </span>
-                                            <span>{formatDate(movie.release_date)}</span>
-                                        </div>
-                                        <div className="flex items-center justify-between border-b border-white/10 pb-3">
-                                            <span className="flex items-center gap-2">
-                                                <Clock3 className="h-4 w-4 text-[#ffb703]" />
-                                                Runtime
-                                            </span>
-                                            <span>{formatRuntime(movie.runtime)}</span>
-                                        </div>
-                                        <div className="flex items-center justify-between border-b border-white/10 pb-3">
-                                            <span className="flex items-center gap-2">
-                                                <Star className="h-4 w-4 text-[#ffb703]" />
-                                                Rating
-                                            </span>
-                                            <span>{movie.vote_average?.toFixed(1)} / 10</span>
-                                        </div>
-                                        <div className="flex items-center justify-between">
-                                            <span className="flex items-center gap-2">
-                                                <Ticket className="h-4 w-4 text-[#ffb703]" />
-                                                Popularity
-                                            </span>
-                                            <span>{Math.round(movie.popularity || 0)}</span>
+                                    {/* Left Column: Movie Poster */}
+                                    <div className="flex items-start justify-center md:justify-start">
+                                        <div className="relative">
+                                            <img
+                                                src={posterUrl}
+                                                alt={movie?.title}
+                                                className="h-105 w-105 rounded-2xl object-cover shadow-2xl"
+                                            />
+                                            {/* Glow Effect */}
+                                            <div className="absolute -inset-0.5 rounded-2xl bg-linear-to-b from-cyan-500/20 via-blue-500/10 to-transparent blur-xl" />
                                         </div>
                                     </div>
+
+                                    {/* Right Column: Movie Details */}
+                                    <div className="flex flex-col p-2 justify-start">
+                                        {/* Movie Title */}
+                                        <div className="mb-6">
+                                            <h1 className="font-[Libre Caslon Text] text-4xl font-bold leading-tight tracking-wide text-white md:text-5xl lg:text-6xl">
+                                                {movie.title}
+                                            </h1>
+                                            <p className="mt-2 text-sm font-medium uppercase tracking-[0.25em] text-amber-400/80">
+                                                {movie?.release_date?.slice(0, 4) || "Upcoming"}
+                                            </p>
+                                        </div>
+
+                                        {/* Tagline */}
+                                        {movie.tagline && (
+                                            <p className="mb-8 text-lg text-amber-300/90 uppercase tracking-[0.15em]">
+                                                {movie.tagline}
+                                            </p>
+                                        )}
+
+                                        {/* Metadata Grid */}
+                                        <div className="mb-8 grid grid-cols-2 gap-6 md:grid-cols-4">
+                                            {/* Release Date */}
+                                            <div>
+                                                <p className="flex items-center gap-2 text-xs uppercase tracking-[0.2em] text-white/60">
+                                                    <CalendarDays className="h-4 w-4 text-amber-400" />
+                                                    Release Date
+                                                </p>
+                                                <p className="mt-3 text-sm text-white md:text-base">
+                                                    {formatDate(movie.release_date)}
+                                                </p>
+                                            </div>
+
+                                            {/* Runtime */}
+                                            <div>
+                                                <p className="flex items-center gap-2 text-xs uppercase tracking-[0.2em] text-white/60">
+                                                    <Clock3 className="h-4 w-4 text-amber-400" />
+                                                    Runtime
+                                                </p>
+                                                <p className="mt-3 text-sm text-white md:text-base">
+                                                    {formatRuntime(movie.runtime)}
+                                                </p>
+                                            </div>
+
+                                            {/* Rating */}
+                                            <div>
+                                                <p className="flex items-center gap-2 text-xs uppercase tracking-[0.2em] text-white/60">
+                                                    <Star className="h-4 w-4 text-amber-400" />
+                                                    Rating
+                                                </p>
+                                                <p className="mt-3 flex items-center gap-1 text-sm text-white md:text-base">
+                                                    {movie.vote_average?.toFixed(1) ?? "N/A"}
+                                                    <span className="text-xs text-white/60"></span>
+                                                </p>
+                                            </div>
+
+                                            {/* Genres */}
+                                            <div>
+                                                <p className="text-xs uppercase tracking-[0.2em] text-white/60">
+                                                    Genres
+                                                </p>
+                                                <p className="mt-3 text-sm text-white">
+                                                    {movie.genres
+                                                        ?.slice(0, 2)
+                                                        .map((genre) => genre.name)
+                                                        .join(", ") || "N/A"}
+                                                </p>
+                                            </div>
+                                        </div>
+
+                                        {/* Overview Section */}
+                                        <div className="mb-8 border-t border-white/10 pt-6">
+                                            <h3 className="text-xs uppercase tracking-[0.25em] text-white/60">
+                                                Overview
+                                            </h3>
+                                            <p className="mt-4 line-clamp-4 text-sm leading-relaxed text-white/80 md:text-base">
+                                                {movie?.overview}
+                                            </p>
+                                        </div>
+
+                                        {/* Action Buttons */}
+                                        <div className="mb-8 flex flex-wrap gap-4">
+                                            <button
+                                                onClick={handleWatchlistToggle}
+                                                className={`inline-flex items-center gap-2 rounded-full px-6 py-3 text-sm font-semibold uppercase tracking-[0.2em] transition duration-300 ${isInWatchlist
+                                                    ? "border border-amber-500 bg-amber-500/20 text-amber-300 hover:bg-amber-500/30"
+                                                    : "border border-white/80 bg-white text-[#0f0f10] hover:bg-white/80 cursor-pointer"
+                                                    }`}
+                                            >
+                                                <Ticket className="h-4 w-4" />
+                                                {isInWatchlist ? "In Watchlist" : "Add to Watchlist"}
+                                            </button>
+                                            <button className="inline-flex items-center gap-2 rounded-full border border-white/30 bg-white/10 px-6 py-3 text-sm font-semibold uppercase tracking-[0.2em] text-white transition duration-300 hover:bg-white/20">
+                                                <Play className="h-4 w-4" />
+                                                Watch trailer
+                                            </button>
+                                        </div>
+
+                                        {/* Genre Tags */}
+                                        {movie.genres && movie.genres.length > 0 && (
+                                            <div className="flex flex-wrap gap-3">
+                                                {movie.genres.map((genre) => (
+                                                    <span
+                                                        key={genre.id}
+                                                        className="rounded-full border border-amber-500/40 bg-amber-500/10 px-4 py-2 text-xs uppercase tracking-[0.15em] text-amber-300/80"
+                                                    >
+                                                        {genre.name}
+                                                    </span>
+                                                ))}
+                                            </div>
+                                        )}
+                                    </div>
+
+                                    {/* Right Sidebar: Score Card */}
+                                    {/* <div className="absolute right-6 top-120 hidden -translate-y-1/2 flex-col items-center rounded-2xl border border-white/10 bg-white/5 p-6 backdrop-blur-sm lg:flex">
+                                        <div className="relative h-32 w-32">
+                                            <svg className="h-full w-full -rotate-90 transform">
+                                                <circle
+                                                    cx="64"
+                                                    cy="64"
+                                                    r="56"
+                                                    fill="none"
+                                                    stroke="rgba(255,255,255,0.1)"
+                                                    strokeWidth="3"
+                                                />
+                                                <circle
+                                                    cx="64"
+                                                    cy="64"
+                                                    r="56"
+                                                    fill="none"
+                                                    stroke="url(#gradient)"
+                                                    strokeWidth="3"
+                                                    strokeDasharray={`${(movie.vote_average ?? 0) * 35.16} 351.6`}
+                                                    className="transition-all duration-1000 rounded-full"
+                                                />
+                                                <defs>
+                                                    <linearGradient id="gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                                                        <stop offset="0%" stopColor="#06b6d4" />
+                                                        <stop offset="100%" stopColor="#0891b2" />
+                                                    </linearGradient>
+                                                </defs>
+                                            </svg>
+                                            <div className="absolute inset-0 flex items-center justify-center gap-1">
+                                                <span className="text-3xl font-bold text-white">
+                                                    {Math.round(((movie.vote_average ?? 0) / 10) * 100)}
+                                                </span>
+                                                <span className="text-xl text-white/60">%</span>
+                                            </div>
+                                        </div>
+                                        <p className="mt-4 text-center text-xs uppercase tracking-[0.15em] text-white/70">
+                                            User Score
+                                        </p>
+                                    </div> */}
                                 </div>
                             </div>
                         </section>
@@ -409,7 +500,9 @@ export default function MovieDetail() {
                                                 />
 
                                                 <div className="flex-1 justify-start pr-2">
-                                                    <h3 className={`font-medium text-lg text-white ${person.name?.length > 5 ? "text-wrap" : "line-clamp-1"}`}>
+                                                    <h3
+                                                        className={`font-medium text-lg text-white ${person.name?.length > 5 ? "text-wrap" : "line-clamp-1"}`}
+                                                    >
                                                         {person.name}
                                                     </h3>
                                                     <p className="text-sm text-white/60 truncate">
@@ -425,10 +518,18 @@ export default function MovieDetail() {
                                     )}
                                 </div>
                             </div>
-                            <div className="rounded-[2rem] border border-white/10 bg-[#111111] p-8 shadow-2xl shadow-black/20">
+                            <div className="w-full border border-white/10 bg-fuchsia-500/30 p-8 shadow-2xl shadow-black/20">
                                 <div className="grid gap-8 lg:grid-cols-[1.1fr_0.75fr]">
                                     <div className="space-y-6">
+
                                         <div className="flex items-center gap-3">
+                                            <div className="rounded-[2rem] overflow-hidden border border-white/10 bg-black/20">
+                                                <img
+                                                    src={posterUrl}
+                                                    alt={movie.title}
+                                                    className="h-full w-full object-cover"
+                                                />
+                                            </div>
                                             <div className="rounded-full bg-white/10 p-3">
                                                 <Star className="h-5 w-5 text-[#ffb703]" />
                                             </div>
@@ -494,13 +595,7 @@ export default function MovieDetail() {
                                         </div>
                                     </div>
 
-                                    <div className="rounded-[2rem] overflow-hidden border border-white/10 bg-black/20">
-                                        <img
-                                            src={posterUrl}
-                                            alt={movie.title}
-                                            className="h-full w-full object-cover"
-                                        />
-                                    </div>
+
                                 </div>
                             </div>
                         </section>
