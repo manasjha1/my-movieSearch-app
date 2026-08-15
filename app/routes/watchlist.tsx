@@ -137,7 +137,7 @@ export default function Watchlist() {
                                                 {movie.vote_average?.toFixed(1) ?? "New"} / 10
                                             </span>
                                             <Link
-                                                to={`/movie/${movie.id}`}
+                                                to={`/movie/${movie.id}-${movie.title}`}
                                                 className="text-sm font-medium text-[#ffb703] transition hover:text-[#ffd166]"
                                             >
                                                 View details
