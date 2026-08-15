@@ -477,9 +477,6 @@ export default function MovieDetail() {
                                         </p>
                                     )}
                                 </div>
-                                <Link className="text-white/50 text-lg font-medium hover:underline hover:scale-95" to="/cast&crew">
-                                    View more cast
-                                </Link>
                             </div>
                             <Trailer findTrailer={findTrailer} />
                         </section>
