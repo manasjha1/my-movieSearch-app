@@ -8,7 +8,7 @@ import {
     Ticket,
     UserRound,
 } from "lucide-react";
-import { Link, useParams, useSearchParams } from "react-router";
+import { Link, useParams } from "react-router";
 import { Footer } from "~/components/Footer";
 import { Headers } from "~/components/Headers";
 import type {
@@ -26,6 +26,7 @@ const POSTER_BASE_URL = "https://image.tmdb.org/t/p/w500";
 
 export default function MovieDetail() {
     const { id } = useParams();
+    const movieId = Number(id?.match(/^\d+/)?.[0]);
     const [movie, setMovie] = useState<MovieType | null>(null);
     const [movieVideo, setMovieVideo] = useState<any>(null);
     const [credits, setCredits] = useState<{ cast?: CastMember[] } | null>(null);
@@ -39,14 +40,14 @@ export default function MovieDetail() {
                 const [detailResponse, creditsResponse, videoResponse] =
                     await Promise.all([
                         fetch(
-                            `https://api.themoviedb.org/3/movie/${id}?api_key=${API_KEY}&language=en-US`,
+                            `https://api.themoviedb.org/3/movie/${movieId}?api_key=${API_KEY}&language=en-US`,
                         ),
 
                         fetch(
-                            `https://api.themoviedb.org/3/movie/${id}/credits?api_key=${API_KEY}&language=en-US`,
+                            `https://api.themoviedb.org/3/movie/${movieId}/credits?api_key=${API_KEY}&language=en-US`,
                         ),
                         fetch(
-                            `https://api.themoviedb.org/3/movie/${id}/videos?api_key=${API_KEY}&language=en-US`,
+                            `https://api.themoviedb.org/3/movie/${movieId}/videos?api_key=${API_KEY}&language=en-US`,
                         ),
                     ]);
 
@@ -74,7 +75,7 @@ export default function MovieDetail() {
         };
 
         fetchMovieDetail();
-    }, [id]);
+    }, [movieId]);
 
     const findTrailer = movieVideo?.results?.find(
         (video: any) =>
@@ -113,16 +114,20 @@ export default function MovieDetail() {
     // const cast = credits?.cast?.slice(0, 10) || [];
 
     useEffect(() => {
-        try {
-            const saved = localStorage.getItem(WATCHLIST_STORAGE_KEY);
-            if (saved) {
-                const parsed = JSON.parse(saved) as WatchlistMovie[];
-                setIsInWatchlist(parsed.some((item) => item.id === Number(id)));
+        const syncWatchlistStatus = () => {
+            try {
+                const saved = localStorage.getItem(WATCHLIST_STORAGE_KEY);
+                const parsed = saved ? (JSON.parse(saved) as WatchlistMovie[]) : [];
+                setIsInWatchlist(parsed.some((item) => item.id === movieId));
+            } catch (error) {
+                console.error("Unable to read watchlist", error);
             }
-        } catch (error) {
-            console.error("Unable to read watchlist", error);
-        }
-    }, [id]);
+        };
+
+        syncWatchlistStatus();
+        window.addEventListener("storage", syncWatchlistStatus);
+        return () => window.removeEventListener("storage", syncWatchlistStatus);
+    }, [movieId]);
 
     const handleWatchlistToggle = () => {
         try {
@@ -150,7 +155,7 @@ export default function MovieDetail() {
             localStorage.setItem(WATCHLIST_STORAGE_KEY, JSON.stringify(next));
             setIsInWatchlist(!exists);
         } catch (error) {
-            return error;
+            console.error("Unable to update watchlist", error);
         }
     };
 
@@ -297,7 +302,6 @@ export default function MovieDetail() {
                             {/* Hero Content Container */}
                             <div className="relative z-10 mx-auto max-w-7xl px-6 py-10 md:px-8">
                                 <div className="grid grid-cols-1 gap-12 md:grid-cols-[1fr_1.5fr] lg:gap-2">
-
                                     {/* Left Column: Movie Poster */}
                                     <div className="flex items-start justify-center md:justify-start">
                                         <div className="relative">
@@ -395,14 +399,21 @@ export default function MovieDetail() {
                                             <button
                                                 onClick={handleWatchlistToggle}
                                                 className={`inline-flex items-center gap-2 rounded-full px-6 py-3 text-sm font-semibold uppercase tracking-[0.2em] transition duration-300 ${isInWatchlist
-                                                    ? "border border-amber-500 bg-amber-500/20 text-amber-300 hover:bg-amber-500/30"
-                                                    : "border border-white/80 bg-white text-[#0f0f10] hover:bg-white/80 cursor-pointer"
+                                                        ? "border border-amber-500 bg-amber-500/20 text-amber-300 hover:bg-amber-500/30"
+                                                        : "border border-white/80 bg-white text-[#0f0f10] hover:bg-white/80 cursor-pointer"
                                                     }`}
                                             >
                                                 <Ticket className="h-4 w-4" />
-                                                {isInWatchlist ? "In Watchlist" : "Add to Watchlist"}
+                                                {isInWatchlist
+                                                    ? "Added to Watchlist"
+                                                    : "Add to Watchlist"}
                                             </button>
-                                            <button onClick={() => scrollTo({ top: 1400, behavior: "smooth" })} className="inline-flex items-center gap-2 rounded-full border border-white/30 bg-white/10 px-6 py-3 text-sm font-semibold uppercase tracking-[0.2em] text-white transition duration-300 hover:bg-white/20">
+                                            <button
+                                                onClick={() =>
+                                                    scrollTo({ top: 1400, behavior: "smooth" })
+                                                }
+                                                className="inline-flex items-center gap-2 rounded-full border border-white/30 bg-white/10 px-6 py-3 text-sm font-semibold uppercase tracking-[0.2em] text-white transition duration-300 hover:bg-white/20"
+                                            >
                                                 <Play className="h-4 w-4" />
                                                 Watch trailer
                                             </button>
@@ -468,7 +479,6 @@ export default function MovieDetail() {
                                                         {person.character || "Cast member"}
                                                     </p>
                                                 </div>
-
                                             </div>
                                         ))
                                     ) : (
