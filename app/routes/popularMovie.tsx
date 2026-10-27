@@ -150,7 +150,7 @@ export default function PopularMovie() {
                                     <Link
                                         key={movie.id}
                                         to={`/movie/${movie.id}-${encodeURIComponent(movie.title)}`}
-                                        className="movie-card group relative overflow-hidden rounded-xs border border-white/10 bg-[#11141d] shadow-[0_20px_60px_rgba(0,0,0,0.25)]"
+                                        className="movie-card group relative overflow-hidden rounded-lg bg-[#11141d] shadow-[0_20px_60px_rgba(0,0,0,0.25)]"
                                     >
                                         <img
                                             className="aspect-2/3 w-full object-cover"
@@ -221,7 +221,7 @@ export default function PopularMovie() {
                         </PaginationContent>
                     </Pagination>{" "}
                 </div>
-                
+
             </div>
             <Footer />
         </div>
