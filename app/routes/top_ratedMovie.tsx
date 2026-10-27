@@ -102,24 +102,6 @@ export default function RecentMovie() {
                                     Browse the standout titles that critics and audiences consistently praise for their craft and impact.
                                 </p>
                             </div>
-                            <div className="flex flex-wrap gap-3">
-                                <div className="rounded-2xl border border-white/10 bg-black/20 px-4 py-3 backdrop-blur">
-                                    <p className="text-[0.65rem] uppercase tracking-[0.32em] text-white/40">
-                                        Spotlight
-                                    </p>
-                                    <p className="mt-1 text-sm font-medium text-white">
-                                        Award-worthy picks
-                                    </p>
-                                </div>
-                                <div className="rounded-2xl border border-white/10 bg-black/20 px-4 py-3 backdrop-blur">
-                                    <p className="text-[0.65rem] uppercase tracking-[0.32em] text-white/40">
-                                        Mood
-                                    </p>
-                                    <p className="mt-1 text-sm font-medium text-white">
-                                        Prestige and depth
-                                    </p>
-                                </div>
-                            </div>
                         </div>
                     </div>
 

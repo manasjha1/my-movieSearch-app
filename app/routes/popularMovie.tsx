@@ -100,24 +100,6 @@ export default function PopularMovie() {
                                     Discover the most talked-about releases that are keeping audiences engaged right now.
                                 </p>
                             </div>
-                            <div className="flex flex-wrap gap-3">
-                                <div className="rounded-2xl border border-white/10 bg-black/20 px-4 py-3 backdrop-blur">
-                                    <p className="text-[0.65rem] uppercase tracking-[0.32em] text-white/40">
-                                        Collection
-                                    </p>
-                                    <p className="mt-1 text-sm font-medium text-white">
-                                        Crowd favorites
-                                    </p>
-                                </div>
-                                <div className="rounded-2xl border border-white/10 bg-black/20 px-4 py-3 backdrop-blur">
-                                    <p className="text-[0.65rem] uppercase tracking-[0.32em] text-white/40">
-                                        Mood
-                                    </p>
-                                    <p className="mt-1 text-sm font-medium text-white">
-                                        Instant watchlist energy
-                                    </p>
-                                </div>
-                            </div>
                         </div>
                     </div>
 

@@ -101,24 +101,6 @@ export default function UpcomingMovie() {
                                     Get a first look at the releases arriving soon, with the most exciting stories already on the horizon.
                                 </p>
                             </div>
-                            <div className="flex flex-wrap gap-3">
-                                <div className="rounded-2xl border border-white/10 bg-black/20 px-4 py-3 backdrop-blur">
-                                    <p className="text-[0.65rem] uppercase tracking-[0.32em] text-white/40">
-                                        Next up
-                                    </p>
-                                    <p className="mt-1 text-sm font-medium text-white">
-                                        Fresh arrivals
-                                    </p>
-                                </div>
-                                <div className="rounded-2xl border border-white/10 bg-black/20 px-4 py-3 backdrop-blur">
-                                    <p className="text-[0.65rem] uppercase tracking-[0.32em] text-white/40">
-                                        Mood
-                                    </p>
-                                    <p className="mt-1 text-sm font-medium text-white">
-                                        Anticipation builds
-                                    </p>
-                                </div>
-                            </div>
                         </div>
                     </div>
 
