@@ -196,7 +196,7 @@ export const Headers = ({ filterMovies = () => { } }: MovieProps) => {
                                                     ?.map((movie: MovieType) => (
                                                         <Link
                                                             key={movie.id}
-                                                            to={`/movie/${movie.id}`}
+                                                            to={`/movie/${movie.id}-${encodeURIComponent(movie.title)}`}
                                                             className="group relative overflow-hidden rounded-xl border border-white/10 bg-linear-to-br from-white/5 to-white/2 hover:from-white/10 hover:to-white/5 hover:border-white/20 transition-all duration-300 hover:shadow-lg hover:shadow-white/10 p-3"
                                                         >
                                                             <div className="flex gap-3">

@@ -257,7 +257,7 @@ function Home() {
                   {movies?.results?.slice(0, 8)?.map((movie: MovieType) => (
                     <Link
                       key={movie.id}
-                      to={`/movie/${movie.id}-${movie.title}`}
+                      to={`/movie/${movie.id}-${encodeURIComponent(movie.title)}`}
                       className="flex-none w-[60vw] md:w-[22vw] snap-start"
                     >
                       <div className="movie-card h-full relative rounded-lg overflow-hidden group">
@@ -313,7 +313,7 @@ function Home() {
                   {movies?.results?.slice(10, 20)?.map((movie: MovieType) => (
                     <Link
                       key={movie.id}
-                      to={`/movie/${movie.id}`}
+                      to={`/movie/${movie.id}-${encodeURIComponent(movie.title)}`}
                       className="flex-none w-[60vw] md:w-[22vw] snap-start"
                     >
                       <div className="movie-card h-full relative rounded-lg overflow-hidden group cursor-pointer">
@@ -368,7 +368,7 @@ function Home() {
                   {movies?.results?.slice(9, 19)?.map((movie: MovieType) => (
                     <Link
                       key={movie.id}
-                      to={`/movie/${movie.id}`}
+                      to={`/movie/${movie.id}-${encodeURIComponent(movie.title)}`}
                       className="flex-none w-[60vw] md:w-[22vw] snap-start"
                     >
                       <div className="movie-card h-full relative rounded-lg overflow-hidden group cursor-pointer">
@@ -442,7 +442,7 @@ function Home() {
                     {movies?.results?.slice(0, 2)?.map((movie: MovieType) => (
                       <Link
                         key={movie.id}
-                        to={`/movie/${movie.id}`}
+                        to={`/movie/${movie.id}-${encodeURIComponent(movie.title)}`}
                         className="movie-card flex-none w-[60vw] md:w-[22vw] rounded-lg relative snap-start overflow-hidden group cursor-pointer"
                       >
                         <div className="h-full">
@@ -477,7 +477,7 @@ function Home() {
                     {movies?.results?.slice(3, 5).map((movie: MovieType) => (
                       <Link
                         key={movie.id}
-                        to={`/movie/${movie.id}`}
+                        to={`/movie/${movie.id}-${encodeURIComponent(movie.title)}`}
                         className="relative group overflow-hidden rounded-[1.5rem] h-60 flex-1"
                       >
                         <img
